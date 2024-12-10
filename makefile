@@ -4,7 +4,7 @@ RED			= \033[0;31m
 RST			= \033[0m
 END			= \e[0m
 
-SRCS		=	srcs/main.c
+SRCS		=	srcs/main.c srcs/events.c srcs/render.c
 SRCS_B		= 	srcs_bonus/main_bonus.c \
 
 NAME		= cub3d

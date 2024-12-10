@@ -10,4 +10,27 @@
 #include <stdbool.h>
 # include <X11/keysym.h>
 
+#define texheigh 64
+#define texwidth 64
+#define WIDTH 512
+#define HEIGHT 512
+
+typedef struct s_player{
+     double posx;
+     double posy;
+     double view_deg;
+}t_player;
+
+typedef struct s_data{
+     t_player *player;
+     void      *mlx_ptr;
+     void      *win_ptr;
+}t_data;
+
+int	close_win(t_data *data);
+int render_walls(t_data *data);
+int update_player_pos(t_data *data, int scale);
+int rotate_player_dir(t_data *data, int keycode);
+int	pressed_key_event(int keycode, t_data *data);
+
 #endif

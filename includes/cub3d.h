@@ -10,7 +10,7 @@
 #include <stdbool.h>
 # include <X11/keysym.h>
 
-#define texheigh 64
+#define texheight 64
 #define texwidth 64
 #define WIDTH 512
 #define HEIGHT 512
@@ -32,5 +32,6 @@ int render_walls(t_data *data);
 int update_player_pos(t_data *data, int scale);
 int rotate_player_dir(t_data *data, int keycode);
 int	pressed_key_event(int keycode, t_data *data);
-
+double   horizontalraycast(t_data *data, int stripex, double castAngle);
+double   verticalraycast(t_data *data, double stripex, double castAngle);
 #endif

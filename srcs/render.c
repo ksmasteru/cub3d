@@ -15,7 +15,14 @@ int map[8][8]={
 {1, 0 , 0, 0, 0, 0, 0, 1},
 {1, 1 , 1, 1, 1, 1, 1, 1},
 };
+double  calculate_distance(t_data *data, double cx, double cy, double castAngle)
+{
+    //TODO
+    double distance;
 
+    distance = sin(degToRad(castAngle)) * fabs(data->player->posy - cy); //  
+    return distance;
+}
 // cast a ray of castAngle stops when it hits a wall
 // return distance from player to the wal
 
@@ -25,27 +32,19 @@ double   horizontalraycast(t_data *data, int stripex, double castAngle)
     //ya iknowns ca isnt
     double len;
     int hit;
-    double cx;// should be double from small distances
+    double cx;
     double cy;
     hit = 0;
-    return (verticalraycast(data, stripex, castAngle));
-    castAngle = 170;
-    // raydiry
-    // FIX ROUNDING ERROR OF FLOAING POOINTS.
     if (castAngle >= 0 && castAngle <= 180)// going up handle if dir y = 0
     {
         printf("upward ray\n");
-        // defining the first horizontal intersection
         cy = ((int)data->player->posy / texheight) * texheight - 1;
-        //printf("primary cy is %d\n", cy);
-        //printf("tan value tan(75) %f\n", tan(degToRad(castAngle)));
         cx = roundf(data->player->posy - cy) / tan(degToRad(castAngle));// this can be so small --> 0 ?
-        //printf("tan cx is %d\n", cx);
         cx += data->player->posx;
-        //printf("cy is %f cx is %f\n", cy, cx);
-        //printf("first cube horizontal intersection is at x:%d y:%d \n", (int)(cx/64)
-        //, (int)(cy / 64));
-        //exit(1);
+        /*printf("cy is %f cx is %f\n", cy, cx);
+        printf("first cube horizontal intersection is at x:%d y:%d \n", (int)(cx/64)
+        , (int)(cy / 64));
+        exit(1);*/
     }
     
     // ray going down // shouldn't let angle be nagtive : 0-->360;
@@ -60,11 +59,11 @@ double   horizontalraycast(t_data *data, int stripex, double castAngle)
             cx += data->player->posx;
         else if (castAngle < 270)
             cx = data->player->posx - cx;
-        //cx = roundf(cx) / 64;
-        //cy = roundf(cy) / 64;
-        //printf("first cube horizontal intersection is at x:%d y:%d \n", ((int)cx/64)
-        //, ((int)cy / 64));
-        //exit(1);
+        /*cx = roundf(cx) / 64;
+        cy = roundf(cy) / 64;
+        printf("first cube horizontal intersection is at x:%d y:%d \n", ((int)cx/64)
+        , ((int)cy / 64));
+        exit(1);*/
     }
     printf("first cube horizontal intersection is at x:%d y:%d \n", (int)cx / 64,
         (int)cy / 64);
@@ -92,8 +91,8 @@ double   horizontalraycast(t_data *data, int stripex, double castAngle)
     }
     
     printf("found a wall at %d %d\n", (int)cx / 64, (int)cy / 64);
-    double distance = 0.0; // to be calculated out of cx and yx
-    //exit(1);
+    double distance = calculate_distance(data, cx, cx, castAngle);
+    printf("horizontal distance to the wall is %f\n", distance);
     return (distance);
 }
 
@@ -103,11 +102,9 @@ double   verticalraycast(t_data *data, double stripex, double castAngle)
     double  cx;
     double  cy;
     int     hit;
+    double distance;
     int xa;
     hit = 0;
-    // defining first intersection y axis
-    // if raydirx > 0 going right side;
-    castAngle = 320;
     
     printf("vertival ray casting with castangle %f\n", castAngle);
     if ((castAngle > 0 && castAngle < 90)
@@ -121,23 +118,22 @@ double   verticalraycast(t_data *data, double stripex, double castAngle)
             cy = data->player->posy - cy; // box y;
         else
             cy = data->player->posy + cy;
-        //cx = roundf(cx) / 64;
-        //cy = roundf(cy) / 64;
-        /*printf("first cube vertical intersection is at x:%d y:%d \n", ((int)cx/64)
+        /*cx = roundf(cx) / 64;
+        cy = roundf(cy) / 64;
+        printf("first cube vertical intersection is at x:%d y:%d \n", ((int)cx/64)
         , ((int)cy / 64));
         exit(1);*/
     }
     else
     {
         // adjacent current - box
-        cx = ((int)data->player->posx / texwidth) * texwidth - 1; // box smaller
-        // small disance :opposent : tan will be negative ?
-        printf("data->player->posx[%f] - cx[%f] = [%f\n", data->player->posx, cx, data->player->posx - cx);
+        cx = ((int)data->player->posx / texwidth) * texwidth - 1; 
+        //printf("data->player->posx[%f] - cx[%f] = [%f\n", data->player->posx, cx, data->player->posx - cx);
         cy =  fabs(tan(degToRad(castAngle)) * (data->player->posx - cx));
-        printf("opposent value is %f\n", cy);
-        // fabs (tan) ? because we decided when to add and -
-        /// !!!! when to add and when to substract to cy
-        //if (castAngle > 0 && castAngle < 90) // handled in the first if
+        //printf("opposent value is %f\n", cy);
+        /* fabs (tan) ? because we decided when to add and -
+         !!!! when to add and when to substract to cy
+        if (castAngle > 0 && castAngle < 90) // handled in the first if*/
         if (castAngle > 90 && castAngle < 180)
             cy = data->player->posy - cy;// !
         else
@@ -162,19 +158,43 @@ double   verticalraycast(t_data *data, double stripex, double castAngle)
             hit = 1;
     }
     printf("found wall at [%d] [%d]\n", (int)cx / 64, (int)cy /64);
-    exit(1);
-    return (0.0);
+    distance = calculate_distance(data, cx, cx, castAngle);
+    printf("vertical distance to the wall is %f\n", distance);
+    return (distance);
+}
+
+
+void    put_wall(t_data *data, int stripex, double distance)
+{
+    // PUTS VERLINE .
+    // distance ratio ?
+    double slice_height;
+    double projection_d = (WIDTH / 2) * tan(degToRad(30)); /*ambigous*/
+    slice_height = texheight / distance * (projection_d);
+    // drawing from middle of screen;
+    int y_min =  HEIGHT / 2 - slice_height;
+    int y_max = HEIGHT / 2 + slice_height;
+    char *pixel;
+    while (y_min != y_max)
+    {
+        pixel = data->img->adrs + data->img->size_line * y_min +
+            stripex * (data->img->bpp / 8);
+        *(int *)pixel = 0x00ff00;
+        y_min++;
+    }
 }
 
 double   raycast(t_data *data, int stripex, double castAngle)
 {
-    double horizotalray;
+    double horizontalray;
     double verticalray;
     // just use angle instead of vectors;
     // vertical raytracing
     verticalray = verticalraycast(data, stripex, castAngle);
-    horizotalray = horizontalraycast(data, stripex, castAngle);
-    return (0.0);
+    horizontalray = horizontalraycast(data, stripex, castAngle);
+    if (verticalray < horizontalray)
+        return (verticalray);
+    return (horizontalray);
 }
 
 int render_walls(t_data *data)
@@ -186,19 +206,28 @@ int render_walls(t_data *data)
     int i;
     double  sep_angle;
     double   castAngle;
-
+    // DELETE OLD IMAGE AND CREATE A NEW ONE
+    if (data->img->mlx_img)
+    {
+        mlx_destroy_image(data->mlx_ptr, data->img->mlx_img);
+        data->img->mlx_img = NULL;
+    }
+    data->img->mlx_img = mlx_new_image(data->mlx_ptr, WIDTH, HEIGHT);
+    data->img->adrs = mlx_get_data_addr(data->img->mlx_img, &(data->img->bpp), &(data->img->size_line), &(data->img->endian));
     sep_angle = 60.0 / WIDTH;
     printf("angle between rays is %f\n", sep_angle);
     i = 0;
     castAngle = data->player->view_deg + 30;
     printf("cast angle is %f\n", castAngle);
     printf("at start player is at cube [%d] [%d]\n", (int)data->player->posx / 64,
-    (int)data->player->posy / 64);
+    (int)data->player->posy / 64); 
     while (i < WIDTH)
     {
         wallheight = raycast(data, i, castAngle);
+        put_wall(data, i, wallheight);
         castAngle -= sep_angle;
         i++;
     }
+    mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0, 0);
     return (0);
 }

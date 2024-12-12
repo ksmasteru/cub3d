@@ -11,6 +11,10 @@ int init_data(t_data *data)
     data->player = malloc(sizeof(t_player));
     if (!data->player)
         return (-1);
+    data->img = malloc(sizeof(t_image));
+    if (!data->img)
+        return (NULL);
+    data->img->mlx_img = NULL;
     data->player->posx = 224;
     data->player->posy = 221;
     data->player->view_deg = 45;

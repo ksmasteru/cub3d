@@ -21,11 +21,21 @@ typedef struct s_player{
      double view_deg;
 }t_player;
 
+typedef struct s_image{
+     void      *mlx_img;
+     int       bpp;
+     int       endian;
+     int       size_line;
+     char      *adrs;
+}t_image;
+
 typedef struct s_data{
      t_player *player;
      void      *mlx_ptr;
      void      *win_ptr;
+     t_image   *img;
 }t_data;
+
 
 int	close_win(t_data *data);
 int render_walls(t_data *data);

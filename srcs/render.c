@@ -28,6 +28,7 @@ double   horizontalraycast(t_data *data, int stripex, double castAngle)
     double cx;// should be double from small distances
     double cy;
     hit = 0;
+    return (verticalraycast(data, stripex, castAngle));
     castAngle = 170;
     // raydiry
     // FIX ROUNDING ERROR OF FLOAING POOINTS.
@@ -104,31 +105,43 @@ double   verticalraycast(t_data *data, double stripex, double castAngle)
     int     hit;
     // defining first intersection y axis
     // if raydirx > 0 going right side;
+    castAngle = 135;
+    printf("vertival ray casting\n");
     if ((castAngle > 0 && castAngle < 90)
         || (castAngle > 270 && castAngle < 360))
     {
-        // finding  adjacent  : current + 1
+        // finding  adjacent  : current + 1 BIG DISTANCE
         cx = ((int)data->player->posx / texwidth) * texwidth + texwidth; // box x
         // small distance
         cy = fabs(tan(degToRad(castAngle)) * roundf(cx - data->player->posx));// opposent : round down second part?
         if (castAngle > 0 && castAngle < 90)
-            cy += data->player->posy; // box y;
+            cy = data->player->posy - cy; // box y;
         else
-            cy -= data->player->posy;
+            cy = data->player->posy + cy;
+        //cx = roundf(cx) / 64;
+        //cy = roundf(cy) / 64;
+        printf("first cube vertical intersection is at x:%d y:%d \n", ((int)cx/64)
+        , ((int)cy / 64));
+        exit(1);
     }
     else
     {
         // adjacent current - box
-        cx = ((int)data->player->posx - texwidth) * texwidth - 1; // box smaller
+        cx = ((int)data->player->posx / texwidth) * texwidth - 1; // box smaller
         // small disance :opposent : tan will be negative ?
-        cy =  fabs(tan(degToRad(castAngle) * roundf(data->player->posx - cx)));
+        printf("data->player->posx[%f] - cx[%f] = [%f\n", data->player->posx, cx, data->player->posx - cx);
+        cy =  fabs(tan(degToRad(castAngle)) * (data->player->posx - cx));
+        printf("opposent value is %f\n", cy);
         // fabs (tan) ? because we decided when to add and -
         /// !!!! when to add and when to substract to cy
         //if (castAngle > 0 && castAngle < 90) // handled in the first if
         if (castAngle > 90 && castAngle < 180)
-            cy += data->player->posy;
+            cy = data->player->posy - cy;// !
         else
-            cy -= data->player->posy;
+            cy = data->player->posy + cy;
+        printf("first cube vertical intersection is at x:%d y:%d \n", ((int)cx/64)
+        , ((int)cy / 64));
+        exit(1);
     }
     
     return (0.0);

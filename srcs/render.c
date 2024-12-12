@@ -103,10 +103,13 @@ double   verticalraycast(t_data *data, double stripex, double castAngle)
     double  cx;
     double  cy;
     int     hit;
+    int xa;
+    hit = 0;
     // defining first intersection y axis
     // if raydirx > 0 going right side;
-    castAngle = 135;
-    printf("vertival ray casting\n");
+    castAngle = 320;
+    
+    printf("vertival ray casting with castangle %f\n", castAngle);
     if ((castAngle > 0 && castAngle < 90)
         || (castAngle > 270 && castAngle < 360))
     {
@@ -120,9 +123,9 @@ double   verticalraycast(t_data *data, double stripex, double castAngle)
             cy = data->player->posy + cy;
         //cx = roundf(cx) / 64;
         //cy = roundf(cy) / 64;
-        printf("first cube vertical intersection is at x:%d y:%d \n", ((int)cx/64)
+        /*printf("first cube vertical intersection is at x:%d y:%d \n", ((int)cx/64)
         , ((int)cy / 64));
-        exit(1);
+        exit(1);*/
     }
     else
     {
@@ -139,11 +142,27 @@ double   verticalraycast(t_data *data, double stripex, double castAngle)
             cy = data->player->posy - cy;// !
         else
             cy = data->player->posy + cy;
-        printf("first cube vertical intersection is at x:%d y:%d \n", ((int)cx/64)
-        , ((int)cy / 64));
-        exit(1);
+        /*printf("first cube vertical intersection1 is at x:%d y:%d \n", ((int)cx)
+        , ((int)cy));
+        exit(1);*/
     }
-    
+    while (hit != 1) // xa stable.
+    {
+        if ((castAngle > 0 && castAngle < 180))
+            cy -= fabs(tan(degToRad(castAngle)) * texheight);// BIG CY
+        else
+            cy += fabs(tan(degToRad(castAngle)) * texheight);
+        if ((castAngle > 0 && castAngle < 90)
+            || (castAngle > 270 && castAngle < 360))
+            cx += texwidth;
+        else
+            cx -= texwidth;
+        printf("current cx[%d] cy[%d]\n", (int)cx, (int)cy);
+        if (map[(int)cx / 64][(int)cy / 64] != 0)
+            hit = 1;
+    }
+    printf("found wall at [%d] [%d]\n", (int)cx / 64, (int)cy /64);
+    exit(1);
     return (0.0);
 }
 

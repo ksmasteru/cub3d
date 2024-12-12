@@ -1,1 +1,2 @@
 angle should bebetween 0--->360; NO NEGATIVE;
+find a way to work around fabs : use negative value of tan

@@ -19,6 +19,7 @@ typedef struct s_player{
      double posx;
      double posy;
      double view_deg;
+     double beta_angle;
 }t_player;
 
 typedef struct s_image{
@@ -42,6 +43,8 @@ int render_walls(t_data *data);
 int update_player_pos(t_data *data, int scale);
 int rotate_player_dir(t_data *data, int keycode);
 int	pressed_key_event(int keycode, t_data *data);
-double   horizontalraycast(t_data *data, int stripex, double castAngle);
-double   verticalraycast(t_data *data, double stripex, double castAngle);
+double   horizontalraycast(t_data *data, double castAngle);
+double   verticalraycast(t_data *data, double castAngle);
+double   raycast(t_data *data, double castAngle);
+void set_new_img(t_data *data);
 #endif

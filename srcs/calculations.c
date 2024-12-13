@@ -185,6 +185,7 @@ double   verticalraycast(t_data *data, double castAngle)
         cx = ((int)data->player->posx / texwidth) * texwidth + texwidth; // box x
         // small distance
         cy = fabs(tan(degToRad(castAngle)) * roundf(cx - data->player->posx));// opposent : round down second part?
+        printf("small cy is %f\n", cy);
         if (castAngle > 0 && castAngle < 90)
             cy = data->player->posy - cy; // box y;
         else
@@ -239,7 +240,7 @@ double   verticalraycast(t_data *data, double castAngle)
             hit = 1;
     }
     //printf("found wall at [%d] [%d]\n", (int)cx / 64, (int)cy /64);
-    distance = calculate_distance(data, cx, cx, castAngle);
+    distance = calculate_distance(data, cx, cy, castAngle);
     //printf("vertical distance to the wall is %f\n", distance);
     return (distance);
 }

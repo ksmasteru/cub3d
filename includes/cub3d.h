@@ -47,4 +47,7 @@ double   horizontalraycast(t_data *data, double castAngle);
 double   verticalraycast(t_data *data, double castAngle);
 double   raycast(t_data *data, double castAngle);
 void set_new_img(t_data *data);
+double  calculate_distance(t_data *data, double cx, double cy, double castAngle);
+double   x_axis_raycast(t_data *data, double castAngle);
+double  y_axis_raycast(t_data *data, double castAngle);
 #endif

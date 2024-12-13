@@ -38,7 +38,7 @@ void    put_wall(t_data *data, int stripex,  double distance)
     char *pixel;
     while (y_min != y_max)
     {
-        printf("ymin value is %d\n", y_min);
+        //printf("ymin value is %d\n", y_min);
         pixel = data->img->adrs + data->img->size_line * y_min +
             stripex * (data->img->bpp / 8);
         *(int *)pixel = 0x00ff00;
@@ -48,7 +48,7 @@ void    put_wall(t_data *data, int stripex,  double distance)
 
 double   raycast(t_data *data, double castAngle)
 {
-    double horizontalray;
+    //double horizontalray;
     double verticalray;
 
     if (castAngle == 0 || castAngle == 180)
@@ -56,16 +56,16 @@ double   raycast(t_data *data, double castAngle)
     else if (castAngle == 90 || castAngle == 270)
         return (y_axis_raycast(data, castAngle));
     verticalray = verticalraycast(data, castAngle);
-    horizontalray = horizontalraycast(data, castAngle);
-    if (verticalray < horizontalray)
-    {
-        printf("distance to the wall is %f\n", verticalray);
-        printf("coreccted distance to the wall is %f\n", verticalray * cos(degToRad(data->player->beta_angle)));
-        return (verticalray * cos(degToRad(data->player->beta_angle)));
-    }
-    printf("distance to the wall is %f\n", horizontalray);
-    printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
-    return (horizontalray * cos(degToRad(data->player->beta_angle)));
+    //horizontalray = horizontalraycast(data, castAngle);
+    //if (verticalray < horizontalray)
+    //{
+      //  printf("distance to the wall is %f\n", verticalray);
+        //printf("coreccted distance to the wall is %f\n", verticalray * cos(degToRad(data->player->beta_angle)));
+        return (verticalray );//* cos(degToRad(data->player->beta_angle)));
+    //}
+    //printf("distance to the wall is %f\n", horizontalray);
+    //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
+    //return (horizontalray * cos(degToRad(data->player->beta_angle)));
 }
 
 void set_new_img(t_data *data)

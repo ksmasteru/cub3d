@@ -69,8 +69,6 @@ double  y_axis_raycast(t_data *data, double castAngle)
     int box_y;// keep count of how many boxes were traveled.
 
     box_y = 0;
-    castAngle = 180;
-    printf("Cast angle is %f\n", castAngle);
     hit = 0;
     cx = data->player->posx;
     if (castAngle == 90)
@@ -142,7 +140,7 @@ double   horizontalraycast(t_data *data, double castAngle)
     }
     //printf("first cube horizontal intersection is at x:%d y:%d \n", (int)cx / 64,
       //  (int)cy / 64);
-    if (map[(int)cx / 64][(int)cy / 64] != 0)
+    if (map[(int)cy / 64][(int)cx / 64] != 0)
         hit = 1;
     while (hit != 1)
     {
@@ -161,7 +159,7 @@ double   horizontalraycast(t_data *data, double castAngle)
             else if (castAngle < 270)
                 cx -= texheight / tan(degToRad(castAngle));
         }
-        if (map[(int)cx / 64][(int)cy / 64] != 0)
+        if (map[(int)cy / 64][(int)cx / 64]!= 0)
             hit = 1;
     }
     //printf("found a wall at %d %d\n", (int)cx / 64, (int)cy / 64);
@@ -215,6 +213,12 @@ double   verticalraycast(t_data *data, double castAngle)
         , ((int)cy));
         exit(1);*/
     }
+    if (cy < 0)
+        cy = 0;
+    if (cx < 0)
+        cx = 0;
+    if (map[(int)cy / 64][(int)cx / 64] != 0)
+            hit = 1;
     while (hit != 1) // xa stable.
     {
         if ((castAngle > 0 && castAngle < 180))
@@ -231,11 +235,11 @@ double   verticalraycast(t_data *data, double castAngle)
         if (cy < 0)
             cy = 0;
         printf("current cx[%d] cy[%d]\n", (int)cx/ 64 , (int)cy / 64);
-        if (map[(int)cx / 64][(int)cy / 64] != 0)
+        if (map[(int)cy / 64][(int)cx / 64] != 0)
             hit = 1;
     }
     //printf("found wall at [%d] [%d]\n", (int)cx / 64, (int)cy /64);
     distance = calculate_distance(data, cx, cx, castAngle);
-   // printf("vertical distance to the wall is %f\n", distance);
+    //printf("vertical distance to the wall is %f\n", distance);
     return (distance);
 }

@@ -16,7 +16,7 @@ int init_data(t_data *data)
         return (NULL);
     data->img->mlx_img = NULL;
     data->player->posx = 224;
-    data->player->posy = 221;
+    data->player->posy = 224;
     data->player->view_deg = 90;
 }
 

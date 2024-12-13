@@ -5,11 +5,13 @@
 #define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
 
 // each wall is 64*64.
+//            cx = (int)(data->player->posx / texwidth) * texwidth + texwidth;
+
 int map[8][8]={
 {1, 1 , 1, 1, 1, 1, 1, 1},
-{1, 0 , 0, 0, 0, 0, 0, 1},
-{1, 0 , 0, 0, 0, 0, 0, 1},
-{1, 0 , 0, 0, 0, 0, 0, 1},
+{1, 0 , 0, 1, 0, 0, 0, 1},
+{1, 0 , 0, 1, 0, 0, 0, 1},
+{1, 0 , 1, 0, 0, 0, 1, 1},
 {1, 0 , 0, 0, 0, 0, 0, 1},
 {1, 0 , 0, 0, 0, 0, 0, 1},
 {1, 0 , 0, 0, 0, 0, 0, 1},
@@ -26,6 +28,7 @@ double  calculate_distance(t_data *data, double cx, double cy, double castAngle)
 // cast a ray of castAngle stops when it hits a wall
 // return distance from player to the wal
 
+// !converting from box to numberis problematic box 1 is actulaly (1 + 1) * unit.
 double   x_axis_raycast(t_data *data, double castAngle)
 {
     // @returns distance
@@ -35,18 +38,29 @@ double   x_axis_raycast(t_data *data, double castAngle)
     int hit;
     double distance;
 
+    //castAngle = 0;
+    //printf("castAngle is %f\n", castAngle);
     hit = 0;
     if (castAngle == 0 || castAngle == 180)
     {
         cy = data->player->posy;
+        //printf("cy startposition is %f\n", cy);
         if (castAngle == 0)
             cx = (int)(data->player->posx / texwidth) * texwidth + texwidth;
         else
-            cx = (int) (data->player->posx / texwidth) * texwidth - texwidth; // first wall at left credentials.
+            cx = (int) (data->player->posx / texwidth) * texwidth - 1; // for rounding up. to make 3 == 2.
         if (cx < 0) // in case above is at 1;
             cx = 0;
+        //printf("first box cx is %f and its box value is %d %d\n", cx, (int)cx / 64, (int)cy / 64);
     }
-    if (map[(int)cx / texwidth][(int) cy / texheight] != 0)
+    /*for (int  i = 0 ; i < 8 ; i++)
+    {
+        printf("{");
+        for (int j = 0 ; j < 8 ; j++)
+            printf("%d ", map[i][j]);
+        printf("}\n");
+    }*/
+    if (map[(int) cy / texheight][(int)cx / texheight] != 0)
         hit = 1;
     while (hit != 1) /*traverse right or left until hitting a wall*/
     {
@@ -56,51 +70,59 @@ double   x_axis_raycast(t_data *data, double castAngle)
             cx -= texwidth;
         if (cx < 0)
             cx = 0;
-        if (map[(int)cx / texwidth][(int) cy / texheight] != 0)
+        if (map[(int) cy / texheight][(int)cx / texheight] != 0)
             hit = 1;
     }
-    printf("found a wall at map[%d][%d]\n", (int)cx / texwidth, (int)cy / texheight);
+    //printf("found a wall at map[%d][%d]\n", (int)cx / texwidth, (int)cy / texheight);
     if (castAngle == 0)
-         distance = (int) cx / texwidth * texwidth - data->player->posx;
+         distance = (int)cx / texwidth * texwidth - data->player->posx; // current box lent excluded
     else
-        distance = data->player->posx - (int) cx / texwidth * texwidth; // cx / 64 == 0 is a problem
-    printf("distance to x axis is %f\n", distance);
+        distance = data->player->posx - (((int) (cx) / texwidth) * texwidth + texwidth); // current box lent included
+    //printf("distance to x axis is %f cx value is %f\n", distance, cx);
     return (distance);
 }
 
+// cy and cx in this context are useless.
 double  y_axis_raycast(t_data *data, double castAngle)
 {
-    double cx;
-    double cy;
-    double distance; // distance should be int ;
+    double cx; // CREDENTIAL X : 
+    double cy;// CREDENTIAL Y
+    double distance;
     int hit;
+    int box_y;// keep count of how many boxes were traveled.
 
+    box_y = 0;
+    castAngle = 180;
+    printf("Cast angle is %f\n", castAngle);
     hit = 0;
     cx = data->player->posx;
     if (castAngle == 90)
-        cy = (int)(data->player->posy / texheight) * texheight - texheight;
+        cy = (int)(data->player->posy / texheight + 1) * texheight - texheight - 1; // go up -1 is import for credentials
     else
-        cy = (int)(data->player->posy / texheight) * texheight + texheight;
+        cy = (int)(data->player->posy / texheight + 1) * texheight;
     if (cy < 0)
         cy = 0;
-    if (map[(int)cx / texheight][(int)cy / texheight] != 0)
+    if (map[(int)cy / texheight][(int)cx / texheight] != 0)
         hit = 1;
+    printf("first box cy %f its box value is %d %d\n", cy, (int)cx/64, (int)cy/64);
     while (hit != 1)
     {
-        // traveling acroos y axis;
         if (castAngle == 90)
             cy -= texheight;
         else
             cy += texheight;
         if (cy < 0)
+        {
             cy = 0;
-        if (map[(int)cx / texheight][(int)cy / texheight] != 0)
+            printf("ERROR CY IS NEGATIVE\n");
+            exit(1);
+        }
+        box_y++;
+        if (map[(int)cy / texheight][(int)cx / texwidth] != 0)
             hit = 1;
     }
-    if (castAngle == 0)
-        distance = data->player->posy - (int)cy / texheight * texheight;
-    else
-        distance = (int) cy / texheight * texheight - data->player->posy;
+    printf("found a wall at cy %f box %d %d\n", cy, (int)cx / 64, (int) cy / 64);
+    distance = box_y * texheight + ((int)data->player->posy % texheight); 
     printf("distance across y axis ist %f\n", distance);
     return (distance);
 }
@@ -297,7 +319,7 @@ double   raycast(t_data *data, double castAngle)
     double horizontalray;
     double verticalray;
 
-    castAngle = 0;
+    castAngle = 90;
     if (castAngle == 0 || castAngle == 180)
         return (x_axis_raycast(data, castAngle));
     else if (castAngle == 90 || castAngle == 270)

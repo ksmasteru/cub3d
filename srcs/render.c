@@ -25,9 +25,9 @@ void    put_wall(t_data *data, int stripex,  double distance)
     // distance ratio ?
     int slice_height;
     int projection_d = (WIDTH / 2) * tan(degToRad(30)); /*ambigous*/
-    printf("putwall distance is %f\n", distance);
+    //printf("putwall distance is %f\n", distance);
     slice_height = (texheight / distance) * (projection_d); // this should be round up distance too small ? 
-    printf("slice height is %d\n", slice_height);
+    //printf("slice height is %d\n", slice_height);
     // drawing from middle of screen;
     int y_min =  HEIGHT / 2 - slice_height / 2;
     if (y_min <= 0)
@@ -49,22 +49,25 @@ void    put_wall(t_data *data, int stripex,  double distance)
 double   raycast(t_data *data, double castAngle)
 {
     double horizontalray;
-    //double verticalray;
+    double verticalray;
 
+    if (castAngle < 0)
+        castAngle += 360;
     if (castAngle == 0 || castAngle == 180)
         return (x_axis_raycast(data, castAngle));
     else if (castAngle == 90 || castAngle == 270)
         return (y_axis_raycast(data, castAngle));
-    //verticalray = verticalraycast(data, castAngle);
+    verticalray = verticalraycast(data, castAngle);
     horizontalray = horizontalraycast(data, castAngle);
-    //if (verticalray < horizontalray)
-    //{
-      //  printf("distance to the wall is %f\n", verticalray);
-        //printf("coreccted distance to the wall is %f\n", verticalray * cos(degToRad(data->player->beta_angle)));
-        //return (verticalray );//* cos(degToRad(data->player->beta_angle)));
+    if (verticalray < horizontalray)
+    {
+        printf("for angle %f vertical height is %f because horizontal is %f\n", castAngle, verticalray, horizontalray);
+        return (verticalray * cos(degToRad(data->player->beta_angle)));
+    }
     //}
     //printf("distance to the wall is %f\n", horizontalray);
     //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
+    printf("for angle %f horizontal height is %f because horizontal was %f\n", castAngle, horizontalray,verticalray);
     return (horizontalray * cos(degToRad(data->player->beta_angle)));
 }
 

@@ -106,7 +106,7 @@ double  y_axis_raycast(t_data *data, double castAngle)
 }
 
 // the actual distance. BOTH hit same wall. or at least pass tru the same grids.
-double   horizontalraycast(t_data *data, double castAngle)
+double   verticalraycast(t_data *data, double castAngle)
 {
     //ya iknowns ca isnt
     double len;
@@ -114,15 +114,14 @@ double   horizontalraycast(t_data *data, double castAngle)
     double cx;
     double cy;
     hit = 0;
-    int xa;
-    int ya;
+    double xa;
+    double ya;
     if (castAngle > 0 && castAngle < 180)
     {
-        ya = -texheight;
+        ya = texheight * -1;
         cy = ((int)data->player->posy / texheight) * texheight - 1;
         cx = ((data->player->posy - cy) / tan(degToRad(castAngle)));
-        printf("adjacent value is %f\n", cx);
-        cx += data->player->posx; // add or substract ?
+        cx += data->player->posx;
         // if ray is going rihgt side add
         // if it is going left side substaract : same proprety as tan so just add
         // and keep the sign of tan but data->player->posy - cy has to be positive.
@@ -137,7 +136,6 @@ double   horizontalraycast(t_data *data, double castAngle)
         ya = texheight;
         cy = ((int)data->player->posy / texheight) * texheight + texheight;
         cx = (cy - data->player->posy) / tan(degToRad(castAngle));
-        printf("adjacent value is %f\n", cx);
         //printf("cy is %f cx is %f\n", cy, cx);
         /*
             as above using the porprety of tan. only cx - posy has to be positve
@@ -151,6 +149,11 @@ double   horizontalraycast(t_data *data, double castAngle)
         printf("first cube horizontal intersection is at x:%d y:%d \n", ((int)cx/64)
         , ((int)cy / 64));
         exit(1);*/
+    }
+    if (cx < 0 || cx > WIDTH)
+    {
+         printf("!!!!!width is too high!!!!!\n");
+         return (1e30);
     }
     //printf("first cube horizontal intersection is at x:%d y:%d \n", (int)cx / 64,
       //  (int)cy / 64);
@@ -173,70 +176,74 @@ double   horizontalraycast(t_data *data, double castAngle)
     return (distance);
 }
 
-double   verticalraycast(t_data *data, double castAngle)
+/*name were swapped.*/
+double   horizontalraycast(t_data *data, double castAngle)
 {
     double  len;
     double  cx;
     double  cy;
     int     hit;
     double distance;
-    int xa;
-    int ya;
+    double xa;
+    double ya;
     hit = 0;
-
+    // ah swaping value from negative to positive didnt take place !
     if ((castAngle > 0 && castAngle < 90)
         || (castAngle > 270 && castAngle < 360))
     {
+        xa = texwidth;
         // finding  adjacent  : current + 1 BIG DISTANCE
         cx = ((int)data->player->posx / texwidth) * texwidth + texwidth; // box x
         // small distance
-        cy = tan(degToRad(castAngle)) * (cx - data->player->posx);
-        cy += data->player->posy;
+        //printf("cx value is %f and angle is %f\n", cx, castAngle);
+        cy = tan(degToRad(castAngle)) * (cx - data->player->posx); // something is wrong in here
+        //printf("cy value is %f\n", cy);
+        if (castAngle > 0 && castAngle < 90)/*positive cy tan method doesnt apply here*/
+            cy = data->player->posy - fabs(cy);
+        else
+            cy = data->player->posy + fabs(cy);
         /*as stated in horizontal raycasting : adding or substracting is decided
-        by the sing of tan.*/
+        by the sign of tan : this can only work for x as y sign isnt the same as tan.*/
         /*cx = roundf(cx) / 64;
-        cy = roundf(cy) / 64;
+        cy = roundf(cy) / 64;*/
         printf("first cube vertical intersection is at x:%d y:%d \n", ((int)cx/64)
         , ((int)cy / 64));
-        exit(1);*/
+        //exit(1);
     }
     else
     {
         // adjacent current - box
+        xa = texwidth * -1;
         cx = ((int)data->player->posx / texwidth) * texwidth - 1; 
         //printf("data->player->posx[%f] - cx[%f] = [%f\n", data->player->posx, cx, data->player->posx - cx);
         cy =  tan(degToRad(castAngle)) * (data->player->posx - cx);
         //printf("opposent value is %f\n", cy);
         /* fabs (tan) ? because we decided when to add and -
-         !!!! when to add and when to substract to cy : decided by tan sign.
-        if (castAngle > 0 && castAngle < 90) // handled in the first if*/
-        cy += data->player->posy;
-        /*printf("first cube vertical intersection1 is at x:%d y:%d \n", ((int)cx)
+         !!!! when to add and when to substract to cy : decided by tan sign.*/
+        if (castAngle > 90 && castAngle < 180) /*negative cy*/
+            cy = data->player->posy - fabs(cy);
+        else
+            cy = data->player->posy + fabs(cy);
+        printf("first cube vertical intersection1 is at x:%d y:%d \n", ((int)cx)
         , ((int)cy));
-        exit(1);*/
+        //exit(1);
     }
-    if (cy < 0) // to remove these later
-        cy = 0;
-    if (cx < 0)
-        cx = 0;
+    if (cy < 0 || cy > HEIGHT) /*enough ?*/
+    {
+        printf("!!!!!!!!!!at angle %f cy is too high %f!!!!!!!!!!!!!\n", castAngle, cy);
+        return (1e30);
+    }
     if (map[(int)cy / 64][(int)cx / 64] != 0)
             hit = 1;
-    ya = tan(degToRad(castAngle)) * texheight;// calculated one time for efficiency.
+    ya = fabs(tan(degToRad(castAngle)) * texheight);// calculated one time for efficiency. : up positive,down negative
+    // tan doesnt apply to ya ? it only apply to x;
+    printf("ya value is %f\n", ya);
+    if (castAngle > 0 && castAngle < 180)
+        ya *= -1;
     while (hit != 1) // xa stable.
     {
-        if ((castAngle > 0 && castAngle < 180))
-            cy -= fabs(tan(degToRad(castAngle)) * texheight);// BIG CY // calculate it one time
-        else
-            cy += fabs(tan(degToRad(castAngle)) * texheight);
-        if ((castAngle > 0 && castAngle < 90)
-            || (castAngle > 270 && castAngle < 360))
-            cx += texwidth;
-        else
-            cx -= texwidth;
-        if (cx < 0)
-            cx = 0;
-        if (cy < 0)
-            cy = 0;
+        cy += ya;
+        cx += xa;
         //printf("current cx[%d] cy[%d]\n", (int)cx/ 64 , (int)cy / 64);
         if (map[(int)cy / texheight][(int)cx / texwidth] != 0)
             hit = 1;

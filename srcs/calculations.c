@@ -114,9 +114,11 @@ double   horizontalraycast(t_data *data, double castAngle)
     double cx;
     double cy;
     hit = 0;
-    
+    int xa;
+    int ya;
     if (castAngle > 0 && castAngle < 180)
     {
+        ya = -texheight;
         cy = ((int)data->player->posy / texheight) * texheight - 1;
         cx = ((data->player->posy - cy) / tan(degToRad(castAngle)));
         printf("adjacent value is %f\n", cx);
@@ -132,6 +134,7 @@ double   horizontalraycast(t_data *data, double castAngle)
     else 
     {
         //printf("down ward ray\n");
+        ya = texheight;
         cy = ((int)data->player->posy / texheight) * texheight + texheight;
         cx = (cy - data->player->posy) / tan(degToRad(castAngle));
         printf("adjacent value is %f\n", cx);
@@ -153,16 +156,14 @@ double   horizontalraycast(t_data *data, double castAngle)
       //  (int)cy / 64);
     if (map[(int)cy / 64][(int)cx / 64] != 0)
         hit = 1;
+    xa = texwidth / tan(degToRad(castAngle));
     while (hit != 1)
     {
         //printf("entered  hit loop\n");
         // traverse upward
-        if (castAngle > 0 && castAngle < 180)
-            cy -= texheight;
-        else
-            cy += texheight;
-        cx += texwidth / tan(degToRad(castAngle));
-        cx += texwidth / tan(degToRad(castAngle));
+        cy += ya;// +texheight or -texheight
+        cx += xa;
+        // in case cy or cx get negative --> SEGV;
         if (map[(int)cy / texwidth][(int)cx / texheight]!= 0)
             hit = 1;
     }
@@ -180,20 +181,19 @@ double   verticalraycast(t_data *data, double castAngle)
     int     hit;
     double distance;
     int xa;
+    int ya;
     hit = 0;
-    
+
     if ((castAngle > 0 && castAngle < 90)
         || (castAngle > 270 && castAngle < 360))
     {
         // finding  adjacent  : current + 1 BIG DISTANCE
         cx = ((int)data->player->posx / texwidth) * texwidth + texwidth; // box x
         // small distance
-        cy = fabs(tan(degToRad(castAngle)) * roundf(cx - data->player->posx));// opposent : round down second part?
-        printf("small cy is %f\n", cy);
-        if (castAngle > 0 && castAngle < 90)
-            cy = data->player->posy - cy; // box y;
-        else
-            cy = data->player->posy + cy;
+        cy = tan(degToRad(castAngle)) * (cx - data->player->posx);
+        cy += data->player->posy;
+        /*as stated in horizontal raycasting : adding or substracting is decided
+        by the sing of tan.*/
         /*cx = roundf(cx) / 64;
         cy = roundf(cy) / 64;
         printf("first cube vertical intersection is at x:%d y:%d \n", ((int)cx/64)
@@ -205,29 +205,27 @@ double   verticalraycast(t_data *data, double castAngle)
         // adjacent current - box
         cx = ((int)data->player->posx / texwidth) * texwidth - 1; 
         //printf("data->player->posx[%f] - cx[%f] = [%f\n", data->player->posx, cx, data->player->posx - cx);
-        cy =  fabs(tan(degToRad(castAngle)) * (data->player->posx - cx));
+        cy =  tan(degToRad(castAngle)) * (data->player->posx - cx);
         //printf("opposent value is %f\n", cy);
         /* fabs (tan) ? because we decided when to add and -
-         !!!! when to add and when to substract to cy
+         !!!! when to add and when to substract to cy : decided by tan sign.
         if (castAngle > 0 && castAngle < 90) // handled in the first if*/
-        if (castAngle > 90 && castAngle < 180)
-            cy = data->player->posy - cy;// !
-        else
-            cy = data->player->posy + cy;
+        cy += data->player->posy;
         /*printf("first cube vertical intersection1 is at x:%d y:%d \n", ((int)cx)
         , ((int)cy));
         exit(1);*/
     }
-    if (cy < 0)
+    if (cy < 0) // to remove these later
         cy = 0;
     if (cx < 0)
         cx = 0;
     if (map[(int)cy / 64][(int)cx / 64] != 0)
             hit = 1;
+    ya = tan(degToRad(castAngle)) * texheight;// calculated one time for efficiency.
     while (hit != 1) // xa stable.
     {
         if ((castAngle > 0 && castAngle < 180))
-            cy -= fabs(tan(degToRad(castAngle)) * texheight);// BIG CY
+            cy -= fabs(tan(degToRad(castAngle)) * texheight);// BIG CY // calculate it one time
         else
             cy += fabs(tan(degToRad(castAngle)) * texheight);
         if ((castAngle > 0 && castAngle < 90)

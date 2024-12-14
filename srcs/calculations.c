@@ -10,7 +10,7 @@ double  calculate_distance(t_data *data, double cx, double cy, double castAngle)
     //TODO
     double distance;
 
-    distance = sin(degToRad(castAngle)) * fabs(data->player->posy - cy); //  
+    distance = fabs((data->player->posy - cy) / sin(degToRad(castAngle)));
     return (distance);
 }
 // cast a ray of castAngle stops when it hits a wall
@@ -72,14 +72,14 @@ double  y_axis_raycast(t_data *data, double castAngle)
     hit = 0;
     cx = data->player->posx;
     if (castAngle == 90)
-        cy = (int)(data->player->posy / texheight + 1) * texheight - texheight - 1; // go up -1 is import for credentials
+        cy = (int)data->player->posy / texheight * texheight - 1;
     else
-        cy = (int)(data->player->posy / texheight + 1) * texheight;
+        cy = (int)(data->player->posy / texheight) * texheight + texheight;
     if (cy < 0)
         cy = 0;
     if (map[(int)cy / texheight][(int)cx / texheight] != 0)
         hit = 1;
-    printf("first box cy %f its box value is %d %d\n", cy, (int)cx/64, (int)cy/64);
+    //printf("first box cy %f its box value is %d %d\n", cy, (int)cx/64, (int)cy/64);
     while (hit != 1)
     {
         if (castAngle == 90)
@@ -96,9 +96,12 @@ double  y_axis_raycast(t_data *data, double castAngle)
         if (map[(int)cy / texheight][(int)cx / texwidth] != 0)
             hit = 1;
     }
-    printf("found a wall at cy %f box %d %d\n", cy, (int)cx / 64, (int) cy / 64);
-    distance = box_y * texheight + ((int)data->player->posy % texheight); 
-    printf("distance across y axis ist %f\n", distance);
+    //printf("found a wall at cy %f box %d %d\n", cy, (int)cx / 64, (int) cy / 64);
+    if (box_y == 0)
+        distance = (int)data->player->posy % texheight;
+    else
+        distance = (box_y + 1) * texheight + (int)data->player->posy % texheight; 
+    //printf("distance across y axis ist %f\n", distance);
     return (distance);
 }
 
@@ -115,8 +118,12 @@ double   horizontalraycast(t_data *data, double castAngle)
     if (castAngle > 0 && castAngle < 180)
     {
         cy = ((int)data->player->posy / texheight) * texheight - 1;
-        cx = roundf(data->player->posy - cy) / tan(degToRad(castAngle));
-        cx += data->player->posx;
+        cx = ((data->player->posy - cy) / tan(degToRad(castAngle)));
+        printf("adjacent value is %f\n", cx);
+        cx += data->player->posx; // add or substract ?
+        // if ray is going rihgt side add
+        // if it is going left side substaract : same proprety as tan so just add
+        // and keep the sign of tan but data->player->posy - cy has to be positive.
         /*printf("cy is %f cx is %f\n", cy, cx);
         printf("first cube horizontal intersection is at x:%d y:%d \n", (int)(cx/64)
         , (int)(cy / 64));
@@ -124,14 +131,18 @@ double   horizontalraycast(t_data *data, double castAngle)
     }
     else 
     {
-        printf("down ward ray\n");
+        //printf("down ward ray\n");
         cy = ((int)data->player->posy / texheight) * texheight + texheight;
-        cx = roundf(cy - data->player->posy) / tan(degToRad(castAngle));
+        cx = (cy - data->player->posy) / tan(degToRad(castAngle));
+        printf("adjacent value is %f\n", cx);
         //printf("cy is %f cx is %f\n", cy, cx);
+        /*
+            as above using the porprety of tan. only cx - posy has to be positve
         if (castAngle > 270)
             cx += data->player->posx;
         else if (castAngle < 270)
-            cx = data->player->posx - cx;
+            cx = data->player->posx - cx;*/
+        cx += data->player->posx;
         /*cx = roundf(cx) / 64;
         cy = roundf(cy) / 64;
         printf("first cube horizontal intersection is at x:%d y:%d \n", ((int)cx/64)
@@ -147,23 +158,16 @@ double   horizontalraycast(t_data *data, double castAngle)
         //printf("entered  hit loop\n");
         // traverse upward
         if (castAngle > 0 && castAngle < 180)
-        {
             cy -= texheight;
-            cx += texheight / tan(degToRad(castAngle));
-        }
         else
-        {
-            cy +=texheight;
-            if (castAngle > 270)
-                cx += texheight / tan(degToRad(castAngle));
-            else if (castAngle < 270)
-                cx -= texheight / tan(degToRad(castAngle));
-        }
-        if (map[(int)cy / 64][(int)cx / 64]!= 0)
+            cy += texheight;
+        cx += texwidth / tan(degToRad(castAngle));
+        cx += texwidth / tan(degToRad(castAngle));
+        if (map[(int)cy / texwidth][(int)cx / texheight]!= 0)
             hit = 1;
     }
     //printf("found a wall at %d %d\n", (int)cx / 64, (int)cy / 64);
-    double distance = calculate_distance(data, cx, cx, castAngle);
+    double distance = calculate_distance(data, cx, cy, castAngle);
     //printf("horizontal distance to the wall is %f\n", distance);
     return (distance);
 }
@@ -235,8 +239,8 @@ double   verticalraycast(t_data *data, double castAngle)
             cx = 0;
         if (cy < 0)
             cy = 0;
-        printf("current cx[%d] cy[%d]\n", (int)cx/ 64 , (int)cy / 64);
-        if (map[(int)cy / 64][(int)cx / 64] != 0)
+        //printf("current cx[%d] cy[%d]\n", (int)cx/ 64 , (int)cy / 64);
+        if (map[(int)cy / texheight][(int)cx / texwidth] != 0)
             hit = 1;
     }
     //printf("found wall at [%d] [%d]\n", (int)cx / 64, (int)cy /64);

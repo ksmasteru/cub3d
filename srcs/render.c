@@ -9,8 +9,8 @@
 
 int map[8][8]={
 {1, 1 , 1, 1, 1, 1, 1, 1},
-{1, 0 , 0, 1, 0, 0, 0, 1},
-{1, 0 , 0, 1, 0, 0, 0, 1},
+{1, 0 , 0, 0, 0, 0, 0, 1},
+{1, 0 , 0, 0, 0, 0, 0, 1},
 {1, 0 , 0, 0, 0, 0, 0, 1},
 {1, 0 , 0, 0, 0, 0, 0, 1},
 {1, 0 , 0, 0, 0, 0, 0, 1},
@@ -48,24 +48,24 @@ void    put_wall(t_data *data, int stripex,  double distance)
 
 double   raycast(t_data *data, double castAngle)
 {
-    //double horizontalray;
-    double verticalray;
+    double horizontalray;
+    //double verticalray;
 
     if (castAngle == 0 || castAngle == 180)
         return (x_axis_raycast(data, castAngle));
     else if (castAngle == 90 || castAngle == 270)
         return (y_axis_raycast(data, castAngle));
-    verticalray = verticalraycast(data, castAngle);
-    //horizontalray = horizontalraycast(data, castAngle);
+    //verticalray = verticalraycast(data, castAngle);
+    horizontalray = horizontalraycast(data, castAngle);
     //if (verticalray < horizontalray)
     //{
       //  printf("distance to the wall is %f\n", verticalray);
         //printf("coreccted distance to the wall is %f\n", verticalray * cos(degToRad(data->player->beta_angle)));
-        return (verticalray );//* cos(degToRad(data->player->beta_angle)));
+        //return (verticalray );//* cos(degToRad(data->player->beta_angle)));
     //}
     //printf("distance to the wall is %f\n", horizontalray);
     //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
-    //return (horizontalray * cos(degToRad(data->player->beta_angle)));
+    return (horizontalray * cos(degToRad(data->player->beta_angle)));
 }
 
 void set_new_img(t_data *data)
@@ -90,12 +90,13 @@ int render_walls(t_data *data)
     sep_angle = 60.0 / WIDTH;
     castAngle = data->player->view_deg + 30;
     data->player->beta_angle = 30;
-    printf("start boxX[%d] boxY[%d]\n", (int)data->player->posx / 64, (int)data->player->posy / 64);
+    //printf("start boxX[%d] boxY[%d]\n", (int)data->player->posx / 64, (int)data->player->posy / 64);
     set_new_img(data);
     while (i < WIDTH)
     {
         //printf("cast angle is %f\n", castAngle);
         wallheight = raycast(data, castAngle);
+        //printf("for cast angle %f wallheight is %f\n", castAngle, wallheight);
         put_wall(data, i, wallheight);
         castAngle -= sep_angle;
         data->player->beta_angle -= sep_angle;

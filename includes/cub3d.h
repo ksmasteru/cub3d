@@ -14,7 +14,7 @@
 #define texwidth 64
 #define WIDTH 512
 #define HEIGHT 512
-
+#define FOW 60
 typedef struct s_player{
      double posx;
      double posy;

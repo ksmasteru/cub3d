@@ -49,11 +49,11 @@ double   x_axis_raycast(t_data *data, double castAngle)
              hit = 1;
     }
     //printf("found a wall at map[%d][%d]\n", (int)cx / texwidth, (int)cy / texheight);
-    if (castAngle == 0)
-         distance = (int)cx / texwidth * texwidth - data->player->posx; // current box lent excluded
+    if (box_x == 0)
+        distance = (int)data->player->posx % texwidth; // current box lent excluded
     else
-        distance = data->player->posx - (((int) (cx) / texwidth) * texwidth + texwidth); // current box lent included
-    //printf("distance to x axis is %f cx value is %f\n", distance, cx);
+        distance = box_x * texwidth + (int)data->player->posx % texwidth; // current box lent included
+    printf("------------distance to x axis is %f cx value is %f-----------\n", distance, cx);
     return (distance);
 }
 
@@ -96,7 +96,7 @@ double  y_axis_raycast(t_data *data, double castAngle)
     if (box_y == 0)
         distance = (int)data->player->posy % texheight;
     else
-        distance = box_y * texheight + (int)data->player->posy % texheight; 
+        distance = box_y * texheight + (int)data->player->posy % texheight;
     return (distance * cos(degToRad(data->player->beta_angle)));
 }
 
@@ -116,7 +116,10 @@ double   verticalraycast(t_data *data, double castAngle)
         ya = texheight * -1;
         cy = ((int)data->player->posy / texheight) * texheight - 1;
         cx = ((data->player->posy - cy) / tan(degToRad(castAngle)));
-        cx += data->player->posx;
+        if (castAngle < 90)
+            cx = data->player->posx + fabs(cx);
+        else
+            cx = data->player->posx - fabs(cx);
         // if ray is going rihgt side add
         // if it is going left side substaract : same proprety as tan so just add
         // and keep the sign of tan but data->player->posy - cy has to be positive.
@@ -138,7 +141,10 @@ double   verticalraycast(t_data *data, double castAngle)
             cx += data->player->posx;
         else if (castAngle < 270)
             cx = data->player->posx - cx;*/
-        cx += data->player->posx;
+        if (castAngle > 270)
+            cx = data->player->posx + fabs(cx);
+        else
+            cx = data->player->posx - fabs(cx);
         /*cx = roundf(cx) / 64;
         cy = roundf(cy) / 64;
         printf("first cube horizontal intersection is at x:%d y:%d \n", ((int)cx/64)

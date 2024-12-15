@@ -67,7 +67,7 @@ double   raycast(t_data *data, double castAngle)
     //}
     //printf("distance to the wall is %f\n", horizontalray);
     //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
-    printf("for angle %f horizontal height is %f because horizontal was %f\n", castAngle, horizontalray,verticalray);
+    printf("for angle %f horizontal height is %f because vertical was %f\n", castAngle, horizontalray,verticalray);
     return (horizontalray * cos(degToRad(data->player->beta_angle)));
 }
 
@@ -100,6 +100,7 @@ int render_walls(t_data *data)
         //printf("cast angle is %f\n", castAngle);
         wallheight = raycast(data, castAngle);
         //printf("for cast angle %f wallheight is %f\n", castAngle, wallheight);
+        //if (castAngle > -12 && castAngle < -8)
         put_wall(data, i, wallheight);
         castAngle -= sep_angle;
         data->player->beta_angle -= sep_angle;
@@ -107,4 +108,4 @@ int render_walls(t_data *data)
     }
     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0, 0);
     return (0);
-}
+} 

@@ -24,19 +24,16 @@ double   x_axis_raycast(t_data *data, double castAngle)
     double cy;
     int hit;
     double distance;
+    int box_x;
     //printf("castAngle is %f\n", castAngle);
     hit = 0;
-    if (castAngle == 0 || castAngle == 180)
-    {
-        cy = data->player->posy;
+    box_x = 0;
+    cy = data->player->posy;
         //printf("cy startposition is %f\n", cy);
-        if (castAngle == 0)
-            cx = (int)(data->player->posx / texwidth) * texwidth + texwidth;
-        else
-            cx = (int) (data->player->posx / texwidth) * texwidth - 1; // for rounding up. to make 3 == 2.
-        if (cx < 0)
-            cx = 0;
-    }
+    if (castAngle == 0)
+        cx = ((int)data->player->posx / texwidth) * texwidth + texwidth;
+    else
+        cx = ((int)data->player->posx / texwidth) * texwidth - 1;
     if (map[(int) cy / texheight][(int)cx / texheight] != 0)
         hit = 1;
     while (hit != 1) /*traverse right or left until hitting a wall*/
@@ -47,6 +44,7 @@ double   x_axis_raycast(t_data *data, double castAngle)
             cx -= texwidth;
         if (cx < 0)
             cx = 0;
+        box_x++;
         if (map[(int) cy / texheight][(int)cx / texheight] != 0)
              hit = 1;
     }
@@ -75,8 +73,6 @@ double  y_axis_raycast(t_data *data, double castAngle)
         cy = (int)data->player->posy / texheight * texheight - 1;
     else
         cy = (int)(data->player->posy / texheight) * texheight + texheight;
-    if (cy < 0)
-        cy = 0;
     if (map[(int)cy / texheight][(int)cx / texheight] != 0)
         hit = 1;
     //printf("first box cy %f its box value is %d %d\n", cy, (int)cx/64, (int)cy/64);
@@ -100,9 +96,8 @@ double  y_axis_raycast(t_data *data, double castAngle)
     if (box_y == 0)
         distance = (int)data->player->posy % texheight;
     else
-        distance = (box_y + 1) * texheight + (int)data->player->posy % texheight; 
-    //printf("distance across y axis ist %f\n", distance);
-    return (distance);
+        distance = box_y * texheight + (int)data->player->posy % texheight; 
+    return (distance * cos(degToRad(data->player->beta_angle)));
 }
 
 // the actual distance. BOTH hit same wall. or at least pass tru the same grids.

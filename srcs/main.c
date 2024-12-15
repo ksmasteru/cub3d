@@ -5,7 +5,7 @@ int init_data(t_data *data)
     data->mlx_ptr = mlx_init();
     if (!data->mlx_ptr)
         return (-1);
-    data->win_ptr = mlx_new_window(data->mlx_ptr, WIDTH, HEIGHT, "CUB3D");
+    data->win_ptr = mlx_new_window(data->mlx_ptr, SCREEN_W, SCREEN_H, "CUB3D");
     if (!data->win_ptr)
         return (-1);
     data->player = malloc(sizeof(t_player));
@@ -15,8 +15,8 @@ int init_data(t_data *data)
     if (!data->img)
         return (NULL);
     data->img->mlx_img = NULL;
-    data->player->posx = 224;
-    data->player->posy = 224;
+    data->player->posx = 800;// on the map not screen map is 64 * 24 width
+    data->player->posy = 800;
     data->player->view_deg = 90;
 }
 

@@ -4,7 +4,7 @@
 #define degToRad(angleInDegrees) ((angleInDegrees) * M_PI / 180.0)
 #define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
 
-extern int map[8][8];
+extern int map[24][24];
 double  calculate_distance(t_data *data, double cx, double cy, double castAngle)
 {
     //TODO
@@ -53,7 +53,7 @@ double   x_axis_raycast(t_data *data, double castAngle)
         distance = (int)data->player->posx % texwidth; // current box lent excluded
     else
         distance = box_x * texwidth + (int)data->player->posx % texwidth; // current box lent included
-    printf("------------distance to x axis is %f cx value is %f-----------\n", distance, cx);
+    //printf("------------distance to x axis is %f cx value is %f-----------\n", distance, cx);
     return (distance);
 }
 
@@ -85,8 +85,8 @@ double  y_axis_raycast(t_data *data, double castAngle)
         if (cy < 0)
         {
             cy = 0;
-            printf("ERROR CY IS NEGATIVE\n");
-            exit(1);
+           printf("ERROR CY IS NEGATIVE\n");
+           exit(1);
         }
         box_y++;
         if (map[(int)cy / texheight][(int)cx / texwidth] != 0)
@@ -151,9 +151,9 @@ double   verticalraycast(t_data *data, double castAngle)
         , ((int)cy / 64));
         exit(1);*/
     }
-    if (cx < 0 || cx > WIDTH)
+    if (cx < 0 || cx > MAP_W)
     {
-         printf("!!!!!width is too high!!!!!\n");
+         //printf("!!!!!width is too high!!!!!\n");
          return (1e30);
     }
     //printf("first cube horizontal intersection is at x:%d y:%d \n", (int)cx / 64,
@@ -207,8 +207,8 @@ double   horizontalraycast(t_data *data, double castAngle)
         by the sign of tan : this can only work for x as y sign isnt the same as tan.*/
         /*cx = roundf(cx) / 64;
         cy = roundf(cy) / 64;*/
-        printf("first cube vertical intersection is at x:%d y:%d \n", ((int)cx/64)
-        , ((int)cy / 64));
+        //printf("first cube horizontal intersection is at x:%d y:%d \n", ((int)cx/64)
+       // , ((int)cy / 64));
         //exit(1);
     }
     else
@@ -225,27 +225,32 @@ double   horizontalraycast(t_data *data, double castAngle)
             cy = data->player->posy - fabs(cy);
         else
             cy = data->player->posy + fabs(cy);
-        printf("first cube vertical intersection1 is at x:%d y:%d \n", ((int)cx)
-        , ((int)cy));
+        //printf("first cube horizontal intersection1 is at x:%d y:%d \n", ((int)cx) / 64
+       // , ((int)cy) / 64);
         //exit(1);
     }
-    if (cy < 0 || cy > HEIGHT) /*enough ?*/
+    if (cy < 0 || cy > MAP_H) /*enough ?*/
     {
-        printf("!!!!!!!!!!at angle %f cy is too high %f!!!!!!!!!!!!!\n", castAngle, cy);
+        //printf("!!!!!!!!!!at angle %f cy is too high %f!!!!!!!!!!!!!\n", castAngle, cy);
         return (1e30);
     }
     if (map[(int)cy / 64][(int)cx / 64] != 0)
             hit = 1;
     ya = fabs(tan(degToRad(castAngle)) * texheight);// calculated one time for efficiency. : up positive,down negative
     // tan doesnt apply to ya ? it only apply to x;
-    printf("ya value is %f\n", ya);
+    //printf("ya value is %f\n", ya);
     if (castAngle > 0 && castAngle < 180)
         ya *= -1;
     while (hit != 1) // xa stable.
     {
         cy += ya;
         cx += xa;
-        //printf("current cx[%d] cy[%d]\n", (int)cx/ 64 , (int)cy / 64);
+        // cy got negative.
+        if(cy < 0)
+            cy = 0;
+        if (cy > MAP_H)
+            cy = MAP_H - 1;
+        printf("cx value %f cy value %f current cx[%d] cy[%d]\n", cx, cy, (int)cx/ 64 , (int)cy / 64);
         if (map[(int)cy / texheight][(int)cx / texwidth] != 0)
             hit = 1;
     }

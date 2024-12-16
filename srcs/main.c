@@ -13,9 +13,9 @@ int init_data(t_data *data)
         return (-1);
     data->img = malloc(sizeof(t_image));
     if (!data->img)
-        return (NULL);
+        return (-1);
     data->img->mlx_img = NULL;
-    data->player->posx = 800;// on the map not screen map is 64 * 24 width
+    data->player->posx = 800;
     data->player->posy = 800;
     data->player->view_deg = 90;
 }

@@ -250,7 +250,7 @@ double   horizontalraycast(t_data *data, double castAngle)
             cy = 0;
         if (cy > MAP_H)
             cy = MAP_H - 1;
-        printf("cx value %f cy value %f current cx[%d] cy[%d]\n", cx, cy, (int)cx/ 64 , (int)cy / 64);
+        //printf("cx value %f cy value %f current cx[%d] cy[%d]\n", cx, cy, (int)cx/ 64 , (int)cy / 64);
         if (map[(int)cy / texheight][(int)cx / texwidth] != 0)
             hit = 1;
     }

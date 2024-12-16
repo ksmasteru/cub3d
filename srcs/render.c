@@ -1,12 +1,11 @@
 #include "../includes/cub3d.h"
 #include <math.h>
-#define M_PI   3.14159265358979323846264338327950288
-#define degToRad(angleInDegrees) ((angleInDegrees) * M_PI / 180.0)
-#define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
+
 
 // each wall is 64*64.
 //            cx = (int)(data->player->posx / texwidth) * texwidth + texwidth;
 
+double angle;
 int map[24][24]=
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -53,7 +52,7 @@ void    put_wall(t_data *data, int stripex,  double distance)
     if (y_max >= SCREEN_H)
         y_max = SCREEN_H - 1;
     char *pixel;
-    printf("distance value is %f sliceheight value %d y_min value %d y_max value %d stripex value %d\n",distance, slice_height, y_min, y_max, stripex);
+    //printf("distance value is %f sliceheight value %d y_min value %d y_max value %d stripex value %d\n",distance, slice_height, y_min, y_max, stripex);
     while (y_min != y_max)
     {
         //printf("ymin value is %d\n", y_min);
@@ -110,8 +109,9 @@ int render_walls(t_data *data)
     i = 0;
     sep_angle = (double)FOW / SCREEN_W;
     castAngle = data->player->view_deg + (double)FOW / 2;
+    angle = data->player->view_deg;
     update_ray_dir(&(data->ray), data->player->view_deg);
-    printf("cast angle is %f\n", castAngle);
+    //printf("cast angle is %f\n", castAngle);
     data->player->beta_angle = (double)FOW / 2; // works better than FOW / 2 somehow.
     //printf("start boxX[%d] boxY[%d]\n", (int)data->player->posx / 64, (int)data->player->posy / 64);
     //printf("beta angle is %f\n", data->player->beta_angle);
@@ -128,5 +128,6 @@ int render_walls(t_data *data)
         i++;
     }
     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0, 0);
+    show_player_data(data); // write on top of new img
     return (0);
-} 
+}

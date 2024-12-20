@@ -19,6 +19,8 @@
 #define FOW 60
 #define ROTSPEED 1.5
 #define MOVE_SPEED 31
+#define w 24
+#define h 24
 
 #define M_PI   3.14159265358979323846264338327950288
 #define degToRad(angleInDegrees) ((angleInDegrees) * M_PI / 180.0)

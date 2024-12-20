@@ -168,6 +168,14 @@ double   verticalraycast(t_data *data, double castAngle)
         cy += ya;// +texheight or -texheight
         cx += xa;
         // in case cy or cx get negative --> SEGV;
+        if (cy < 0)
+            cy = 0;
+        if (cy > h * texheight)
+            cy = h * texheight - 1;
+        if (cx < 0)
+            cx = 0;
+        if (cx > h * texwidth)
+            cx = h * texwidth - 1;
         if (map[(int)cy / texwidth][(int)cx / texheight]!= 0)
             hit = 1;
     }

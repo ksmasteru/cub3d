@@ -1,6 +1,8 @@
 #include "../includes/cub3d.h"
 #include <stdbool.h>
 
+#define map_w 24
+#define map_h 24
 extern int map[24][24];
 extern double angle;
 int	close_win(t_data *data)
@@ -38,7 +40,16 @@ bool player_move_up(t_data *data, double old_posx, double old_posy)
 	data->player->posy -= MOVE_SPEED * sin(degToRad(data->player->view_deg));
 	// check if its inside a wall. if yes reverse
 	printf("new player posx %d posy %d\n", (int)data->player->posx, (int)data->player->posy);
-	if (map[(int)data->player->posy / texheight][(int)data->player->posx / texwidth] != 0)/*wall*/
+	// first check if its out of bounds.
+	if (data->player->posx > map_h * texwidth)
+		data->player->posx = map_h  * texwidth - 1;
+	else if (data->player->posx < 0)
+		data->player->posx = 1;
+	if (data->player->posy > map_h * texheight)
+		data->player->posy = map_h * texheight - 1;
+	else if (data->player->posy < 0)
+		data->player->posx = 1;
+	if (map[(int)data->player->posy / texheight][(int)data->player->posx / texwidth] != 0)/*wall*/ // it could be equal to -1 : outofpbound
 	{
 		data->player->posx = old_posx;// or increment by the necessary value. % distance.
 		data->player->posy = old_posy;
@@ -57,6 +68,14 @@ bool player_move_down(t_data *data, double old_posx, double old_posy)
 	data->player->posx -= MOVE_SPEED * cos(degToRad(data->player->view_deg)); // MOVE SPEED VALUE ? should be by values. and raydir
 	data->player->posy += MOVE_SPEED * sin(degToRad(data->player->view_deg)); // sure
 	
+	if (data->player->posx > map_w * texwidth)
+		data->player->posx = map_w  * texwidth - 1;
+	else if (data->player->posx < 0)
+		data->player->posx = 1;
+	if (data->player->posy > map_h * texheight)
+		data->player->posy = map_h * texheight - 1;
+	else if (data->player->posy < 0)
+		data->player->posx = 1;
 	printf("new player posx %d posy %d\n", (int)data->player->posx, (int)data->player->posy);
 	if (map[(int)data->player->posy / texheight][(int)data->player->posx / texwidth] != 0)
 	{
@@ -116,7 +135,8 @@ int	pressed_key_event(int keycode, t_data *data)
             update_img = rotate_player_dir(data, keycode);
 		if (update_img)
 		{
-			printf("image to be updated with %f\n", data->player->view_deg);
+			printf("image to be updated with view :%f posx %d posy %d\n", data->player->view_deg
+			,(int)data->player->posx, (int)data->player->posy);
             render_walls(data);
 		}
 	}

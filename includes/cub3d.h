@@ -31,6 +31,8 @@ typedef struct s_player{
      double posy;
      double view_deg;
      double beta_angle;
+     double hitx;
+     double hity;
 }t_player;
 
 typedef struct s_image{
@@ -63,7 +65,7 @@ bool rotate_player_dir(t_data *data, int keycode);
 int	pressed_key_event(int keycode, t_data *data);
 double   horizontalraycast(t_data *data, double castAngle);
 double   verticalraycast(t_data *data, double castAngle);
-double   raycast(t_data *data, double castAngle);
+double   raycast(t_data *data, double castAngle, int *side);
 void set_new_img(t_data *data);
 double  calculate_distance(t_data *data, double cx, double cy, double castAngle);
 double   x_axis_raycast(t_data *data, double castAngle);
@@ -78,4 +80,5 @@ char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strjoin2(char *s1, char *s2, char *str);
 char		*ft_itoa(int num);
 static int	count_size(int n);
+void    put_wall_side(t_data *data, int stripex, double distance, int side);
 #endif

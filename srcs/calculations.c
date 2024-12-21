@@ -35,7 +35,11 @@ double   x_axis_raycast(t_data *data, double castAngle)
     else
         cx = ((int)data->player->posx / texwidth) * texwidth - 1;
     if (map[(int) cy / texheight][(int)cx / texheight] != 0)
+    {
+        data->player->hitx = cx;
+        data->player->hity = cy;
         hit = 1;
+    }
     while (hit != 1) /*traverse right or left until hitting a wall*/
     {
         if (castAngle == 0)
@@ -46,7 +50,11 @@ double   x_axis_raycast(t_data *data, double castAngle)
             cx = 0;
         box_x++;
         if (map[(int) cy / texheight][(int)cx / texheight] != 0)
-             hit = 1;
+        {
+            data->player->hitx = cx;
+            data->player->hity = cy;
+            hit = 1;
+        }
     }
     //printf("found a wall at map[%d][%d]\n", (int)cx / texwidth, (int)cy / texheight);
     if (box_x == 0)
@@ -74,7 +82,11 @@ double  y_axis_raycast(t_data *data, double castAngle)
     else
         cy = (int)(data->player->posy / texheight) * texheight + texheight;
     if (map[(int)cy / texheight][(int)cx / texheight] != 0)
+    {
+        data->player->hitx = cx;
+        data->player->hity = cy;
         hit = 1;
+    }
     //printf("first box cy %f its box value is %d %d\n", cy, (int)cx/64, (int)cy/64);
     while (hit != 1)
     {
@@ -90,7 +102,11 @@ double  y_axis_raycast(t_data *data, double castAngle)
         }
         box_y++;
         if (map[(int)cy / texheight][(int)cx / texwidth] != 0)
+        {
+            data->player->hitx = cx;
+            data->player->hity = cy;
             hit = 1;
+        }
     }
     //printf("found a wall at cy %f box %d %d\n", cy, (int)cx / 64, (int) cy / 64);
     if (box_y == 0)
@@ -159,7 +175,11 @@ double   verticalraycast(t_data *data, double castAngle)
     //printf("first cube horizontal intersection is at x:%d y:%d \n", (int)cx / 64,
       //  (int)cy / 64);
     if (map[(int)cy / 64][(int)cx / 64] != 0)
+    {
+        data->player->hitx = cx;
+        data->player->hity = cy;
         hit = 1;
+    }
     xa = texwidth / tan(degToRad(castAngle));
     while (hit != 1)
     {
@@ -177,7 +197,11 @@ double   verticalraycast(t_data *data, double castAngle)
         if (cx > h * texwidth)
             cx = h * texwidth - 1;
         if (map[(int)cy / texwidth][(int)cx / texheight]!= 0)
+        {
+            data->player->hitx = cx;
+            data->player->hity = cy;
             hit = 1;
+        }
     }
     //printf("found a wall at %d %d\n", (int)cx / 64, (int)cy / 64);
     double distance = calculate_distance(data, cx, cy, castAngle);
@@ -243,7 +267,11 @@ double   horizontalraycast(t_data *data, double castAngle)
         return (1e30);
     }
     if (map[(int)cy / 64][(int)cx / 64] != 0)
-            hit = 1;
+    {
+        data->player->hitx = cx;
+        data->player->hity = cy;
+        hit = 1;
+    }
     ya = fabs(tan(degToRad(castAngle)) * texheight);// calculated one time for efficiency. : up positive,down negative
     // tan doesnt apply to ya ? it only apply to x;
     //printf("ya value is %f\n", ya);
@@ -260,7 +288,11 @@ double   horizontalraycast(t_data *data, double castAngle)
             cy = MAP_H - 1;
         //printf("cx value %f cy value %f current cx[%d] cy[%d]\n", cx, cy, (int)cx/ 64 , (int)cy / 64);
         if (map[(int)cy / texheight][(int)cx / texwidth] != 0)
+        {
+            data->player->hitx = cx;
+            data->player->hity = cy;
             hit = 1;
+        }
     }
     //printf("found wall at [%d] [%d]\n", (int)cx / 64, (int)cy /64);
     distance = calculate_distance(data, cx, cy, castAngle);

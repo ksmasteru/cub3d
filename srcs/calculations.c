@@ -4,8 +4,8 @@
 #define degToRad(angleInDegrees) ((angleInDegrees) * M_PI / 180.0)
 #define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
 
-extern int map[24][24];
-double  calculate_distance(t_data *data, double cx, double cy, double castAngle)
+extern int map[w][h];
+double  calculate_distance(t_data *data, double cx, double  cy, double castAngle)
 {
     //TODO
     double distance;

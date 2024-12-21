@@ -19,7 +19,9 @@ bool player_move_up(t_data *data, double old_posx, double old_posy)
 {
 	int box_x;
 	int box_y;
-	//t_ray ray;
+	t_ray ray;
+
+	ray = data->ray;
 // update the positin then check if its a wall.
 
 	//ray = data->ray;
@@ -36,8 +38,15 @@ bool player_move_up(t_data *data, double old_posx, double old_posy)
 	else
 		box_y--;*/
 	// check if next box is a wall.
-	data->player->posx += MOVE_SPEED * cos(degToRad(data->player->view_deg)); // MOVE SPEED VALUE ?
-	data->player->posy -= MOVE_SPEED * sin(degToRad(data->player->view_deg));
+	printf("ray dir x %d ray dir y %d\n", ray.dir_x, ray.dir_y);
+	if (ray.dir_x > 0)
+		data->player->posx += fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg))); // MOVE SPEED VALUE ?
+	else if (ray.dir_x < 0)
+		data->player->posx -=  fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg)));
+	if (ray.dir_y > 0)
+		data->player->posy += fabs(MOVE_SPEED * sin(degToRad(data->player->view_deg))); // sin at this degree is negative
+	else if (ray.dir_y < 0)
+		data->player->posy -= fabs(MOVE_SPEED * sin(degToRad(data->player->view_deg)));
 	// check if its inside a wall. if yes reverse
 	printf("new player posx %d posy %d\n", (int)data->player->posx, (int)data->player->posy);
 	// first check if its out of bounds.
@@ -64,10 +73,18 @@ bool player_move_down(t_data *data, double old_posx, double old_posy)
 {
 	int box_x;
 	int box_y;
-	//t_ray ray;
-	data->player->posx -= MOVE_SPEED * cos(degToRad(data->player->view_deg)); // MOVE SPEED VALUE ? should be by values. and raydir
-	data->player->posy += MOVE_SPEED * sin(degToRad(data->player->view_deg)); // sure
-	
+	t_ray ray;
+
+	ray = data->ray;
+	printf("ray dir x %d ray dir y %d\n", ray.dir_x, ray.dir_y); // dirx == 0 ?
+	if (ray.dir_x > 0)
+		data->player->posx -= fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg))); // MOVE SPEED VALUE ?
+	else if (ray.dir_x < 0)
+		data->player->posx +=  fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg)));
+	if (ray.dir_y > 0)
+		data->player->posy -= fabs(MOVE_SPEED * sin(degToRad(data->player->view_deg)));
+	else if (ray.dir_y < 0)
+		data->player->posy += fabs(MOVE_SPEED * sin(degToRad(data->player->view_deg)));
 	if (data->player->posx > map_w * texwidth)
 		data->player->posx = map_w  * texwidth - 1;
 	else if (data->player->posx < 0)

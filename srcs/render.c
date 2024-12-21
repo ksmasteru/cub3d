@@ -6,7 +6,7 @@
 //            cx = (int)(data->player->posx / texwidth) * texwidth + texwidth;
 
 double angle;
-int map[24][24]=
+int map[w][h]=
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},

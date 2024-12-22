@@ -61,13 +61,14 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
     int     x_offset;
     int     pixel_repeat;
     int     i;
+    int     ratio;
     int projection_d = (SCREEN_W / 2) * tan(degToRad(30)); /*ambigous*/
     slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
     t_image *xpm_img = get_xpm_img(data);
     if (side == 0)
     {
          x_offset = (int)data->player->hitx % texwidth; // logical error. : should get actual position of the hit.
-         printf("x offset is %d\n", x_offset);
+         //printf("x offset is %d\n", x_offset);
          y_xpm = 0;
     }
 
@@ -80,9 +81,15 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
     char *pixel;
     i = 0;
     pixel_repeat = abs(y_max - y_min) / texheight; // all verline will be drawn 
-    printf("distance value is %f sliceheight value %d y_min value %d y_max value %d stripex value %d\n",distance, slice_height, y_min, y_max, stripex);
+    if (pixel_repeat == 0)
+    {
+        ratio = texheight / abs(y_max - y_min);
+        printf("ratio is %d\n", ratio);
+    }
+    //printf("distance value is %f sliceheight value %d y_min value %d y_max value %d stripex value %d\n",distance, slice_height, y_min, y_max, stripex);
      // texheight > lineheight :: we scale up. :easier solution repeat the wall
-    printf("pixel repeat is %d\n", pixel_repeat);
+    //printf("pixel repeat is %d\n", pixel_repeat);
+    printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
     int color;
     while (y_min != y_max)
     {
@@ -96,15 +103,12 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
         *(int *)pixel = color;
         y_min++;
         if (pixel_repeat == 0) /*scale up == reapeat wall*/
-        {
-            if (++y_xpm > texheight)
-                y_xpm = 0;
-        }
+            y_xpm += ratio;
         if ((pixel_repeat != 0) && (++i % pixel_repeat == 0))
             y_xpm++;
-        if (y_xpm > texheight) /*_*/
-            y_xpm = 0;
-        printf("y_xpm is %d\n", y_xpm);
+        if (y_xpm > texheight)
+                y_xpm = 0;
+        //printf("y_xpm is %d\n", y_xpm);
     }
 }
 
@@ -119,6 +123,7 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     int     y_offset;
     int     y_offset_o;
     int     repeat_pix;
+    int     ratio;
     int     i;
     int     projection_d = (SCREEN_W / 2) * tan(degToRad(30)); /*ambigous*/
     //printf("putwall distance is %f\n", distance);
@@ -134,7 +139,7 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
         // hit at the start of the wall it is just data->player->posy % 64.
         y_offset_o = (int)data->player->hity % 64;
         // x of the xpm is starting 0;
-        printf("y_ofsset is %d\n", y_offset_o);
+        //printf("y_ofsset is %d\n", y_offset_o);
         x_xpm = 0; // or x = 1  ?
     }
 
@@ -147,11 +152,18 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     // number of pixel to draw is |ymax - ymin|: need a way to scale that with the xpm.
     char *pixel;
     repeat_pix = abs(y_max - y_min) / (texheight - y_offset_o); // p_r ==  0 repeat wall.
-    printf("pixel repeat is %d\n", repeat_pix);
+    if (repeat_pix == 0)
+    {
+        ratio = (texheight - y_offset_o) / abs(y_max - y_min);
+        //printf("ratio is %d\n", ratio);
+    }
+    //printf("pixel repeat is %d\n", repeat_pix);
+    // if pixel repeat == 0 : scale down : skip some pixels.
     //printf("for side %d repeat_pix is %d\n", side, repeat_pix);
     i = 0;
-    //printf("distance value is %f sliceheight value %d y_min value %d y_max value %d stripex value %d\n",distance, slice_height, y_min, y_max, stripex);
+    printf("stripex value %d side value %d , y_ offset value %d\n",stripex, side, y_offset_o);
     y_offset = y_offset_o;
+    int color;
     while (y_min != y_max)
     {
         //printf("ymin value is %d\n", y_min);
@@ -161,15 +173,15 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
                 x_xpm * (xpm_img->bpp / 8);
         pixel = data->img->adrs + data->img->size_line * y_min +
             stripex * (data->img->bpp / 8);
-        *(int *)pixel = *(int *)xpm_pixel;
+        color = *(int *)xpm_pixel;
+        *(int *)pixel = color;
         y_min++;
-        if (repeat_pix == 0)
-        {
-            if (++y_offset > 64)
-                y_offset = y_offset_o; // should be original offset .
-        }
+        if (repeat_pix == 0) /*scale down*/
+            y_offset += ratio;
         if (repeat_pix != 0 && ++i % repeat_pix == 0)
-             y_offset++;
+            y_offset++;
+        if (y_offset > texheight)
+            y_offset = y_offset_o;
     }
 }
 

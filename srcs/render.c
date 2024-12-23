@@ -120,9 +120,9 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     int     slice_height;
     char    *xpm_pixel;
     int     x_xpm;
-    int     y_offset;
-    int     y_offset_o;
-    int     repeat_pix;
+    int     y_xpm;
+    int     x_offset;
+    int     pixel_repeat;
     int     ratio;
     int     i;
     int     projection_d = (SCREEN_W / 2) * tan(degToRad(30)); /*ambigous*/
@@ -130,58 +130,49 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
     if (side == 0)
           return (put_wall_side(data, stripex, distance, side));
-    //printf("slice height is %d\n", slice_height);
-    // drawing from middle of screen;
-    /*loading img*/
     t_image *xpm_img = get_xpm_img(data);
     if (side == 1)
     {
-        // hit at the start of the wall it is just data->player->posy % 64.
-        y_offset_o = (int)data->player->hity % 64;
-        // x of the xpm is starting 0;
-        //printf("y_ofsset is %d\n", y_offset_o);
-        x_xpm = 0; // or x = 1  ?
+         x_offset = (int)data->player->hity % texwidth;
+         y_xpm = 0;
     }
-
     int y_min =  SCREEN_H / 2 - slice_height / 2;
     if (y_min <= 0)
         y_min = 1;
     int y_max = SCREEN_H / 2 + slice_height / 2;
     if (y_max >= SCREEN_H)
         y_max = SCREEN_H - 1;
-    // number of pixel to draw is |ymax - ymin|: need a way to scale that with the xpm.
     char *pixel;
-    repeat_pix = abs(y_max - y_min) / (texheight - y_offset_o); // p_r ==  0 repeat wall.
-    if (repeat_pix == 0)
-    {
-        ratio = (texheight - y_offset_o) / abs(y_max - y_min);
-        //printf("ratio is %d\n", ratio);
-    }
-    //printf("pixel repeat is %d\n", repeat_pix);
-    // if pixel repeat == 0 : scale down : skip some pixels.
-    //printf("for side %d repeat_pix is %d\n", side, repeat_pix);
     i = 0;
-    printf("stripex value %d side value %d , y_ offset value %d\n",stripex, side, y_offset_o);
-    y_offset = y_offset_o;
+    pixel_repeat = abs(y_max - y_min) / texheight; // all verline will be drawn 
+    if (pixel_repeat == 0)
+    {
+        ratio = texheight / abs(y_max - y_min);
+        printf("ratio is %d\n", ratio);
+    }
+    //printf("distance value is %f sliceheight value %d y_min value %d y_max value %d stripex value %d\n",distance, slice_height, y_min, y_max, stripex);
+     // texheight > lineheight :: we scale up. :easier solution repeat the wall
+    //printf("pixel repeat is %d\n", pixel_repeat);
+    printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
     int color;
     while (y_min != y_max)
     {
         //printf("ymin value is %d\n", y_min);
         // find a way to get the scaling xpm_pixel
-        //  increase after repeat_pix increment y_offset
-        xpm_pixel = xpm_img->adrs + xpm_img->size_line * y_offset +
-                x_xpm * (xpm_img->bpp / 8);
+        xpm_pixel = xpm_img->adrs + xpm_img->size_line * y_xpm +
+            x_offset * (xpm_img->bpp / 8);
         pixel = data->img->adrs + data->img->size_line * y_min +
             stripex * (data->img->bpp / 8);
         color = *(int *)xpm_pixel;
         *(int *)pixel = color;
         y_min++;
-        if (repeat_pix == 0) /*scale down*/
-            y_offset += ratio;
-        if (repeat_pix != 0 && ++i % repeat_pix == 0)
-            y_offset++;
-        if (y_offset > texheight)
-            y_offset = y_offset_o;
+        if (pixel_repeat == 0) /*scale up == reapeat wall*/
+            y_xpm += ratio;
+        if ((pixel_repeat != 0) && (++i % pixel_repeat == 0))
+            y_xpm++;
+        if (y_xpm > texheight)
+                y_xpm = 0;
+        //printf("y_xpm is %d\n", y_xpm);
     }
 }
 

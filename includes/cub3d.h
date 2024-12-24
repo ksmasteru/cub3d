@@ -16,23 +16,29 @@
 #define SCREEN_H 480
 #define MAP_W 1536
 #define MAP_H 1536
+#define MAP_W1 512
+#define MAP_H1 512
 #define FOW 60
 #define ROTSPEED 1.5
 #define MOVE_SPEED 31
 #define w 24
 #define h 24
-
+#define h1 8
+#define w1 8
 #define M_PI   3.14159265358979323846264338327950288
 #define degToRad(angleInDegrees) ((angleInDegrees) * M_PI / 180.0)
 #define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
+#define projection_d (SCREEN_W / 2) * tan(degToRad(30))
 
 typedef struct s_player{
-     double posx;
-     double posy;
-     double view_deg;
-     double beta_angle;
-     double hitx;
-     double hity;
+     double    posx;
+     double    posy;
+     double    view_deg;
+     double    beta_angle;
+     double    hitx;
+     double    hity;
+     int       box_x;
+     int       box_y; 
 }t_player;
 
 typedef struct s_image{

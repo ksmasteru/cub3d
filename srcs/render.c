@@ -33,8 +33,19 @@ int map[w][h]=
   {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
+/*int map[w1][h1] = 
+{
+    {1,1,1,1,1,1,1,1,1},
+    {1,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,1},
+    {1,1,1,1,1,1,1,1,1}  
+};*/
 
-t_image    *get_xpm_img(t_data *data)
+t_image     *get_xpm_img(t_data *data)
 {
     int width;
     int height;
@@ -62,7 +73,6 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
     int     pixel_repeat;
     int     i;
     int     ratio;
-    int projection_d = (SCREEN_W / 2) * tan(degToRad(30)); /*ambigous*/
     slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
     t_image *xpm_img = get_xpm_img(data);
     if (side == 0)
@@ -93,7 +103,7 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
     int color;
     while (y_min != y_max)
     {
-        //printf("ymin value is %d\n", y_min);
+        //printf("ymin value is %d\n",- y_min);
         // find a way to get the scaling xpm_pixel
         xpm_pixel = xpm_img->adrs + xpm_img->size_line * y_xpm +
             x_offset * (xpm_img->bpp / 8);
@@ -110,6 +120,8 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
                 y_xpm = 0;
         //printf("y_xpm is %d\n", y_xpm);
     }
+    free(xpm_img->mlx_img);
+    free(xpm_img);
 }
 
 /*for side == 1 yside hit*/
@@ -125,15 +137,15 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     int     pixel_repeat;
     int     ratio;
     int     i;
-    int     projection_d = (SCREEN_W / 2) * tan(degToRad(30)); /*ambigous*/
-    //printf("putwall distance is %f\n", distance);
+    char *pixel;
     slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
+    printf("putwall distance is %f slice height is %f\n", distance);
     if (side == 0)
           return (put_wall_side(data, stripex, distance, side));
     t_image *xpm_img = get_xpm_img(data);
     if (side == 1)
     {
-         x_offset = (int)data->player->hity % texwidth;
+         x_offset = (int)data->player->hity % texheight;
          y_xpm = 0;
     }
     int y_min =  SCREEN_H / 2 - slice_height / 2;
@@ -142,23 +154,17 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     int y_max = SCREEN_H / 2 + slice_height / 2;
     if (y_max >= SCREEN_H)
         y_max = SCREEN_H - 1;
-    char *pixel;
     i = 0;
-    pixel_repeat = abs(y_max - y_min) / texheight; // all verline will be drawn 
+    pixel_repeat = slice_height / texheight; // all verline will be drawn 
     if (pixel_repeat == 0)
     {
-        ratio = texheight / abs(y_max - y_min);
+        ratio = texheight / slice_height;
         printf("ratio is %d\n", ratio);
     }
-    //printf("distance value is %f sliceheight value %d y_min value %d y_max value %d stripex value %d\n",distance, slice_height, y_min, y_max, stripex);
-     // texheight > lineheight :: we scale up. :easier solution repeat the wall
-    //printf("pixel repeat is %d\n", pixel_repeat);
     printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
     int color;
     while (y_min != y_max)
     {
-        //printf("ymin value is %d\n", y_min);
-        // find a way to get the scaling xpm_pixel
         xpm_pixel = xpm_img->adrs + xpm_img->size_line * y_xpm +
             x_offset * (xpm_img->bpp / 8);
         pixel = data->img->adrs + data->img->size_line * y_min +
@@ -171,9 +177,10 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
         if ((pixel_repeat != 0) && (++i % pixel_repeat == 0))
             y_xpm++;
         if (y_xpm > texheight)
-                y_xpm = 0;
-        //printf("y_xpm is %d\n", y_xpm);
+            y_xpm = 0;
     }
+    free(xpm_img->mlx_img);
+    free(xpm_img);
 }
 
 double   raycast(t_data *data, double castAngle, int *side)
@@ -186,12 +193,12 @@ double   raycast(t_data *data, double castAngle, int *side)
         castAngle += 360.0;
     if (castAngle == 0 || castAngle == 180.0 || castAngle == 360)
     {
-        *side = 0;
+        *side = 1;
         return (x_axis_raycast(data, castAngle));
     }
     else if (castAngle == 90.0 || castAngle == 270.0)
     {
-        *side = 1;
+        *side = 0;
         return (y_axis_raycast(data, castAngle));
     }
     verticalray = verticalraycast(data, castAngle);
@@ -200,7 +207,6 @@ double   raycast(t_data *data, double castAngle, int *side)
     horizontalray = horizontalraycast(data, castAngle);
     if (verticalray < horizontalray)
     {
-
         //printf("for angle %f vertical height is %f because horizontal is %f\n", castAngle, verticalray, horizontalray);
         *side = 0;
         data->player->hitx = ver_hitx;

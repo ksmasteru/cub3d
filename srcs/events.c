@@ -64,6 +64,9 @@ bool player_move_up(t_data *data, double old_posx, double old_posy)
 		data->player->posy = old_posy;
 		return (false); // dont update img.
 	}
+	//map[(int)data->player->posy / texwidth][(int)data->player->posx / texwidth] = 6;
+	// anD OLD POSITION SHOULD BE 0
+	//map[(int)old_posy / texwidth][(int)old_posx / texwidth] = 0;
 	return (true);
 }
 
@@ -100,6 +103,9 @@ bool player_move_down(t_data *data, double old_posx, double old_posy)
 		data->player->posy = old_posy;
 		return (false);
 	}
+	//map[(int)data->player->posy / texwidth][(int)data->player->posx / texwidth] = 6;
+	// anD OLD POSITION SHOULD BE 0
+	//map[(int)old_posy / texwidth][(int)old_posx / texwidth] = 0;
 	return (true);
 }
 

@@ -6,8 +6,8 @@ t_map fill_map_data()
 {
     t_map map;
 
-    map.mini_map_w = SCREEN_W / 5; // mixed_screen with map.
-    map.mini_map_h = SCREEN_H / 5;
+    map.mini_map_w = SCREEN_W / 4; // mixed_screen with map.
+    map.mini_map_h = SCREEN_H / 4;
     while (map.mini_map_w % w != 0)
         map.mini_map_w++;
     while (map.mini_map_h % h != 0)
@@ -18,6 +18,7 @@ t_map fill_map_data()
     map.p_y = 0;
     return (map);
 }
+
 
 int fill_square_pixels(t_map *map, t_image *img, int color)
 {
@@ -46,6 +47,13 @@ int fill_square_pixels(t_map *map, t_image *img, int color)
     }
 }
 
+void    fill_player_position(t_map *mini_map, t_image *img, t_data *data, int color)
+{
+    mini_map->p_x = (int)data->player->posx / texwidth * mini_map->w_pixels; // 12;
+    mini_map->p_y = (int)data->player->posy / texheight * mini_map->h_pixels;
+    fill_square_pixels(mini_map, img, color);
+}
+
 int put_mini_map(t_data *data)
 {
      // an image that will be put on the screen should be by scale of scrren 
@@ -71,7 +79,7 @@ int put_mini_map(t_data *data)
             if (map[i][j] != 0)
             {
                 // paint 4 pixels wide and 4 pixels height.
-                printf("map p_x is %d p_y is %d\n", mini_map.p_x, mini_map.p_y);
+                //printf("map p_x is %d p_y is %d\n", mini_map.p_x, mini_map.p_y);
                 fill_square_pixels(&mini_map, data->mini_map, 0x00ff00); // struct for map variables.
             }
             else
@@ -80,5 +88,6 @@ int put_mini_map(t_data *data)
         }
         i++;
     }
+    fill_player_position(&mini_map, data->mini_map, data, 0xff0000);
     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->mini_map->mlx_img,0, 0);
 }

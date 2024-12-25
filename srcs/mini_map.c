@@ -54,11 +54,44 @@ void    fill_player_position(t_map *mini_map, t_image *img, t_data *data, int co
     fill_square_pixels(mini_map, img, color);
 }
 
+int put_ray(int view_deg, t_data  *data, t_map *map)
+{
+    int x;
+    int y;
+    int player_x;
+    int player_y;
+    // start point is player posiiton on the mini_map.
+    player_x = (int)data->player->posx / texwidth * map->w_pixels;
+    player_y = (int)data->player->posy / texheight * map->h_pixels;
+
+    // getting the equation of the line to draw.
+}
+
+int put_rays(t_data *data, t_map *map)
+{
+    int view_deg;
+    int max_deg;
+    int low_deg;
+    int i;
+
+    i = 0;
+    view_deg = data->player->view_deg;
+    max_deg = view_deg + 30;
+    if (max_deg > 360)
+        max_deg = (int)max_deg % 360; // hmm,
+    low_deg = view_deg - 30;  
+    if (low_deg < 0)
+        low_deg = 180 - abs((int)low_deg) % 180;
+    while (i++ < 60)
+        put_ray(view_deg++, data, map);
+}
+
 int put_mini_map(t_data *data)
 {
      // an image that will be put on the screen should be by scale of scrren 
     int i;
     int j;
+
     i  = 0;
     j  = 0;
     t_map mini_map = fill_map_data();
@@ -90,4 +123,6 @@ int put_mini_map(t_data *data)
     }
     fill_player_position(&mini_map, data->mini_map, data, 0xff0000);
     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->mini_map->mlx_img,0, 0);
+    // mlx pixel put looks better.
+    put_rays(data);
 }

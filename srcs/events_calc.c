@@ -13,7 +13,7 @@ void update_ray_dir(t_ray *ray, double view_deg)
 		else
 			ray->dir_y = 1;
 		if ((view_deg > 0 && view_deg < 90)
-			|| (view_deg > 270 || view_deg < 360))
+			|| (view_deg > 270 && view_deg < 360))
 			ray->dir_x = 1;
 		else
 			ray->dir_x = -1;

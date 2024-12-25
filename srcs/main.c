@@ -14,6 +14,10 @@ int init_data(t_data *data)
     data->img = malloc(sizeof(t_image));
     if (!data->img)
         return (-1);
+    data->mini_map = malloc(sizeof(t_image));
+    if (!data->mini_map)
+        return (-1);
+    data->mini_map->mlx_img = NULL;
     data->img->mlx_img = NULL;
     data->player->posx = 32 + 4 * 64;
     data->player->posy = 32 + 4 * 64;

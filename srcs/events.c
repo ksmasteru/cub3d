@@ -80,7 +80,7 @@ bool player_move_down(t_data *data, double old_posx, double old_posy)
 	if (ray.dir_x > 0)
 		data->player->posx -= fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg))); // MOVE SPEED VALUE ?
 	else if (ray.dir_x < 0)
-		data->player->posx +=  fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg)));
+		data->player->posx += fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg)));
 	if (ray.dir_y > 0)
 		data->player->posy -= fabs(MOVE_SPEED * sin(degToRad(data->player->view_deg)));
 	else if (ray.dir_y < 0)

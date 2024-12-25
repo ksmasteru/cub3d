@@ -138,6 +138,10 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     int     ratio;
     int     i;
     char *pixel;
+    if (distance > sqrt(MAP_H * MAP_H + MAP_W * MAP_W)) /*BOTH VERTICAL AND HORIZONAL RETURNED HIGH VALUE*/
+    {
+        distance = fabs(MAP_W - data->player->posx);
+    }
     slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
     printf("putwall distance is %f slice height is %f\n", distance);
     if (side == 0)
@@ -207,7 +211,7 @@ double   raycast(t_data *data, double castAngle, int *side)
     horizontalray = horizontalraycast(data, castAngle);
     if (verticalray < horizontalray)
     {
-        //printf("for angle %f vertical height is %f because horizontal is %f\n", castAngle, verticalray, horizontalray);
+        printf("for angle %f vertical height is %f because horizontal is %f\n", castAngle, verticalray, horizontalray);
         *side = 0;
         data->player->hitx = ver_hitx;
         data->player->hity = ver_hity;
@@ -217,7 +221,7 @@ double   raycast(t_data *data, double castAngle, int *side)
     //}
     //printf("distance to the wall is %f\n", horizontalray);
     //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
-    //printf("for angle %f horizontal height is %f because vertical was %f\n", castAngle, horizontalray,verticalray);
+    printf("for angle %f horizontal height is %f because vertical was %f\n", castAngle, horizontalray,verticalray);
     return (horizontalray) * cos(degToRad(data->player->beta_angle));
 }
 
@@ -240,7 +244,7 @@ int render_walls(t_data *data)
     double   castAngle;
     int side;
     i = 0;
-
+    
     sep_angle = (double)FOW / SCREEN_W;
     castAngle = data->player->view_deg + (double)FOW / 2;
     angle = data->player->view_deg;
@@ -263,5 +267,6 @@ int render_walls(t_data *data)
     }
     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0, 0);
     show_player_data(data); // write on top of new img
+    put_mini_map(data);
     return (0);
 }

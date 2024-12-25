@@ -18,6 +18,8 @@
 #define MAP_H 1536
 #define MAP_W1 512
 #define MAP_H1 512
+#define MINI_MAP_H   (MAP_W / 10)
+#define MINI_MAP_W  (MAP_H / 10)
 #define FOW 60
 #define ROTSPEED 1.5
 #define MOVE_SPEED 31
@@ -60,9 +62,18 @@ typedef struct s_data{
      void      *mlx_ptr;
      void      *win_ptr;
      t_image   *img;
+     t_image   *mini_map;
      t_ray     ray;
 }t_data;
 
+typedef struct s_map{
+     int  mini_map_w;
+     int  mini_map_h;
+     int  w_pixels;
+     int  h_pixels;
+     int  p_x;
+     int  p_y;
+}t_map;
 
 int	close_win(t_data *data);
 int render_walls(t_data *data);
@@ -87,4 +98,5 @@ char	*ft_strjoin2(char *s1, char *s2, char *str);
 char		*ft_itoa(int num);
 static int	count_size(int n);
 void    put_wall_side(t_data *data, int stripex, double distance, int side);
+int  put_mini_map(t_data *data);
 #endif

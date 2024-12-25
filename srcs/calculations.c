@@ -218,13 +218,13 @@ double   verticalraycast(t_data *data, double castAngle)
         // hard coded
         if (rx < 0)
         { 
-            printf("---------------rx value rounded down to 1 becuase ry was %f-----------------\n", ry);
-            ry = 0;
+            printf("---------------returned high value becuase ry was %f-----------------\n", ry);
+            return (1e30);            ry = 0;
         }
         if (rx > MAP_W)
         {
-            printf("---------------rx value rounded down to MAP_W - 1 becuase ry was %f-----------------\n", ry);
-            ry = MAP_W - 1;
+            printf("---------------returned high value becuase ry was %f-----------------\n", ry);
+            return (1e30);            ry = MAP_W - 1;
         }
         if (castAngle > 0 && castAngle < 180)
             data->player->box_y = (ry - 1) / texheight;
@@ -332,12 +332,14 @@ double   horizontalraycast(t_data *data, double castAngle)
         ry += ya;
         if (ry < 0)
         {
-            printf("---------------ry value rounded down to 1 becuase ry was %f-----------------\n", ry);
+            printf("---------------returned high value becuase ry was %f-----------------\n", ry);
+            return (1e30);
             ry = 1;
         }
         if (ry > MAP_W)
         {
-            printf("---------------ry value rounded down to MAP_W - 1 becuase ry was %f-----------------\n", ry);
+            printf("---------------returned high value becuase ry was %f-----------------\n", ry);
+            return (1e30);
             ry = MAP_W - 1;
         }
         rx += xa;

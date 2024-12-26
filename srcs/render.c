@@ -120,7 +120,8 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
                 y_xpm = 0;
         //printf("y_xpm is %d\n", y_xpm);
     }
-    free(xpm_img->mlx_img);
+    mlx_destroy_image(data->mlx_ptr, xpm_img->mlx_img);
+    //free(xpm_img->mlx_img);
     free(xpm_img);
 }
 
@@ -184,7 +185,8 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
         if (y_xpm > texheight)
             y_xpm = 0;
     }
-    free(xpm_img->mlx_img);
+    mlx_destroy_image(data->mlx_ptr, xpm_img->mlx_img);
+    //free(xpm_img->mlx_img);
     free(xpm_img);
 }
 
@@ -228,9 +230,11 @@ double   raycast(t_data *data, double castAngle, int *side)
 
 void set_new_img(t_data *data)
 {
-    if (data->img->mlx_img)
+    if (data->img->mlx_img != NULL)
     {
         mlx_destroy_image(data->mlx_ptr, data->img->mlx_img);
+        mlx_clear_window(data->mlx_ptr, data->win_ptr);
+        //free(data->img->mlx_img);
         data->img->mlx_img = NULL;
     }
     data->img->mlx_img = mlx_new_image(data->mlx_ptr, SCREEN_W, SCREEN_H);

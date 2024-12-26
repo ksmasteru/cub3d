@@ -4,6 +4,8 @@
 extern double angle;
 void update_ray_dir(t_ray *ray, double view_deg)
 {
+	if (view_deg < 0)
+		view_deg += 360;
     if (view_deg != 0 && view_deg != 90
 		&& view_deg != 180 && view_deg != 360
 			&& view_deg != 270)

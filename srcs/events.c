@@ -38,7 +38,7 @@ bool player_move_up(t_data *data, double old_posx, double old_posy)
 	else
 		box_y--;*/
 	// check if next box is a wall.
-	//printf("ray dir x %d ray dir y %d\n", ray.dir_x, ray.dir_y);
+	printf("ray dir x %d ray dir y %d\n", ray.dir_x, ray.dir_y);
 	if (ray.dir_x > 0)
 		data->player->posx += fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg))); // MOVE SPEED VALUE ?
 	else if (ray.dir_x < 0)

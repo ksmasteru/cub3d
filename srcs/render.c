@@ -212,7 +212,7 @@ double   raycast(t_data *data, double castAngle, int *side)
     horizontalray = horizontalraycast(data, castAngle);
     if (verticalray < horizontalray)
     {
-        printf("for angle %f vertical height is %f because horizontal is %f\n", castAngle, verticalray, horizontalray);
+        //printf("for angle %f vertical height is %f because horizontal is %f\n", castAngle, verticalray, horizontalray);
         *side = 0;
         data->player->hitx = ver_hitx;
         data->player->hity = ver_hity;
@@ -222,7 +222,7 @@ double   raycast(t_data *data, double castAngle, int *side)
     //}
     //printf("distance to the wall is %f\n", horizontalray);
     //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
-    printf("for angle %f horizontal height is %f because vertical was %f\n", castAngle, horizontalray,verticalray);
+    //printf("for angle %f horizontal height is %f because vertical was %f\n", castAngle, horizontalray,verticalray);
     return (horizontalray) * cos(degToRad(data->player->beta_angle));
 }
 
@@ -260,7 +260,7 @@ int render_walls(t_data *data)
         //printf("cast angle is %f\n", castAngle);
         wallheight = raycast(data, castAngle, &side);
         //printf("for cast angle %f wallheight is %f side is %d\n", castAngle, wallheight, side);
-        printf("stripex is %d side is %d\n", i, side);
+        //printf("stripex is %d side is %d\n", i, side);
         //if (castAngle > -12 && castAngle < -8)
         put_wall(data, i, wallheight, side);
         castAngle -= sep_angle;

@@ -69,7 +69,7 @@ int put_ray(double view_deg, t_data  *data, t_map *map)
     player_y = (int)data->player->posy / texwidth * map->h_pixels;
     slope = tan(degToRad(view_deg));
     slope *= -1; // backward coordinates
-    printf("player_x is %d player_y %d slope %f\n", player_x, player_y, slope);
+    //printf("player_x is %d player_y %d slope %f\n", player_x, player_y, slope);
     for (x = player_x ; x < map->mini_map_w; x++)
     {
         y = slope * x - slope * player_x + player_y;

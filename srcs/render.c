@@ -200,12 +200,12 @@ double   raycast(t_data *data, double castAngle, int *side)
         castAngle += 360.0;
     if (castAngle == 0 || castAngle == 180.0 || castAngle == 360)
     {
-        *side = 1;
+        *side = 0;
         return (x_axis_raycast(data, castAngle));
     }
     else if (castAngle == 90.0 || castAngle == 270.0)
     {
-        *side = 0;
+        *side = 1;
         return (y_axis_raycast(data, castAngle));
     }
     verticalray = verticalraycast(data, castAngle);
@@ -249,7 +249,7 @@ int render_walls(t_data *data)
     double   castAngle;
     int side;
     i = 0;
-    
+
     sep_angle = (double)FOW / SCREEN_W;
     castAngle = data->player->view_deg + (double)FOW / 2;
     angle = data->player->view_deg;

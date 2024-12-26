@@ -90,6 +90,7 @@ double  y_axis_raycast(t_data *data, double castAngle)
     box_y = 0;
     hit = 0;
     rx = data->player->posx;
+    data->player->box_x = (int)data->player->posx / texwidth;
     if (castAngle == 90)
     {
         ry = (int)data->player->posy / texheight * texheight;
@@ -106,7 +107,7 @@ double  y_axis_raycast(t_data *data, double castAngle)
         data->player->hity = ry;
         hit = 1;
     }
-    //printf("first box ry %f its box value is %d %d\n", ry, (int)rx/64, (int)ry/64);
+    //printf("first box ry %f its box value is %d %d\n", ry, data->player->box_x, data->player->box_y);
     while (hit != 1)
     {
         if (castAngle == 90)
@@ -133,7 +134,7 @@ double  y_axis_raycast(t_data *data, double castAngle)
             hit = 1;
         }
     }
-    //printf("found a wall at cy %f box %d %d\n", cy, (int)cx / 64, (int) cy / 64);
+    //printf("found a wall at ry %f box %d %d\n", ry, (int)rx / 64, (int) ry / 64);
     //if (box_y == 0)
      //   distance = (int)data->player->posy % texheight;
     //else

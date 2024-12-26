@@ -56,7 +56,7 @@ t_image     *get_xpm_img(t_data *data)
     img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./colorstone.xpm", &width, &height);
     if (img->mlx_img == NULL)
     {
-        printf("null img\n");
+        //printf("null img\n");
         exit(1);
     }
     img->adrs = mlx_get_data_addr(img->mlx_img, &(img->bpp), &(img->size_line), &(img->endian));
@@ -94,12 +94,12 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
     if (pixel_repeat == 0)
     {
         ratio = texheight / abs(y_max - y_min);
-        printf("ratio is %d\n", ratio);
+        //printf("ratio is %d\n", ratio);
     }
     //printf("distance value is %f sliceheight value %d y_min value %d y_max value %d stripex value %d\n",distance, slice_height, y_min, y_max, stripex);
      // texheight > lineheight :: we scale up. :easier solution repeat the wall
     //printf("pixel repeat is %d\n", pixel_repeat);
-    printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
+    //printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
     int color;
     while (y_min != y_max)
     {
@@ -143,7 +143,7 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
         distance = fabs(MAP_W - data->player->posx);
     }
     slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
-    printf("putwall distance is %f slice height is %f\n", distance);
+    //printf("putwall distance is %f slice height is %f\n", distance);
     if (side == 0)
           return (put_wall_side(data, stripex, distance, side));
     t_image *xpm_img = get_xpm_img(data);
@@ -152,6 +152,7 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
          x_offset = (int)data->player->hity % texheight;
          y_xpm = 0;
     }
+    //printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
     int y_min =  SCREEN_H / 2 - slice_height / 2;
     if (y_min <= 0)
         y_min = 1;
@@ -163,9 +164,9 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     if (pixel_repeat == 0)
     {
         ratio = texheight / slice_height;
-        printf("ratio is %d\n", ratio);
+        //printf("ratio is %d\n", ratio);
     }
-    printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
+    //printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
     int color;
     while (y_min != y_max)
     {
@@ -211,7 +212,7 @@ double   raycast(t_data *data, double castAngle, int *side)
     horizontalray = horizontalraycast(data, castAngle);
     if (verticalray < horizontalray)
     {
-        printf("for angle %f vertical height is %f because horizontal is %f\n", castAngle, verticalray, horizontalray);
+        //printf("for angle %f vertical height is %f because horizontal is %f\n", castAngle, verticalray, horizontalray);
         *side = 0;
         data->player->hitx = ver_hitx;
         data->player->hity = ver_hity;
@@ -221,7 +222,7 @@ double   raycast(t_data *data, double castAngle, int *side)
     //}
     //printf("distance to the wall is %f\n", horizontalray);
     //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
-    printf("for angle %f horizontal height is %f because vertical was %f\n", castAngle, horizontalray,verticalray);
+    //printf("for angle %f horizontal height is %f because vertical was %f\n", castAngle, horizontalray,verticalray);
     return (horizontalray) * cos(degToRad(data->player->beta_angle));
 }
 
@@ -258,7 +259,7 @@ int render_walls(t_data *data)
     {
         //printf("cast angle is %f\n", castAngle);
         wallheight = raycast(data, castAngle, &side);
-        //printf("for cast angle %f wallheight is %f\n", castAngle, wallheight);
+        printf("for cast angle %f wallheight is %f side is %d\n", castAngle, wallheight, side);
         //if (castAngle > -12 && castAngle < -8)
         put_wall(data, i, wallheight, side);
         castAngle -= sep_angle;

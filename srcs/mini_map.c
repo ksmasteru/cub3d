@@ -30,14 +30,14 @@ int fill_square_pixels(t_map *map, t_image *img, int color)
 
     p_y = map->p_y;
     p_x = map->p_x;
-    it = 0;
-    it1 = 0;
+    it = 1;
+    it1 = 1;
     while (it++ < map->w_pixels)
     {
         p_y = map->p_y;
         pixel = img->adrs + img->size_line * p_y + p_x * (img->bpp) / 8; 
         *(int *)pixel = color;
-        it1 = 0;
+        it1 = 1;
         while (it1++ < map->h_pixels)
         {
             pixel = img->adrs + img->size_line * p_y++ + p_x * img->bpp / 8;
@@ -56,15 +56,34 @@ void    fill_player_position(t_map *mini_map, t_image *img, t_data *data, int co
 
 int put_ray(int view_deg, t_data  *data, t_map *map)
 {
-    int x;
-    int y;
+    // TO BE FIXED LATER
+    int x = 0;
+    int y = 0;
     int player_x;
     int player_y;
+    int wall_x;
+    int wall_y;
+    double slope;
     // start point is player posiiton on the mini_map.
     player_x = (int)data->player->posx / texwidth * map->w_pixels;
-    player_y = (int)data->player->posy / texheight * map->h_pixels;
-
+    player_y = player_x;//
     // getting the equation of the line to draw.
+    wall_x = (int)data->player->hitx / texwidth * map->w_pixels;
+    wall_y = wall_x;//
+    slope =  (wall_y - player_y) / (wall_x - player_x);
+    //printf("slope value is %d wall_y %d wall_x %d player_y %d player_x %f\n"
+     //,slope, wall_y, wall_x, player_y, player_x);
+    for (x = player_x ; x < map->mini_map_w; x++)
+    {
+        y = slope * x - wall_x + wall_y;
+        if (y < 0)
+        {
+            //printf("negative y !!\n");
+            continue;
+        }
+        //y += player_y;
+        mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, y, 0x0000ff);
+    }
 }
 
 int put_rays(t_data *data, t_map *map)
@@ -124,5 +143,5 @@ int put_mini_map(t_data *data)
     fill_player_position(&mini_map, data->mini_map, data, 0xff0000);
     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->mini_map->mlx_img,0, 0);
     // mlx pixel put looks better.
-    put_rays(data);
+    //put_rays(data, &mini_map);
 }

@@ -195,9 +195,9 @@ double   verticalraycast(t_data *data, double castAngle)
         , ((int)ry / 64));
         exit(1);*/
     }
-    if (rx < 0 || rx > MAP_W1)
+    if (rx < 0 || rx > MAP_W)
     {
-         //printf("!!!!!width is too high!!!!!\n");
+         printf("!!!!!width is too high!!!!! rx is %f\n", rx);
          return (1e30);
     }
     //printf("first cube horizontal intersection is at x:%d y:%d \n", (int)rx / 64,
@@ -218,12 +218,12 @@ double   verticalraycast(t_data *data, double castAngle)
         // hard coded
         if (rx < 0)
         { 
-            printf("---------------returned high value becuase ry was %f-----------------\n", ry);
+            printf("---------------returned high value becuase rx was %f-----------------\n", rx);
             return (1e30);            ry = 0;
         }
         if (rx > MAP_W)
         {
-            printf("---------------returned high value becuase ry was %f-----------------\n", ry);
+            printf("---------------returned high value becuase rx was %f-----------------\n", rx);
             return (1e30);            ry = MAP_W - 1;
         }
         if (castAngle > 0 && castAngle < 180)
@@ -234,7 +234,7 @@ double   verticalraycast(t_data *data, double castAngle)
         // in case ry or rx get negative --> SEGV;
         //ry = roundf(ry);
         //rx = roundf(rx);
-        printf("vertical casting : rx value %f ry value %f\n", rx, ry);
+        //printf("vertical casting : rx value %f ry value %f\n", rx, ry);
         /*if (ry < 0)
             ry = 0;
         if (ry > h * texheight)
@@ -281,7 +281,7 @@ double   horizontalraycast(t_data *data, double castAngle)
             ry = data->player->posy - fabs(ry);
         else
             ry = data->player->posy + fabs(ry);
-        printf("horizontal casting ry value is %f\n", ry); // make smaller map
+        //printf("horizontal casting ry value is %f\n", ry); // make smaller map
         data->player->box_y = ry / texheight;
         /*as stated in horizontal raycasting : adding or substracting is decided
         by the sign of tan : this can only work for x as y sign isnt the same as tan.*/
@@ -352,7 +352,7 @@ double   horizontalraycast(t_data *data, double castAngle)
         //ry = roundf(ry);
         //rx = roundf(rx);
         // ry got negative.
-        printf("horizontal casting :rx value %f ry value %f angle %f\n", rx, ry, castAngle);
+        //printf("horizontal casting :rx value %f ry value %f angle %f\n", rx, ry, castAngle);
         //if(ry < 0)
           //  ry = 0;
         data->player->hitx = rx;

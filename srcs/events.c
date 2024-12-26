@@ -38,7 +38,7 @@ bool player_move_up(t_data *data, double old_posx, double old_posy)
 	else
 		box_y--;*/
 	// check if next box is a wall.
-	printf("ray dir x %d ray dir y %d\n", ray.dir_x, ray.dir_y);
+	//printf("ray dir x %d ray dir y %d\n", ray.dir_x, ray.dir_y);
 	if (ray.dir_x > 0)
 		data->player->posx += fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg))); // MOVE SPEED VALUE ?
 	else if (ray.dir_x < 0)
@@ -48,7 +48,7 @@ bool player_move_up(t_data *data, double old_posx, double old_posy)
 	else if (ray.dir_y < 0)
 		data->player->posy -= fabs(MOVE_SPEED * sin(degToRad(data->player->view_deg)));
 	// check if its inside a wall. if yes reverse
-	printf("new player posx %d posy %d\n", (int)data->player->posx, (int)data->player->posy);
+	//printf("new player posx %d posy %d\n", (int)data->player->posx, (int)data->player->posy);
 	// first check if its out of bounds.
 	if (data->player->posx > map_h * texwidth)
 		data->player->posx = map_h  * texwidth - 1;
@@ -79,7 +79,7 @@ bool player_move_down(t_data *data, double old_posx, double old_posy)
 	t_ray ray;
 
 	ray = data->ray;
-	printf("ray dir x %d ray dir y %d\n", ray.dir_x, ray.dir_y); // dirx == 0 ?
+	//printf("ray dir x %d ray dir y %d\n", ray.dir_x, ray.dir_y); // dirx == 0 ?
 	if (ray.dir_x > 0)
 		data->player->posx -= fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg))); // MOVE SPEED VALUE ?
 	else if (ray.dir_x < 0)
@@ -96,7 +96,7 @@ bool player_move_down(t_data *data, double old_posx, double old_posy)
 		data->player->posy = map_h * texheight - 1;
 	else if (data->player->posy < 0)
 		data->player->posx = 1;
-	printf("new player posx %d posy %d\n", (int)data->player->posx, (int)data->player->posy);
+	//printf("new player posx %d posy %d\n", (int)data->player->posx, (int)data->player->posy);
 	if (map[(int)data->player->posy / texheight][(int)data->player->posx / texwidth] != 0)
 	{
 		data->player->posx = old_posx;
@@ -136,7 +136,7 @@ bool rotate_player_dir(t_data *data, int keycode)
 	}
 	else
 		data->player->view_deg = (int)(ROTSPEED * 10 + data->player->view_deg) % 360;
-	printf("new player->view_deg is %f\n", data->player->view_deg);
+	//printf("new player->view_deg is %f\n", data->player->view_deg);
 	//angle = data->player->view_deg;
 	return (true);
 }
@@ -158,8 +158,8 @@ int	pressed_key_event(int keycode, t_data *data)
             update_img = rotate_player_dir(data, keycode);
 		if (update_img)
 		{
-			printf("image to be updated with view :%f posx %d posy %d\n", data->player->view_deg
-			,(int)data->player->posx, (int)data->player->posy);
+			//printf("image to be updated with view :%f posx %d posy %d\n", data->player->view_deg
+			//(int)data->player->posx, (int)data->player->posy);
             render_walls(data);
 		}
 	}

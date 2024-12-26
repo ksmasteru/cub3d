@@ -144,6 +144,15 @@ double  y_axis_raycast(t_data *data, double castAngle)
 }
 
 // the actual distance. BOTH hit same wall. or at least pass tru the same grids.
+double  set_xa(double castAngle)
+{
+    double xa;
+
+    xa = fabs(texwidth / tan(degToRad(castAngle))); 
+    if (castAngle > 90 && castAngle < 270)
+        xa *= -1;
+    return (xa);
+}
 double   verticalraycast(t_data *data, double castAngle)
 {
     //ya is known ca isnt
@@ -154,17 +163,22 @@ double   verticalraycast(t_data *data, double castAngle)
     hit = 0;
     double xa;
     double ya;
+
+    xa = set_xa(castAngle);
+    printf("xa value is %f\n", xa);
     if (castAngle > 0 && castAngle < 180)
     {
         ya = texheight * -1;
         ry = ((int)data->player->posy / texheight) * texheight;
         data->player->box_y = (ry - 1) / texheight;
+        printf("vertical casting: next square y is %f box_y is %d\n", ry, data->player->box_y );
         rx = ((data->player->posy - ry) / tan(degToRad(castAngle)));
         if (castAngle < 90)
             rx = data->player->posx + fabs(rx);
         else
             rx = data->player->posx - fabs(rx);
         data->player->box_x = rx / texwidth;
+        printf("vertical casting: next square x is %f box_x is %d\n", rx, data->player->box_x );
         /*printf("ry is %f rx is %f\n", ry, rx);
         printf("first cube horizontal intersection is at x:%d y:%d \n", (int)(rx/64)
         , (int)(ry / 64));
@@ -176,8 +190,9 @@ double   verticalraycast(t_data *data, double castAngle)
         ya = texheight;
         ry = ((int)data->player->posy / texheight) * texheight + texheight;
         data->player->box_y = ry / texheight;
+        printf("vertical casting: next square y is %f box_y is %d\n", ry, data->player->box_y );
         rx = (ry - data->player->posy) / tan(degToRad(castAngle));
-        //printf("ry is %f rx is %f\n", ry, rx);
+        printf("ry is %f rx is %f\n", ry, rx);
         /*
             as above using the porprety of tan. only rx - posy has to be positve
         if (castAngle > 270)
@@ -189,6 +204,8 @@ double   verticalraycast(t_data *data, double castAngle)
         else
             rx = data->player->posx - fabs(rx);
         data->player->box_x = rx / texwidth;
+        printf("vertical casting: next square x is %f box_x is %d\n", rx, data->player->box_x );
+
         /*rx = roundf(rx) / 64;
         ry = roundf(ry) / 64;
         printf("first cube horizontal intersection is at x:%d y:%d \n", ((int)rx/64)
@@ -208,7 +225,6 @@ double   verticalraycast(t_data *data, double castAngle)
         data->player->hity = ry;
         hit = 1;
     }
-    xa = texwidth / tan(degToRad(castAngle));
     while (hit != 1)
     {
         //printf("entered  hit loop\n");
@@ -249,6 +265,9 @@ double   verticalraycast(t_data *data, double castAngle)
             data->player->hity = ry;
             hit = 1;
         }
+        else
+            printf("vertical casting box_x %d box_y %drx %d ry %d werent a wall \n",
+                data->player->box_x, data->player->box_y, (int)rx, (int)ry);
     }
     //printf("found a wall at %d %d\n", (int)rx / 64, (int)ry / 64);
     double distance = calculate_distance(data, rx, ry, castAngle);

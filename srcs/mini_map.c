@@ -54,7 +54,7 @@ void    fill_player_position(t_map *mini_map, t_image *img, t_data *data, int co
     fill_square_pixels(mini_map, img, color);
 }
 
-int put_ray(int view_deg, t_data  *data, t_map *map)
+int put_ray(double view_deg, t_data  *data, t_map *map)
 {
     // TO BE FIXED LATER
     int x = 0;
@@ -64,18 +64,15 @@ int put_ray(int view_deg, t_data  *data, t_map *map)
     int wall_x;
     int wall_y;
     double slope;
-    // start point is player posiiton on the mini_map.
+
     player_x = (int)data->player->posx / texwidth * map->w_pixels;
-    player_y = player_x;//
-    // getting the equation of the line to draw.
-    wall_x = (int)data->player->hitx / texwidth * map->w_pixels;
-    wall_y = wall_x;//
-    slope =  (wall_y - player_y) / (wall_x - player_x);
-    //printf("slope value is %d wall_y %d wall_x %d player_y %d player_x %f\n"
-     //,slope, wall_y, wall_x, player_y, player_x);
+    player_y = (int)data->player->posy / texwidth * map->h_pixels;
+    slope = tan(degToRad(view_deg));
+    slope *= -1; // backward coordinates
+    printf("player_x is %d player_y %d slope %f\n", player_x, player_y, slope);
     for (x = player_x ; x < map->mini_map_w; x++)
     {
-        y = slope * x - wall_x + wall_y;
+        y = slope * x - slope * player_x + player_y;
         if (y < 0)
         {
             //printf("negative y !!\n");
@@ -88,21 +85,22 @@ int put_ray(int view_deg, t_data  *data, t_map *map)
 
 int put_rays(t_data *data, t_map *map)
 {
-    int view_deg;
-    int max_deg;
-    int low_deg;
+    double view_deg;
+    double max_deg;
+    double low_deg;
     int i;
 
     i = 0;
     view_deg = data->player->view_deg;
     max_deg = view_deg + 30;
     if (max_deg > 360)
-        max_deg = (int)max_deg % 360; // hmm,
-    low_deg = view_deg - 30;  
-    if (low_deg < 0)
-        low_deg = 180 - abs((int)low_deg) % 180;
-    while (i++ < 60)
-        put_ray(view_deg++, data, map);
+        max_deg = (int)max_deg % 360;
+    low_deg = view_deg - 30;
+    //if (low_deg < -180)
+      //  low_deg = 180 - abs((int)view_deg) % 180;
+    put_ray(view_deg, data, map);
+    put_ray(max_deg, data, map);
+    put_ray(low_deg, data, map);
 }
 
 int put_mini_map(t_data *data)
@@ -143,5 +141,5 @@ int put_mini_map(t_data *data)
     fill_player_position(&mini_map, data->mini_map, data, 0xff0000);
     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->mini_map->mlx_img,0, 0);
     // mlx pixel put looks better.
-    //put_rays(data, &mini_map);
+    put_rays(data, &mini_map);
 }

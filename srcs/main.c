@@ -19,8 +19,8 @@ int init_data(t_data *data)
         return (-1);
     data->mini_map->mlx_img = NULL;
     data->img->mlx_img = NULL;
-    data->player->posx = 32 + 4 * 64;
-    data->player->posy = 32 + 4 * 64;
+    data->player->posx = 420;
+    data->player->posy = 127;
     data->player->view_deg = 45;
 }
 

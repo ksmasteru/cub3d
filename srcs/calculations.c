@@ -46,6 +46,7 @@ double   x_axis_raycast(t_data *data, double castAngle)
         data->player->hitx = rx;
         data->player->hity = ry;
         hit = 1;
+        data->player->wall_type = map[data->player->box_y][data->player->box_x];
     }
     // ny how much should me increment box and boxy
     while (hit != 1) /*traverse right or left until hitting a wall*/
@@ -67,6 +68,7 @@ double   x_axis_raycast(t_data *data, double castAngle)
             data->player->hitx = rx;
             data->player->hity = ry;
             hit = 1;
+            data->player->wall_type = map[data->player->box_y][data->player->box_x];
         }
     }
     //printf("found a wall at map[%d][%d]\n", (int)rx / texwidth, (int)ry / texheight);
@@ -106,6 +108,7 @@ double  y_axis_raycast(t_data *data, double castAngle)
         data->player->hitx = rx;
         data->player->hity = ry;
         hit = 1;
+        data->player->wall_type = map[data->player->box_y][data->player->box_x];
     }
     //printf("first box ry %f its box value is %d %d\n", ry, data->player->box_x, data->player->box_y);
     while (hit != 1)
@@ -132,6 +135,7 @@ double  y_axis_raycast(t_data *data, double castAngle)
             data->player->hitx = rx;
             data->player->hity = ry;
             hit = 1;
+            data->player->wall_type = map[data->player->box_y][data->player->box_x];
         }
     }
     //printf("found a wall at ry %f box %d %d\n", ry, (int)rx / 64, (int) ry / 64);
@@ -225,6 +229,7 @@ double   verticalraycast(t_data *data, double castAngle)
         data->player->hitx = rx;
         data->player->hity = ry;
         hit = 1;
+        data->player->wall_type = map[data->player->box_y][data->player->box_x];
     }
     while (hit != 1)
     {
@@ -265,6 +270,7 @@ double   verticalraycast(t_data *data, double castAngle)
             data->player->hitx = rx;
             data->player->hity = ry;
             hit = 1;
+            data->player->wall_type = map[data->player->box_y][data->player->box_x];
         }
         /*else
             printf("vertical casting box_x %d box_y %drx %d ry %d werent a wall \n",
@@ -341,6 +347,7 @@ double   horizontalraycast(t_data *data, double castAngle)
         data->player->hitx = rx;
         data->player->hity = ry;
         hit = 1;
+        data->player->wall_type = map[data->player->box_y][data->player->box_x];
     }
     ya = fabs(tan(degToRad(castAngle)) * texheight);// calculated one time for efficienry. : up positive,down negative
     // tan doesnt apply to ya ? it only apply to x;
@@ -384,6 +391,7 @@ double   horizontalraycast(t_data *data, double castAngle)
             hit = 1;
     }
     //printf("found wall at [%d] [%d]\n", (int)rx / 64, (int)ry /64);
+    data->player->wall_type = map[data->player->box_y][data->player->box_x];
     distance = calculate_distance(data, rx, ry, castAngle);
     //printf("vertical distance to the wall is %f\n", distance);
     return (distance);

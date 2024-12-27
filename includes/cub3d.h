@@ -40,7 +40,8 @@ typedef struct s_player{
      double    hitx;
      double    hity;
      int       box_x;
-     int       box_y; 
+     int       box_y;
+     int       wall_type;
 }t_player;
 
 typedef struct s_image{

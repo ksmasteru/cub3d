@@ -26,7 +26,7 @@ int map[w][h]=
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,4,0,0,0,0,3,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -53,10 +53,15 @@ t_image     *get_xpm_img(t_data *data)
     t_image *img;
 
     img = malloc(sizeof(t_image));
-    img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./colorstone.xpm", &width, &height);
+    if (data->player->wall_type == 1)
+        img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./colorstone.xpm", &width, &height);
+    else if(data->player->wall_type == 2)
+        img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./eagle.xpm", &width, &height);
+    else
+        img->mlx_img =mlx_xpm_file_to_image(data->mlx_ptr, "./bluestone.xpm", &width, &height);
     if (img->mlx_img == NULL)
     {
-        //printf("null img\n");
+        printf("null img\n");
         exit(1);
     }
     img->adrs = mlx_get_data_addr(img->mlx_img, &(img->bpp), &(img->size_line), &(img->endian));
@@ -200,12 +205,12 @@ double   raycast(t_data *data, double castAngle, int *side)
         castAngle += 360.0;
     if (castAngle == 0 || castAngle == 180.0 || castAngle == 360)
     {
-        *side = 0;
+        *side = 1;
         return (x_axis_raycast(data, castAngle));
     }
     else if (castAngle == 90.0 || castAngle == 270.0)
     {
-        *side = 1;
+        *side = 0;
         return (y_axis_raycast(data, castAngle));
     }
     verticalray = verticalraycast(data, castAngle);

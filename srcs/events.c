@@ -148,7 +148,7 @@ int	pressed_key_event(int keycode, t_data *data)
 
   update_img = true;
 	if (keycode == 53 || keycode  == XK_Up || keycode == XK_Down
-    || keycode == XK_Right || keycode == XK_Left)
+    		|| keycode == XK_Right || keycode == XK_Left)
 	{
 		if (keycode == 53)
 	    	close_win(data);

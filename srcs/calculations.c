@@ -5,6 +5,7 @@
 #define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
 
 extern int map[w][h];
+// !!USE SHIFT TO DEVIDE BY 64 WHILE LOOPING FOR WALL
 double  calculate_distance(t_data *data, double cx, double  cy, double castAngle)
 {
     //TODO

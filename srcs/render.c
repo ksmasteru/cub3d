@@ -54,11 +54,11 @@ t_image     *get_xpm_img(t_data *data)
 
     img = malloc(sizeof(t_image));
     if (data->player->wall_type == 1)
-        img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./colorstone.xpm", &width, &height);
-    else if(data->player->wall_type == 2)
         img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./eagle.xpm", &width, &height);
+    else if(data->player->wall_type == 2)
+        img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./bluestone.xpm", &width, &height);
     else
-        img->mlx_img =mlx_xpm_file_to_image(data->mlx_ptr, "./bluestone.xpm", &width, &height);
+        img->mlx_img =mlx_xpm_file_to_image(data->mlx_ptr, "./colorstone.xpm", &width, &height);
     if (img->mlx_img == NULL)
     {
         printf("null img\n");
@@ -71,41 +71,30 @@ t_image     *get_xpm_img(t_data *data)
 /*for side == 0 x_side hit*/
 void    put_wall_side(t_data *data, int stripex, double distance, int side)
 {
-    int slice_height;
+    int     slice_height;
     char    *xpm_pixel;
     int     y_xpm;
     int     x_offset;
     int     pixel_repeat;
     int     i;
-    int     ratio;
+    double  step;
+    char*   pixel;
+    int     color;
+
     slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
     t_image *xpm_img = get_xpm_img(data);
-    if (side == 0)
-    {
-         x_offset = (int)data->player->hitx % texwidth; // logical error. : should get actual position of the hit.
-         //printf("x offset is %d\n", x_offset);
-         y_xpm = 0;
-    }
-
+    x_offset = (int)data->player->hitx % texwidth; // logical error. : should get actual position of the hit.
+    printf("for stripe %d of type 0 x offset is %d hit %f\n", stripex, x_offset, data->player->hitx);
+    step = 1.0 * texwidth / slice_height;
     int y_min =  SCREEN_H / 2 - slice_height / 2;
-    if (y_min <= 0)
-        y_min = 1;
+    if (y_min < 0)
+        y_min = 0;
     int y_max = SCREEN_H / 2 + slice_height / 2;
     if (y_max >= SCREEN_H)
         y_max = SCREEN_H - 1;
-    char *pixel;
-    i = 0;
-    pixel_repeat = abs(y_max - y_min) / texheight; // all verline will be drawn 
-    if (pixel_repeat == 0)
-    {
-        ratio = texheight / abs(y_max - y_min);
-        //printf("ratio is %d\n", ratio);
-    }
-    //printf("distance value is %f sliceheight value %d y_min value %d y_max value %d stripex value %d\n",distance, slice_height, y_min, y_max, stripex);
-     // texheight > lineheight :: we scale up. :easier solution repeat the wall
-    //printf("pixel repeat is %d\n", pixel_repeat);
-    //printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
-    int color;
+    double texPos = (y_min - SCREEN_H / 2 + slice_height / 2) * step;
+    y_xpm = (int)texPos & (texwidth -1);
+    printf("starting texture y position is %d\n", y_xpm);
     while (y_min != y_max)
     {
         //printf("ymin value is %d\n",- y_min);
@@ -116,14 +105,9 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
             stripex * (data->img->bpp / 8);
         color = *(int *)xpm_pixel;
         *(int *)pixel = color;
+        y_xpm = (int)texPos & (texheight - 1);
+        texPos += step;
         y_min++;
-        if (pixel_repeat == 0) /*scale up == reapeat wall*/
-            y_xpm += ratio;
-        if ((pixel_repeat != 0) && (++i % pixel_repeat == 0))
-            y_xpm++;
-        if (y_xpm > texheight)
-                y_xpm = 0;
-        //printf("y_xpm is %d\n", y_xpm);
     }
     mlx_destroy_image(data->mlx_ptr, xpm_img->mlx_img);
     //free(xpm_img->mlx_img);
@@ -141,39 +125,35 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     int     y_xpm;
     int     x_offset;
     int     pixel_repeat;
-    int     ratio;
     int     i;
-    char *pixel;
+    char    *pixel;
+    double  step;
+    int color;
+    double  texpos;
+
+    y_xpm = 0;
     if (distance > sqrt(MAP_H * MAP_H + MAP_W * MAP_W)) /*BOTH VERTICAL AND HORIZONAL RETURNED HIGH VALUE*/
-    {
         distance = fabs(MAP_W - data->player->posx);
-    }
     slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
     //printf("putwall distance is %f slice height is %f\n", distance);
     if (side == 0)
-          return (put_wall_side(data, stripex, distance, side));
+        return (put_wall_side(data, stripex, distance, side));
     t_image *xpm_img = get_xpm_img(data);
-    if (side == 1)
-    {
-         x_offset = (int)data->player->hity % texheight;
-         y_xpm = 0;
-    }
+    x_offset = (int)data->player->hity % texheight;//.this.
+    printf("for stripe %d of type 1 x offset %d is hity is %f\n", stripex, x_offset, data->player->hity);
+    step = 1.0 * texheight / slice_height; // by how much to increase  pix corrdinate.
     //printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
     int y_min =  SCREEN_H / 2 - slice_height / 2;
-    if (y_min <= 0)
-        y_min = 1;
+    if (y_min < 0)
+        y_min = 0;
     int y_max = SCREEN_H / 2 + slice_height / 2;
     if (y_max >= SCREEN_H)
         y_max = SCREEN_H - 1;
     i = 0;
-    pixel_repeat = slice_height / texheight; // all verline will be drawn 
-    if (pixel_repeat == 0)
-    {
-        ratio = texheight / slice_height;
-        //printf("ratio is %d\n", ratio);
-    }
-    //printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
-    int color;
+    // textpos y : start of the texture : if wall biggerthan screen it increases downard
+    double texPos = (y_min - SCREEN_H / 2 + slice_height / 2) * step;
+    y_xpm = (int)texPos & (texheight - 1);
+    printf("starting texPos is %f\n", y_xpm);
     while (y_min != y_max)
     {
         xpm_pixel = xpm_img->adrs + xpm_img->size_line * y_xpm +
@@ -182,13 +162,9 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
             stripex * (data->img->bpp / 8);
         color = *(int *)xpm_pixel;
         *(int *)pixel = color;
+        texPos += step;
+        y_xpm = (int)texPos & (texheight - 1);
         y_min++;
-        if (pixel_repeat == 0) /*scale up == reapeat wall*/
-            y_xpm += ratio;
-        if ((pixel_repeat != 0) && (++i % pixel_repeat == 0))
-            y_xpm++;
-        if (y_xpm > texheight)
-            y_xpm = 0;
     }
     mlx_destroy_image(data->mlx_ptr, xpm_img->mlx_img);
     //free(xpm_img->mlx_img);

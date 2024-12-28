@@ -24,6 +24,18 @@ int init_data(t_data *data)
     data->player->view_deg = 45;
 }
 
+int key_pressed(int keycode, t_data  *data)
+{
+    printf("keycode %d was held pressed\n", keycode); //works.
+    // so how.
+    // player moves up by which ratio ?
+    if (keycode == XK_Up || keycode == XK_Down)
+        return (update_player_pos(data, keycode));
+    if (keycode == XK_Right || keycode == XK_Down)
+        return (update_player_pos(data, keycode));
+    return (0);
+}
+
 int main()
 {
     t_data *data;
@@ -35,6 +47,7 @@ int main()
         return (1);
     render_walls(data);
 	mlx_hook(data->win_ptr, 17, 0, close_win, data);
+    mlx_hook(data->win_ptr, 2, 1L<<0, key_pressed, data);
 	mlx_key_hook(data->win_ptr, pressed_key_event, data);
     mlx_loop(data->mlx_ptr);
 }

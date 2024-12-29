@@ -20,12 +20,12 @@ double  vertical_casting_1(t_data *data, double castangle)
     xa = texwidth / tan(degToRad(castangle));
     ya = texheight * -1;
     //printf("ver cast 1 xa %f ya %f\n", xa, ya);
-    ry = ((int)data->player->posy / texheight) * texheight;
-    data->player->box_y = (ry - 1) / texheight;
+    ry = ((int)data->player->posy >> 6) << 6;
+    data->player->box_y = (int)(ry - 1) >> 6;
     //printf("-vertical casting: next square y is %f box_y is %d\n", ry, data->player->box_y );
     rx = ((data->player->posy - ry) / tan(degToRad(castangle)));
     rx = data->player->posx + fabs(rx); // rx should be postive remove fabs
-    data->player->box_x = rx / texwidth;
+    data->player->box_x = (int)rx >> 6;
     if (rx > MAP_W)
     {
          //printf("!!!!!width is too high!!!!! rx is %f\n", rx);
@@ -37,8 +37,8 @@ double  vertical_casting_1(t_data *data, double castangle)
         rx += xa;
         if (rx > MAP_W) // always pos.
             return (1e30);
-        data->player->box_y = (ry - 1) / texheight;
-        data->player->box_x = rx / texwidth;
+        data->player->box_y = (int)(ry - 1) >> 6;
+        data->player->box_x = (int)rx >> 6;
     }
     data->player->hitx = rx;
     data->player->hity = ry;
@@ -59,11 +59,11 @@ double  vertical_casting_2(t_data *data, double castangle)
     xa = texwidth / tan(degToRad(castangle)); // negative tan negative xa
     ya = texheight * -1;
     //printf("ver cast 2 xa %f ya %f\n", xa, ya);
-    ry = ((int)data->player->posy / texheight) * texheight;
-    data->player->box_y = (ry - 1) / texheight;
+    ry = ((int)data->player->posy >> 6) << 6;
+    data->player->box_y = (int)(ry - 1) >> 6;
     rx = ((data->player->posy - ry) / tan(degToRad(castangle)));
     rx = data->player->posx - fabs(rx); // negative tan you could + rx
-    data->player->box_x = rx / texwidth;
+    data->player->box_x = (int)rx >> 6;
     if (rx < 0)
     {
          //printf("!!!!!width is too high!!!!! rx is %f\n", rx);
@@ -75,8 +75,8 @@ double  vertical_casting_2(t_data *data, double castangle)
         rx += xa;
         if (rx < 0)// !! ? can set rx to 0 for 1 calculation ?
             return (1e30);
-        data->player->box_y = (ry - 1) / texheight;
-        data->player->box_x = rx / texwidth;    
+        data->player->box_y = (int)(ry - 1) >> 6;
+        data->player->box_x = (int)rx >> 6;    
     }
     data->player->hitx = rx;
     data->player->hity = ry;
@@ -97,12 +97,12 @@ double  vertical_casting_4(t_data *data, double castangle)
 
     xa = texwidth / tan(degToRad(castangle)) * -1;
     ya = texheight;
-    ry = ((int)data->player->posy / texheight) * texheight + texheight;
-    data->player->box_y = ry / texheight;
+    ry = (((int)data->player->posy >> 6) << 6) + texheight;
+    data->player->box_y = (int)ry >> 6;
         //printf("vertical casting: next square y is %f box_y is %d\n", ry, data->player->box_y );
     rx = (ry - data->player->posy) / tan(degToRad(castangle));
     rx = data->player->posx + fabs(rx);
-    data->player->box_x = rx / texwidth;
+    data->player->box_x = (int)rx >> 6;
     if (rx < 0)
     {
          //printf("!!!!!width is too high!!!!! rx is %f\n", rx);
@@ -114,8 +114,8 @@ double  vertical_casting_4(t_data *data, double castangle)
         rx += xa;
         if (rx > MAP_H)
             return (1e30);
-        data->player->box_y = ry / texheight;
-        data->player->box_x = rx / texwidth;
+        data->player->box_y = (int)ry >> 6;
+        data->player->box_x = (int)rx >> 6;
     }
     data->player->hitx = rx;
     data->player->hity = ry;
@@ -136,13 +136,13 @@ double  vertical_casting_3(t_data *data, double castangle)
 
     xa = texwidth / tan(degToRad(castangle)) * -1;
     ya = texheight;
-    ry = ((int)data->player->posy / texheight) * texheight + texheight;
-    data->player->box_y = ry / texheight;
+    ry = (((int)data->player->posy >> 6) << 6) + texheight;
+    data->player->box_y = (int)ry >> 6;
         //printf("vertical casting: next square y is %f box_y is %d\n", ry, data->player->box_y );
     //printf("ver cast 4 xa %f ya %f\n", xa, ya);
     rx = (ry - data->player->posy) / tan(degToRad(castangle));
     rx = data->player->posx - fabs(rx);
-    data->player->box_x = rx / texwidth;
+    data->player->box_x = (int)rx >> 6;
     if (rx < 0)
     {
          //printf("!!!!!width is too high!!!!! rx is %f\n", rx);
@@ -154,8 +154,8 @@ double  vertical_casting_3(t_data *data, double castangle)
         rx += xa;
         if (rx < 0)
             return (1e30);
-        data->player->box_y = ry / texheight;
-        data->player->box_x = rx / texwidth;
+        data->player->box_y = (int)ry >> 6;
+        data->player->box_x = (int)rx >> 6;
     }
     data->player->hitx = rx;
     data->player->hity = ry;

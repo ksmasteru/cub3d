@@ -20,7 +20,7 @@ double   horizontalraycast_1(t_data *data, double castAngle)
 
     xa = texwidth;
     ya = tan(degToRad(castAngle)) * texheight * -1; // negative ya.
-    rx = ((int)data->player->posx / texwidth) * texwidth + texwidth; // box x
+    rx = (((int)data->player->posx >> 6) << 6) + texwidth; // box x
     data->player->box_x = (int)rx >> 6;
     ry = tan(degToRad(castAngle)) * (rx - data->player->posx);
     ry = data->player->posy - fabs(ry); // pos tan no need for fabs.
@@ -61,7 +61,7 @@ double   horizontalraycast_2(t_data *data, double castAngle)
 
     xa = texwidth * -1;    
     ya = tan(degToRad(castAngle)) * texheight; //neg tan
-    rx = ((int)data->player->posx / texwidth) * texwidth;
+    rx = ((int)data->player->posx >> 6) << 6;
     data->player->box_x = (int)(rx - 1) >> 6;
     ry =  tan(degToRad(castAngle)) * (data->player->posx - rx);
     ry = data->player->posy - fabs(ry); // negative tan : could + ry
@@ -99,7 +99,7 @@ double   horizontalraycast_3(t_data *data, double castAngle)
 
     xa = texwidth * -1;
     ya = tan(degToRad(castAngle)) * texheight; //pos tan pos ya
-    rx = ((int)data->player->posx / texwidth) * texwidth;
+    rx = ((int)data->player->posx >> 6) << 6;
     data->player->box_x = (int)(rx - 1) >> 6;
     ry =  tan(degToRad(castAngle)) * (data->player->posx - rx);
     ry = data->player->posy + fabs(ry);
@@ -138,7 +138,7 @@ double   horizontalraycast_4(t_data *data, double castAngle)
     hit = 0;
     xa = texwidth;
     ya = tan(degToRad(castAngle)) * texheight * -1; // neg tan pos ya
-    rx = ((int)data->player->posx / texwidth) * texwidth + texwidth; // box x
+    rx = (((int)data->player->posx >> 6) << 6) + texwidth; // box x
     data->player->box_x = (int)rx >> 6;
     ry = tan(degToRad(castAngle)) * (rx - data->player->posx); // something is wrong in here
     ry = data->player->posy + fabs(ry); // pos tan 

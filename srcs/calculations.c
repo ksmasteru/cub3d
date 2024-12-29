@@ -303,7 +303,7 @@ double   horizontalraycast(t_data *data, double castAngle)
     double ya;
     hit = 0;
     //  for testing calculations2.c
-    if (castAngle > 0 && castAngle < 90)
+   if (castAngle > 0 && castAngle < 90)
         return (horizontalraycast_1(data, castAngle));
     else if (castAngle > 90 && castAngle < 180)
         return (horizontalraycast_2(data, castAngle));

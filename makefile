@@ -6,7 +6,7 @@ END			= \e[0m
 
 SRCS		=	srcs/main.c srcs/events.c srcs/render.c srcs/calculations.c  \
 				srcs/events_calc.c srcs/ft_strjoin.c srcs/mini_map.c	\
-				srcs/calculations1.c srcs/calculations2.c
+				srcs/calculations1.c srcs/calculations2.c srcs/dispatcher.c
 SRCS_B		= 	srcs_bonus/main_bonus.c \
 
 NAME		= cub3d

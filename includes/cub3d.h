@@ -42,6 +42,10 @@ typedef struct s_player{
      int       box_x;
      int       box_y;
      int       wall_type;
+     double    ver_hitx;
+     double    ver_hity;
+     double    hor_hitx;
+     double    hor_hity;
 }t_player;
 
 typedef struct s_image{
@@ -108,4 +112,5 @@ double   horizontalraycast_1(t_data *data, double castAngle);
 double   horizontalraycast_2(t_data *data, double castAngle);
 double   horizontalraycast_3(t_data *data, double castAngle);
 double   horizontalraycast_4(t_data *data, double castAngle);
+double  raycast_1(t_data   *data, double castangle, int *side);
 #endif

@@ -58,7 +58,7 @@ t_image     *get_xpm_img(t_data *data)
     else if(data->player->wall_type == 2)
         img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./bluestone.xpm", &width, &height);
     else
-        img->mlx_img =mlx_xpm_file_to_image(data->mlx_ptr, "./colorstone.xpm", &width, &height);
+        img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./colorstone.xpm", &width, &height);
     if (img->mlx_img == NULL)
     {
         printf("null img\n");
@@ -244,7 +244,7 @@ int render_walls(t_data *data)
     while (i < SCREEN_W)
     {
         //printf("cast angle is %f\n", castAngle);
-        wallheight = raycast(data, castAngle, &side);
+        wallheight = raycast_1(data, castAngle, &side);
         //printf("for cast angle %f wallheight is %f side is %d\n", castAngle, wallheight, side);
         //printf("stripex is %d side is %d\n", i, side);
         //if (castAngle > -12 && castAngle < -8)

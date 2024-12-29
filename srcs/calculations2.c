@@ -37,8 +37,8 @@ double   horizontalraycast_1(t_data *data, double castAngle)
         rx += xa;
         if (ry < 0)
             return (1e30);
-        data->player->box_x = (rx) / texwidth;
-        data->player->box_y = ry / texheight;
+        data->player->box_x = (int)rx >> 6;
+        data->player->box_y = (int)ry >> 6;
     }
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
     data->player->hor_hitx = rx;
@@ -76,8 +76,8 @@ double   horizontalraycast_2(t_data *data, double castAngle)
         rx += xa;
         if (ry < 0)
             return (1e30);
-        data->player->box_x = (rx - 1) / texwidth;
-        data->player->box_y = ry / texheight;
+        data->player->box_x = (int)(rx - 1) >> 6;
+        data->player->box_y = (int)ry >> 6;
     }
     data->player->hor_hitx = rx;
     data->player->hor_hity = ry;
@@ -114,8 +114,8 @@ double   horizontalraycast_3(t_data *data, double castAngle)
         rx += xa;
         if (ry > MAP_W)
             return (1e30);
-        data->player->box_x = (rx - 1) / texwidth; // round-down-up then >> ?
-        data->player->box_y = ry / texheight;
+        data->player->box_x = (int)(rx - 1) >> 6; // round-down-up then >> ?
+        data->player->box_y = (int)ry >> 6;
     }
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
     data->player->hor_hitx = rx;
@@ -155,8 +155,8 @@ double   horizontalraycast_4(t_data *data, double castAngle)
         if (ry > MAP_W)
             return (1e30);
         rx += xa;
-        data->player->box_x = (rx) / texwidth;
-        data->player->box_y = ry / texheight;
+        data->player->box_x = (int)(rx) >> 6;
+        data->player->box_y = (int)ry >> 6;
     }
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
     distance = calculate_distance(data, rx, ry, castAngle);

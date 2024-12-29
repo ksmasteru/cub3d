@@ -51,7 +51,7 @@ double  raycast_1(t_data   *data, double castangle, int *side)
     }
     if (verticalray < horizontalray)
     {
-        printf("for angle %f vertical height is %f because horizontal is %f\n", castangle, verticalray, horizontalray);
+        //printf("for angle %f vertical height is %f because horizontal is %f\n", castangle, verticalray, horizontalray);
         *side = 0;
         return (verticalray) * cos(degToRad(data->player->beta_angle));
     }
@@ -61,6 +61,6 @@ double  raycast_1(t_data   *data, double castangle, int *side)
     //}
     //printf("distance to the wall is %f\n", horizontalray);
     //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
-    printf("for angle %f horizontal height is %f because vertical was %f\n", castangle, horizontalray,verticalray);
+    //printf("for angle %f horizontal height is %f because vertical was %f\n", castangle, horizontalray,verticalray);
     return (horizontalray) * cos(degToRad(data->player->beta_angle));
 }

@@ -231,7 +231,8 @@ int render_walls(t_data *data)
     int side;
     i = 0;
 
-    system("cls");
+    //fflush(stdout);
+    //printf("-------------------player view is %f---------------------\n", data->player->view_deg);
     sep_angle = (double)FOW / SCREEN_W;
     castAngle = data->player->view_deg + (double)FOW / 2;
     angle = data->player->view_deg;

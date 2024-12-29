@@ -100,4 +100,12 @@ char		*ft_itoa(int num);
 static int	count_size(int n);
 void    put_wall_side(t_data *data, int stripex, double distance, int side);
 int  put_mini_map(t_data *data);
+double  vertical_casting_1(t_data *data, double castangle);
+double  vertical_casting_2(t_data *data, double castangle);
+double  vertical_casting_3(t_data *data, double castangle);
+double  vertical_casting_4(t_data *data, double castangle);
+double   horizontalraycast_1(t_data *data, double castAngle);
+double   horizontalraycast_2(t_data *data, double castAngle);
+double   horizontalraycast_3(t_data *data, double castAngle);
+double   horizontalraycast_4(t_data *data, double castAngle);
 #endif

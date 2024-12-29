@@ -31,8 +31,8 @@ int key_pressed(int keycode, t_data  *data)
     // player moves up by which ratio ?
     if (keycode == XK_Up || keycode == XK_Down)
         return (update_player_pos(data, keycode));
-    if (keycode == XK_Right || keycode == XK_Down)
-        return (update_player_pos(data, keycode));
+    if (keycode == XK_Right || keycode == XK_Left)
+        return (rotate_player_dir(data, keycode));
     return (0);
 }
 

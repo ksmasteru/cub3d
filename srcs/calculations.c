@@ -20,7 +20,7 @@ double  calculate_distance(t_data *data, double cx, double  cy, double castAngle
 // !converting from box to numberis problematic box 1 is actulaly (1 + 1) * unit.
 // change to be like y_axis_raycast if it causes bugs.
 double   x_axis_raycast(t_data *data, double castAngle)
-{
+{ 
     double rx;
     double ry;
     int hit;
@@ -127,8 +127,8 @@ double  y_axis_raycast(t_data *data, double castAngle)
         if (ry < 0)
         {
             ry = 0;
-           printf("ERROR ry IS NEGATIVE\n");
-           exit(1);
+            printf("ERROR ry IS NEGATIVE\n");
+            exit(1);
         }
         //box_y++;
         if (map[data->player->box_y][data->player->box_x] != 0)
@@ -169,7 +169,15 @@ double   verticalraycast(t_data *data, double castAngle)
     hit = 0;
     double xa;
     double ya;
-
+    /*for testing calculations 1*/
+    if (castAngle > 0 && castAngle < 90)
+        return (vertical_casting_1(data, castAngle));
+    else if (castAngle > 90 && castAngle < 180)
+        return (vertical_casting_2(data, castAngle));
+    else if (castAngle > 180 && castAngle < 270)
+        return (vertical_casting_3(data, castAngle));
+    else if (castAngle > 270 && castAngle < 360)
+        return (vertical_casting_4(data, castAngle));
     xa = set_xa(castAngle);
     //printf("xa value is %f\n", xa);
     if (castAngle > 0 && castAngle < 180)
@@ -177,7 +185,7 @@ double   verticalraycast(t_data *data, double castAngle)
         ya = texheight * -1;
         ry = ((int)data->player->posy / texheight) * texheight;
         data->player->box_y = (ry - 1) / texheight;
-        //printf("vertical casting: next square y is %f box_y is %d\n", ry, data->player->box_y );
+        //printf("-vertical casting: next square y is %f box_y is %d\n", ry, data->player->box_y );
         rx = ((data->player->posy - ry) / tan(degToRad(castAngle)));
         if (castAngle < 90)
             rx = data->player->posx + fabs(rx);
@@ -294,6 +302,15 @@ double   horizontalraycast(t_data *data, double castAngle)
     double xa;
     double ya;
     hit = 0;
+    //  for testing calculations2.c
+    if (castAngle > 0 && castAngle < 90)
+        return (horizontalraycast_1(data, castAngle));
+    else if (castAngle > 90 && castAngle < 180)
+        return (horizontalraycast_2(data, castAngle));
+    else if (castAngle > 180 && castAngle < 270)
+        return (horizontalraycast_3(data, castAngle));
+    else if (castAngle > 270 && castAngle < 360)
+        return (horizontalraycast_4(data, castAngle));
     if ((castAngle > 0 && castAngle < 90)
         || (castAngle > 270 && castAngle < 360))
     {

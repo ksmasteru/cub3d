@@ -84,7 +84,7 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
     slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
     t_image *xpm_img = get_xpm_img(data);
     x_offset = (int)data->player->hitx % texwidth; // logical error. : should get actual position of the hit.
-    printf("for stripe %d of type 0 x offset is %d hit %f\n", stripex, x_offset, data->player->hitx);
+    //printf("for stripe %d of type 0 x offset is %d hit %f\n", stripex, x_offset, data->player->hitx);
     step = 1.0 * texwidth / slice_height;
     int y_min =  SCREEN_H / 2 - slice_height / 2;
     if (y_min < 0)
@@ -140,7 +140,7 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
         return (put_wall_side(data, stripex, distance, side));
     t_image *xpm_img = get_xpm_img(data);
     x_offset = (int)data->player->hity % texheight;//.this.
-    printf("for stripe %d of type 1 x offset %d is hity is %f\n", stripex, x_offset, data->player->hity);
+    //printf("for stripe %d of type 1 x offset %d is hity is %f\n", stripex, x_offset, data->player->hity);
     step = 1.0 * texheight / slice_height; // by how much to increase  pix corrdinate.
     //printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
     int y_min =  SCREEN_H / 2 - slice_height / 2;
@@ -195,7 +195,7 @@ double   raycast(t_data *data, double castAngle, int *side)
     horizontalray = horizontalraycast(data, castAngle);
     if (verticalray < horizontalray)
     {
-        //printf("for angle %f vertical height is %f because horizontal is %f\n", castAngle, verticalray, horizontalray);
+        printf("for angle %f vertical height is %f because horizontal is %f\n", castAngle, verticalray, horizontalray);
         *side = 0;
         data->player->hitx = ver_hitx;
         data->player->hity = ver_hity;
@@ -205,7 +205,7 @@ double   raycast(t_data *data, double castAngle, int *side)
     //}
     //printf("distance to the wall is %f\n", horizontalray);
     //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
-    //printf("for angle %f horizontal height is %f because vertical was %f\n", castAngle, horizontalray,verticalray);
+    printf("for angle %f horizontal height is %f because vertical was %f\n", castAngle, horizontalray,verticalray);
     return (horizontalray) * cos(degToRad(data->player->beta_angle));
 }
 
@@ -231,6 +231,7 @@ int render_walls(t_data *data)
     int side;
     i = 0;
 
+    system("cls");
     sep_angle = (double)FOW / SCREEN_W;
     castAngle = data->player->view_deg + (double)FOW / 2;
     angle = data->player->view_deg;

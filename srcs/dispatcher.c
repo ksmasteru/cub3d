@@ -58,6 +58,7 @@ double  raycast_1(t_data   *data, double castangle, int *side)
     *side = 1;
     data->player->hitx = data->player->hor_hitx;
     data->player->hity = data->player->hor_hity;
+    data->player->wall_type = map[(int)data->player->hity / texheight][(int)data->player->hitx / texwidth]; 
     //}
     //printf("distance to the wall is %f\n", horizontalray);
     //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));

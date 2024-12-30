@@ -154,7 +154,7 @@ int	pressed_key_event(int keycode, t_data *data)
 	    	close_win(data);
 		else if (keycode == XK_Down || keycode == XK_Up)
 			update_img = update_player_pos(data, keycode);
-        else if (keycode == XK_Right|| keycode == XK_Left)
+        else if (keycode == XK_Right || keycode == XK_Left)
             update_img = rotate_player_dir(data, keycode);
 		if (update_img)
 		{

@@ -40,7 +40,6 @@ double   horizontalraycast_1(t_data *data, double castAngle)
         data->player->box_x = (int)rx >> 6;
         data->player->box_y = (int)ry >> 6;
     }
-    data->player->wall_type = map[data->player->box_y][data->player->box_x];
     data->player->hor_hitx = rx;
     data->player->hor_hity = ry;
     distance = calculate_distance(data, rx, ry, castAngle);
@@ -81,7 +80,6 @@ double   horizontalraycast_2(t_data *data, double castAngle)
     }
     data->player->hor_hitx = rx;
     data->player->hor_hity = ry;
-    data->player->wall_type = map[data->player->box_y][data->player->box_x];
     distance = calculate_distance(data, rx, ry, castAngle);
     return (distance);
 }
@@ -117,7 +115,6 @@ double   horizontalraycast_3(t_data *data, double castAngle)
         data->player->box_x = (int)(rx - 1) >> 6; // round-down-up then >> ?
         data->player->box_y = (int)ry >> 6;
     }
-    data->player->wall_type = map[data->player->box_y][data->player->box_x];
     data->player->hor_hitx = rx;
     data->player->hor_hity = ry;
     distance = calculate_distance(data, rx, ry, castAngle);
@@ -158,7 +155,6 @@ double   horizontalraycast_4(t_data *data, double castAngle)
         data->player->box_x = (int)(rx) >> 6;
         data->player->box_y = (int)ry >> 6;
     }
-    data->player->wall_type = map[data->player->box_y][data->player->box_x];
     distance = calculate_distance(data, rx, ry, castAngle);
     data->player->hor_hitx = rx;
     data->player->hor_hity = ry;

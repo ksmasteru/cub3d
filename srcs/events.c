@@ -15,7 +15,7 @@ int	close_win(t_data *data)
 
 // MAKE IT MORE READEABLE WITH RAYDIRX RAYDIRY
 // if MAP[BOX_X][BOX_Y] != 0 move
-bool player_move_up(t_data *data, double old_posx, double old_posy)
+bool player_move_up(t_data *data, double old_posx, double old_posy, double ratio)
 {
 	int box_x;
 	int box_y;
@@ -40,13 +40,13 @@ bool player_move_up(t_data *data, double old_posx, double old_posy)
 	// check if next box is a wall.
 	//printf("ray dir x %d ray dir y %d\n", ray.dir_x, ray.dir_y);
 	if (ray.dir_x > 0)
-		data->player->posx += fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg))); // MOVE SPEED VALUE ?
+		data->player->posx += fabs(MOVE_SPEED * ratio * cos(degToRad(data->player->view_deg))); // MOVE SPEED VALUE ?
 	else if (ray.dir_x < 0)
-		data->player->posx -=  fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg)));
+		data->player->posx -=  fabs(MOVE_SPEED * ratio * cos(degToRad(data->player->view_deg)));
 	if (ray.dir_y > 0)
-		data->player->posy += fabs(MOVE_SPEED * sin(degToRad(data->player->view_deg))); // sin at this degree is negative
+		data->player->posy += fabs(MOVE_SPEED * ratio * sin(degToRad(data->player->view_deg))); // sin at this degree is negative
 	else if (ray.dir_y < 0)
-		data->player->posy -= fabs(MOVE_SPEED * sin(degToRad(data->player->view_deg)));
+		data->player->posy -= fabs(MOVE_SPEED * ratio * sin(degToRad(data->player->view_deg)));
 	// check if its inside a wall. if yes reverse
 	//printf("new player posx %d posy %d\n", (int)data->player->posx, (int)data->player->posy);
 	// first check if its out of bounds.
@@ -72,7 +72,7 @@ bool player_move_up(t_data *data, double old_posx, double old_posy)
 
 // MOVE DOWN IF NO WALL IS BEHIND THE PLAYER. : inverse of move_up semantics
 // of increment/decrementing pos
-bool player_move_down(t_data *data, double old_posx, double old_posy)
+bool player_move_down(t_data *data, double old_posx, double old_posy, double ratio)
 {
 	int box_x;
 	int box_y;
@@ -81,13 +81,13 @@ bool player_move_down(t_data *data, double old_posx, double old_posy)
 	ray = data->ray;
 	//printf("ray dir x %d ray dir y %d\n", ray.dir_x, ray.dir_y); // dirx == 0 ?
 	if (ray.dir_x > 0)
-		data->player->posx -= fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg))); // MOVE SPEED VALUE ?
+		data->player->posx -= fabs(MOVE_SPEED * ratio * cos(degToRad(data->player->view_deg))); // MOVE SPEED VALUE ?
 	else if (ray.dir_x < 0)
-		data->player->posx += fabs(MOVE_SPEED * cos(degToRad(data->player->view_deg)));
+		data->player->posx += fabs(MOVE_SPEED * ratio * cos(degToRad(data->player->view_deg)));
 	if (ray.dir_y > 0)
-		data->player->posy -= fabs(MOVE_SPEED * sin(degToRad(data->player->view_deg)));
+		data->player->posy -= fabs(MOVE_SPEED * ratio * sin(degToRad(data->player->view_deg)));
 	else if (ray.dir_y < 0)
-		data->player->posy += fabs(MOVE_SPEED * sin(degToRad(data->player->view_deg)));
+		data->player->posy += fabs(MOVE_SPEED * ratio * sin(degToRad(data->player->view_deg)));
 	if (data->player->posx > map_w * texwidth)
 		data->player->posx = map_w  * texwidth - 1;
 	else if (data->player->posx < 0)
@@ -109,7 +109,7 @@ bool player_move_down(t_data *data, double old_posx, double old_posy)
 	return (true);
 }
 
-bool update_player_pos(t_data *data, int keycode)
+bool update_player_pos(t_data *data, int keycode, double ratio)
 {
 	// CANNOT MOVE UP IF A WALL IS FORWARD VICE-VERSA
 	double old_posx;
@@ -121,21 +121,21 @@ bool update_player_pos(t_data *data, int keycode)
 	old_posy = data->player->posy;
 	// no need to update the ray.
 	if (keycode == XK_Up)
-		return (player_move_up(data, old_posx, old_posy));
-	return (player_move_down(data, old_posx, old_posy));
+		return (player_move_up(data, old_posx, old_posy, ratio));
+	return (player_move_down(data, old_posx, old_posy, ratio));
 }
 
-bool rotate_player_dir(t_data *data, int keycode)
+bool rotate_player_dir(t_data *data, int keycode, double ratio)
 {
     // TODO
 	if (keycode == XK_Right)
 	{
-		data->player->view_deg -= ROTSPEED * 10;
+		data->player->view_deg -= ratio * ROTSPEED * 10;
 		if (data->player->view_deg < -180)
 			data->player->view_deg = 180 - abs((int)data->player->view_deg) % 180;
 	}
 	else
-		data->player->view_deg = (int)(ROTSPEED * 10 + data->player->view_deg) % 360;
+		data->player->view_deg = (int)(ratio * ROTSPEED * 10 + data->player->view_deg) % 360;
 	//printf("new player->view_deg is %f\n", data->player->view_deg);
 	//angle = data->player->view_deg;
 	return (true);
@@ -145,7 +145,6 @@ bool rotate_player_dir(t_data *data, int keycode)
 int	pressed_key_event(int keycode, t_data *data)
 {
   bool update_img;
-
   update_img = true;
 	if (keycode == 53 || keycode  == XK_Up || keycode == XK_Down
     		|| keycode == XK_Right || keycode == XK_Left)
@@ -153,9 +152,9 @@ int	pressed_key_event(int keycode, t_data *data)
 		if (keycode == 53)
 	    	close_win(data);
 		else if (keycode == XK_Down || keycode == XK_Up)
-			update_img = update_player_pos(data, keycode);
+			update_img = update_player_pos(data, keycode, 0.3);
         else if (keycode == XK_Right || keycode == XK_Left)
-            update_img = rotate_player_dir(data, keycode);
+            update_img = rotate_player_dir(data, keycode, 0.3);
 		if (update_img)
 		{
 			//printf("image to be updated with view :%f posx %d posy %d\n", data->player->view_deg

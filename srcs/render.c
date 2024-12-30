@@ -82,7 +82,6 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
     int     color;
 
     slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
-    t_image *xpm_img = get_xpm_img(data);
     x_offset = (int)data->player->hitx % (texwidth - 1); // logical error. : should get actual position of the hit.
     //printf("for stripe %d of type 0 x offset is %d hit %f\n", stripex, x_offset, data->player->hitx);
     step = 1.0 * texwidth / slice_height;
@@ -94,13 +93,13 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
         y_max = SCREEN_H - 1;
     double texPos = (y_min - SCREEN_H / 2 + slice_height / 2) * step;
     y_xpm = (int)texPos & (texwidth -1);
-    printf("put_wall side : starting texture y position is %d\n", y_xpm);
+    //printf("put_wall side : starting texture y position is %d\n", y_xpm);
     while (y_min != y_max)
     {
         //printf("ymin value is %d\n",- y_min);
         // find a way to get the scaling xpm_pixel
-        xpm_pixel = xpm_img->adrs + xpm_img->size_line * y_xpm +
-            x_offset * (xpm_img->bpp / 8);
+        xpm_pixel = data->xpm_imgs[0].adrs + data->xpm_imgs[0].size_line * y_xpm +
+            x_offset * (data->xpm_imgs[0].bpp / 8);
         pixel = data->img->adrs + data->img->size_line * y_min +
             stripex * (data->img->bpp / 8);
         color = *(int *)xpm_pixel;
@@ -109,9 +108,6 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
         texPos += step;
         y_min++;
     }
-    mlx_destroy_image(data->mlx_ptr, xpm_img->mlx_img);
-    //free(xpm_img->mlx_img);
-    free(xpm_img);
 }
 
 /*for side == 1 yside hit*/
@@ -138,7 +134,6 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     //printf("putwall distance is %f slice height is %f\n", distance);
     if (side == 0)
         return (put_wall_side(data, stripex, distance, side));
-    t_image *xpm_img = get_xpm_img(data);
     x_offset = (int)data->player->hity % (texheight - 1);//.this.
     //printf("for stripe %d of type 1 x offset %d is hity is %f\n", stripex, x_offset, data->player->hity);
     step = 1.0 * texheight / slice_height; // by how much to increase  pix corrdinate.
@@ -153,11 +148,11 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     // textpos y : start of the texture : if wall biggerthan screen it increases downard
     double texPos = (y_min - SCREEN_H / 2 + slice_height / 2) * step;
     y_xpm = (int)texPos & (texheight - 1);
-    printf("put_wall : starting texPos is %f\n", y_xpm);
+    //printf("put_wall : starting texPos is %f\n", y_xpm);
     while (y_min != y_max)
     {
-        xpm_pixel = xpm_img->adrs + xpm_img->size_line * y_xpm +
-            x_offset * (xpm_img->bpp / 8);
+        xpm_pixel = data->xpm_imgs[1].adrs + data->xpm_imgs[1].size_line * y_xpm +
+            x_offset * (data->xpm_imgs[1].bpp / 8);
         pixel = data->img->adrs + data->img->size_line * y_min +
             stripex * (data->img->bpp / 8);
         color = *(int *)xpm_pixel;
@@ -166,9 +161,9 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
         y_xpm = (int)texPos & (texheight - 1);
         y_min++;
     }
-    mlx_destroy_image(data->mlx_ptr, xpm_img->mlx_img);
+    //mlx_destroy_image(data->mlx_ptr, xpm_img->mlx_img);
     //free(xpm_img->mlx_img);
-    free(xpm_img);
+    //free(xpm_img);
 }
 
 double   raycast(t_data *data, double castAngle, int *side)

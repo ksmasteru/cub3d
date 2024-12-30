@@ -30,10 +30,34 @@ int key_pressed(int keycode, t_data  *data)
     // so how.
     // player moves up by which ratio ?
     if (keycode == XK_Up || keycode == XK_Down)
-        return (update_player_pos(data, keycode));
+    {
+        printf("keypress up/down\n");
+        return (update_player_pos(data, keycode, 0.5));
+    }
     if (keycode == XK_Right || keycode == XK_Left)
-        return (rotate_player_dir(data, keycode));
+    {
+                printf("keypress r/l\n");
+        return (rotate_player_dir(data, keycode, 0.5));
+    }
     return (0);
+}
+
+int set_up_wall_xpms(t_data *data)
+{
+    // array of xpm images;
+    int width;
+    int height;
+
+    data->xpm_imgs = (t_image *)malloc(sizeof(t_image) * TEXTURES_NUMBERS);
+    if (!data->xpm_imgs)
+        return (-1);
+    data->xpm_imgs[0].mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./eagle.xpm", &width, &height);
+    data->xpm_imgs[0].adrs = mlx_get_data_addr(data->xpm_imgs[0].mlx_img, &(data->xpm_imgs[0].bpp), &(data->xpm_imgs[0].size_line), &(data->xpm_imgs[0].endian));
+    data->xpm_imgs[1].mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./bluestone.xpm", &width, &height);
+    data->xpm_imgs[1].adrs = mlx_get_data_addr(data->xpm_imgs[1].mlx_img, &(data->xpm_imgs[1].bpp), &(data->xpm_imgs[1].size_line), &(data->xpm_imgs[1].endian));
+    data->xpm_imgs[2].mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./colorstone.xpm", &width, &height);
+    data->xpm_imgs[2].adrs = mlx_get_data_addr(data->xpm_imgs[2].mlx_img, &(data->xpm_imgs[2].bpp), &(data->xpm_imgs[2].size_line), &(data->xpm_imgs[2].endian));
+    return (1);
 }
 
 int main()
@@ -45,9 +69,11 @@ int main()
         return (1);
     if (!init_data(data))
         return (1);
+    if (!set_up_wall_xpms(data))
+        return (1);
     render_walls(data);
 	mlx_hook(data->win_ptr, 17, 0, close_win, data);
-    //mlx_hook(data->win_ptr, 2, 1L<<0, key_pressed, data);
-	mlx_key_hook(data->win_ptr, pressed_key_event, data);
+    mlx_hook(data->win_ptr, 2, 1L<<0, pressed_key_event, data);
+	//mlx_key_hook(data->win_ptr, pressed_key_event, data);
     mlx_loop(data->mlx_ptr);
 }

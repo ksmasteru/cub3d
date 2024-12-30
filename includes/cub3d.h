@@ -22,7 +22,7 @@
 #define MINI_MAP_W  (MAP_H / 10)
 #define FOW 60
 #define ROTSPEED 1.5
-#define MOVE_SPEED 31
+#define MOVE_SPEED 31.0
 #define w 24
 #define h 24
 #define h1 8
@@ -31,7 +31,7 @@
 #define degToRad(angleInDegrees) ((angleInDegrees) * M_PI / 180.0)
 #define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
 #define projection_d (SCREEN_W / 2) * tan(degToRad(30))
-
+#define TEXTURES_NUMBERS 3
 typedef struct s_player{
      double    posx;
      double    posy;
@@ -68,6 +68,7 @@ typedef struct s_data{
      void      *win_ptr;
      t_image   *img;
      t_image   *mini_map;
+     t_image   *xpm_imgs;
      t_ray     ray;
 }t_data;
 
@@ -82,8 +83,7 @@ typedef struct s_map{
 
 int	close_win(t_data *data);
 int render_walls(t_data *data);
-bool update_player_pos(t_data *data, int scale);
-bool rotate_player_dir(t_data *data, int keycode);
+bool rotate_player_dir(t_data *data, int keycode, double ratio);
 int	pressed_key_event(int keycode, t_data *data);
 double   horizontalraycast(t_data *data, double castAngle);
 double   verticalraycast(t_data *data, double castAngle);
@@ -93,9 +93,9 @@ double  calculate_distance(t_data *data, double cx, double cy, double castAngle)
 double   x_axis_raycast(t_data *data, double castAngle);
 double  y_axis_raycast(t_data *data, double castAngle);
 void update_ray_dir(t_ray *ray, double view_deg);
-bool player_move_down(t_data *data, double old_posx, double old_posy);
-bool player_move_up(t_data *data, double old_posx, double old_posy);
-bool update_player_pos(t_data *data, int keycode);
+bool player_move_down(t_data *data, double old_posx, double old_posy, double ratio);
+bool player_move_up(t_data *data, double old_posx, double old_posy, double ratio);
+bool update_player_pos(t_data *data, int keycode, double ratio);
 void	show_player_data(t_data *data);
 char	*ft_strdup2(char *s1);
 char	*ft_strjoin(char *s1, char *s2);

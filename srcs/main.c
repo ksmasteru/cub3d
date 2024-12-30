@@ -14,6 +14,10 @@ int init_data(t_data *data)
     data->img = malloc(sizeof(t_image));
     if (!data->img)
         return (-1);
+    data->old_img = malloc(sizeof(t_image));
+    if (!data->old_img)
+        return (-1);
+    data->old_img->mlx_img = NULL;
     data->mini_map = malloc(sizeof(t_image));
     if (!data->mini_map)
         return (-1);

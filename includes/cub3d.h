@@ -69,6 +69,7 @@ typedef struct s_data{
      void      *mlx_ptr;
      void      *win_ptr;
      t_image   *img;
+     t_image   *old_img;
      t_image   *mini_map;
      t_image   *xpm_imgs;
      t_ray     ray;

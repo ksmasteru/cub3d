@@ -214,13 +214,13 @@ void    put_walls(t_data *data)
 
 void set_new_img(t_data *data)
 {
-    if (data->img->mlx_img != NULL)/*here dont destroy the img untill the new img is ready*/
-    {
-        mlx_destroy_image(data->mlx_ptr, data->img->mlx_img);
-        mlx_clear_window(data->mlx_ptr, data->win_ptr);
+    //if (data->img->mlx_img != NULL)/*here dont destroy the img untill the new img is ready*/
+    //{
+      //  mlx_destroy_image(data->mlx_ptr, data->img->mlx_img);
+       // mlx_clear_window(data->mlx_ptr, data->win_ptr);
         //free(data->img->mlx_img);
-        data->img->mlx_img = NULL;
-    }
+        //data->img->mlx_img = NULL;
+    //}
     data->img->mlx_img = mlx_new_image(data->mlx_ptr, SCREEN_W, SCREEN_H);
     data->img->adrs = mlx_get_data_addr(data->img->mlx_img, &(data->img->bpp), &(data->img->size_line), &(data->img->endian));
 }
@@ -233,7 +233,7 @@ int render_walls(t_data *data)
     double   castAngle;
     int side;
     i = 0;
-
+    
     //fflush(stdout);
     //printf("-------------------player view is %f---------------------\n", data->player->view_deg);
     sep_angle = (double)FOW / SCREEN_W;
@@ -257,8 +257,15 @@ int render_walls(t_data *data)
         i++;
     }
     put_walls(data);
+    // swap images.
     //mlx_clear_window(data->mlx_ptr, data->win_ptr);
     //show_player_data(data); // write on top of new img
     //put_mini_map(data);
+    // destroy old img.
+    if (data->old_img->mlx_img)/*should just be an address n need to allocat*/
+        mlx_destroy_image(data->mlx_ptr, data->old_img->mlx_img);
+    mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0, 0);
+    // this img becomes the old img
+    data->old_img->mlx_img = data->img->mlx_img;
     return (0);
 }

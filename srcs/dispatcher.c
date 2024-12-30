@@ -6,7 +6,7 @@
 
 extern int map[w][h];
 
-double  raycast_1(t_data   *data, double castangle, int *side)
+double  raycast_1(t_data   *data, double castangle, int *side, int i)
 {
     double horizontalray;
     double verticalray;
@@ -16,38 +16,38 @@ double  raycast_1(t_data   *data, double castangle, int *side)
         castangle += 360.0;
     if (castangle > 0 && castangle < 90)
     {
-        horizontalray = horizontalraycast_1(data, castangle);
-        verticalray = vertical_casting_1(data, castangle);
+        horizontalray = horizontalraycast_1(data, castangle, i);
+        verticalray = vertical_casting_1(data, castangle, i);
     }
     else if (castangle > 90 && castangle < 180)
     {
-        horizontalray = horizontalraycast_2(data, castangle);
-        verticalray = vertical_casting_2(data, castangle);
+        horizontalray = horizontalraycast_2(data, castangle, i);
+        verticalray = vertical_casting_2(data, castangle, i);
     }
     else if (castangle > 180 && castangle < 270)
     {
-        horizontalray = horizontalraycast_3(data, castangle);
-        verticalray = vertical_casting_3(data, castangle);
+        horizontalray = horizontalraycast_3(data, castangle, i);
+        verticalray = vertical_casting_3(data, castangle, i);
     }
     else if (castangle > 270 && castangle < 360)
     {
-        horizontalray = horizontalraycast_4(data, castangle);
-        verticalray = vertical_casting_4(data, castangle);
+        horizontalray = horizontalraycast_4(data, castangle, i);
+        verticalray = vertical_casting_4(data, castangle, i);
     }
     else if (castangle > 360)
     {
          castangle -= 360.0;
-         return (raycast_1(data, castangle, side));
+         return (raycast_1(data, castangle, side, i));
     }
     else if (castangle == 0 || castangle == 180.0 || castangle == 360)
     {
         *side = 1;
-        return (x_axis_raycast(data, castangle));
+        return (x_axis_raycast(data, castangle, i));
     }
     else if (castangle == 90.0 || castangle == 270.0)
     {
         *side = 0;
-        return (y_axis_raycast(data, castangle));
+        return (y_axis_raycast(data, castangle, i));
     }
     if (verticalray < horizontalray)
     {
@@ -56,8 +56,8 @@ double  raycast_1(t_data   *data, double castangle, int *side)
         return (verticalray) * cos(degToRad(data->player->beta_angle));
     }
     *side = 1;
-    data->player->hitx = data->player->hor_hitx;
-    data->player->hity = data->player->hor_hity;
+    data->player->ver_hitx[i] = data->player->hor_hitx[i];
+    data->player->ver_hity[i] = data->player->hor_hity[i];
     data->player->wall_type = map[(int)data->player->hity / texheight][(int)data->player->hitx / texwidth]; 
     //}
     //printf("distance to the wall is %f\n", horizontalray);

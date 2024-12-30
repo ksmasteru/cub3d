@@ -19,7 +19,7 @@ double  calculate_distance(t_data *data, double cx, double  cy, double castAngle
 
 // !converting from box to numberis problematic box 1 is actulaly (1 + 1) * unit.
 // change to be like y_axis_raycast if it causes bugs.
-double   x_axis_raycast(t_data *data, double castAngle)
+double   x_axis_raycast(t_data *data, double castAngle, int i)
 { 
     double rx;
     double ry;
@@ -44,8 +44,8 @@ double   x_axis_raycast(t_data *data, double castAngle)
     }
     if (map[data->player->box_y][data->player->box_x] != 0)
     {
-        data->player->hitx = rx;
-        data->player->hity = ry;
+        data->player->ver_hitx[i] = rx;
+        data->player->ver_hity[i] = ry;
         hit = 1;
         data->player->wall_type = map[data->player->box_y][data->player->box_x];
     }
@@ -66,8 +66,8 @@ double   x_axis_raycast(t_data *data, double castAngle)
             box_x = 0;*/
         if (map[data->player->box_y][data->player->box_x] != 0)
         {
-            data->player->hitx = rx;
-            data->player->hity = ry;
+            data->player->ver_hitx[i] = rx;
+            data->player->ver_hity[i] = ry;
             hit = 1;
             data->player->wall_type = map[data->player->box_y][data->player->box_x];
         }
@@ -82,7 +82,7 @@ double   x_axis_raycast(t_data *data, double castAngle)
 }
 
 // ry and cx in this context are useless.
-double  y_axis_raycast(t_data *data, double castAngle)
+double  y_axis_raycast(t_data *data, double castAngle, int i)
 {
     double rx; // CREDENTIAL X : 
     double ry;// CREDENTIAL Y
@@ -106,8 +106,8 @@ double  y_axis_raycast(t_data *data, double castAngle)
     }
     if (map[data->player->box_y][data->player->box_x] != 0)
     {
-        data->player->hitx = rx;
-        data->player->hity = ry;
+        data->player->ver_hitx[i] = rx;
+        data->player->ver_hity[i] = ry;
         hit = 1;
         data->player->wall_type = map[data->player->box_y][data->player->box_x];
     }
@@ -133,8 +133,8 @@ double  y_axis_raycast(t_data *data, double castAngle)
         //box_y++;
         if (map[data->player->box_y][data->player->box_x] != 0)
         {
-            data->player->hitx = rx;
-            data->player->hity = ry;
+            data->player->ver_hitx[i] = rx;
+            data->player->ver_hity[i] = ry;
             hit = 1;
             data->player->wall_type = map[data->player->box_y][data->player->box_x];
         }
@@ -159,7 +159,7 @@ double  set_xa(double castAngle)
         xa *= -1;
     return (xa);
 }
-double   verticalraycast(t_data *data, double castAngle)
+double   verticalraycast(t_data *data, double castAngle, int i)
 {
     //ya is known ca isnt
     double len;
@@ -171,13 +171,13 @@ double   verticalraycast(t_data *data, double castAngle)
     double ya;
     /*for testing calculations 1*/
     if (castAngle > 0 && castAngle < 90)
-        return (vertical_casting_1(data, castAngle));
+        return (vertical_casting_1(data, castAngle, i));
     else if (castAngle > 90 && castAngle < 180)
-        return (vertical_casting_2(data, castAngle));
+        return (vertical_casting_2(data, castAngle, i));
     else if (castAngle > 180 && castAngle < 270)
-        return (vertical_casting_3(data, castAngle));
+        return (vertical_casting_3(data, castAngle, i));
     else if (castAngle > 270 && castAngle < 360)
-        return (vertical_casting_4(data, castAngle));
+        return (vertical_casting_4(data, castAngle, i));
     xa = set_xa(castAngle);
     //printf("xa value is %f\n", xa);
     if (castAngle > 0 && castAngle < 180)
@@ -292,7 +292,7 @@ double   verticalraycast(t_data *data, double castAngle)
 }
 
 /*name were swapped.*/
-double   horizontalraycast(t_data *data, double castAngle)
+double   horizontalraycast(t_data *data, double castAngle, int i)
 {
     double  len;
     double  rx;
@@ -304,13 +304,13 @@ double   horizontalraycast(t_data *data, double castAngle)
     hit = 0;
     //  for testing calculations2.c
    if (castAngle > 0 && castAngle < 90)
-        return (horizontalraycast_1(data, castAngle));
+        return (horizontalraycast_1(data, castAngle, i));
     else if (castAngle > 90 && castAngle < 180)
-        return (horizontalraycast_2(data, castAngle));
+        return (horizontalraycast_2(data, castAngle, i));
     else if (castAngle > 180 && castAngle < 270)
-        return (horizontalraycast_3(data, castAngle));
+        return (horizontalraycast_3(data, castAngle, i));
     else if (castAngle > 270 && castAngle < 360)
-        return (horizontalraycast_4(data, castAngle));
+        return (horizontalraycast_4(data, castAngle, i));
     if ((castAngle > 0 && castAngle < 90)
         || (castAngle > 270 && castAngle < 360))
     {

@@ -7,7 +7,7 @@
 extern int map[w][h];
 
 // 0, 90 : +x -y
-double   horizontalraycast_1(t_data *data, double castAngle)
+double   horizontalraycast_1(t_data *data, double castAngle, int i)
 {
     double len;
     int hit;
@@ -40,14 +40,14 @@ double   horizontalraycast_1(t_data *data, double castAngle)
         data->player->box_x = (int)rx >> 6;
         data->player->box_y = (int)ry >> 6;
     }
-    data->player->hor_hitx = rx;
-    data->player->hor_hity = ry;
+    data->player->hor_hitx[i] = rx;
+    data->player->hor_hity[i] = ry;
     distance = calculate_distance(data, rx, ry, castAngle);
     return (distance);
 }
 
 // 90, 180 : -x -y
-double   horizontalraycast_2(t_data *data, double castAngle)
+double   horizontalraycast_2(t_data *data, double castAngle, int i)
 {
     double len;
     int hit;
@@ -78,13 +78,13 @@ double   horizontalraycast_2(t_data *data, double castAngle)
         data->player->box_x = (int)(rx - 1) >> 6;
         data->player->box_y = (int)ry >> 6;
     }
-    data->player->hor_hitx = rx;
-    data->player->hor_hity = ry;
+    data->player->hor_hitx[i] = rx;
+    data->player->hor_hity[i] = ry;
     distance = calculate_distance(data, rx, ry, castAngle);
     return (distance);
 }
 // 180 , 270 : -x + y 
-double   horizontalraycast_3(t_data *data, double castAngle)
+double   horizontalraycast_3(t_data *data, double castAngle, int i)
 {
     double len;
     int hit;
@@ -115,14 +115,14 @@ double   horizontalraycast_3(t_data *data, double castAngle)
         data->player->box_x = (int)(rx - 1) >> 6; // round-down-up then >> ?
         data->player->box_y = (int)ry >> 6;
     }
-    data->player->hor_hitx = rx;
-    data->player->hor_hity = ry;
+    data->player->hor_hitx[i] = rx;
+    data->player->hor_hity[i] = ry;
     distance = calculate_distance(data, rx, ry, castAngle);
     return (distance);
     
 }
 // 270, 360 : +x +y
-double   horizontalraycast_4(t_data *data, double castAngle)
+double   horizontalraycast_4(t_data *data, double castAngle, int i)
 {
     double len;
     int hit;
@@ -156,7 +156,7 @@ double   horizontalraycast_4(t_data *data, double castAngle)
         data->player->box_y = (int)ry >> 6;
     }
     distance = calculate_distance(data, rx, ry, castAngle);
-    data->player->hor_hitx = rx;
-    data->player->hor_hity = ry;
+    data->player->hor_hitx[i] = rx;
+    data->player->hor_hity[i] = ry;
     return (distance);
 }

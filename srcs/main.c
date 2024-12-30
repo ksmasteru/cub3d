@@ -17,6 +17,16 @@ int init_data(t_data *data)
     data->mini_map = malloc(sizeof(t_image));
     if (!data->mini_map)
         return (-1);
+    data->player->distance = (double *)malloc(sizeof(double) * MAP_W);
+    if (!data->player->distance)
+        return (-1);
+    data->player->side = (int *)malloc(sizeof(int) * MAP_W);
+    if (!data->player->side)
+        return (-1);
+    data->player->hor_hitx =  (double *)malloc(sizeof(double) * MAP_W);
+    data->player->hor_hity =  (double *)malloc(sizeof(double) * MAP_W);
+    data->player->ver_hitx =  (double *)malloc(sizeof(double) * MAP_W);
+    data->player->ver_hity =  (double *)malloc(sizeof(double) * MAP_W);
     data->mini_map->mlx_img = NULL;
     data->img->mlx_img = NULL;
     data->player->posx = 1034;

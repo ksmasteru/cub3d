@@ -42,10 +42,12 @@ typedef struct s_player{
      int       box_x;
      int       box_y;
      int       wall_type;
-     double    ver_hitx;
-     double    ver_hity;
-     double    hor_hitx;
-     double    hor_hity;
+     double    *ver_hitx;//not necessary
+     double    *ver_hity;
+     double    *hor_hitx;
+     double    *hor_hity;
+     double    *distance;
+     int       *side;
 }t_player;
 
 typedef struct s_image{
@@ -85,13 +87,13 @@ int	close_win(t_data *data);
 int render_walls(t_data *data);
 bool rotate_player_dir(t_data *data, int keycode, double ratio);
 int	pressed_key_event(int keycode, t_data *data);
-double   horizontalraycast(t_data *data, double castAngle);
-double   verticalraycast(t_data *data, double castAngle);
+double   horizontalraycast(t_data *data, double castAngle, int i);
+double   verticalraycast(t_data *data, double castAngle, int i);
 double   raycast(t_data *data, double castAngle, int *side);
 void set_new_img(t_data *data);
 double  calculate_distance(t_data *data, double cx, double cy, double castAngle);
-double   x_axis_raycast(t_data *data, double castAngle);
-double  y_axis_raycast(t_data *data, double castAngle);
+double   x_axis_raycast(t_data *data, double castAngle, int i);
+double  y_axis_raycast(t_data *data, double castAngle, int i);
 void update_ray_dir(t_ray *ray, double view_deg);
 bool player_move_down(t_data *data, double old_posx, double old_posy, double ratio);
 bool player_move_up(t_data *data, double old_posx, double old_posy, double ratio);
@@ -104,13 +106,13 @@ char		*ft_itoa(int num);
 static int	count_size(int n);
 void    put_wall_side(t_data *data, int stripex, double distance, int side);
 int  put_mini_map(t_data *data);
-double  vertical_casting_1(t_data *data, double castangle);
-double  vertical_casting_2(t_data *data, double castangle);
-double  vertical_casting_3(t_data *data, double castangle);
-double  vertical_casting_4(t_data *data, double castangle);
-double   horizontalraycast_1(t_data *data, double castAngle);
-double   horizontalraycast_2(t_data *data, double castAngle);
-double   horizontalraycast_3(t_data *data, double castAngle);
-double   horizontalraycast_4(t_data *data, double castAngle);
-double  raycast_1(t_data   *data, double castangle, int *side);
+double  vertical_casting_1(t_data *data, double castangle, int i);
+double  vertical_casting_2(t_data *data, double castangle, int i);
+double  vertical_casting_3(t_data *data, double castangle, int i);
+double  vertical_casting_4(t_data *data, double castangle, int i);
+double   horizontalraycast_1(t_data *data, double castAngle, int i);
+double   horizontalraycast_2(t_data *data, double castAngle, int i);
+double   horizontalraycast_3(t_data *data, double castAngle, int i);
+double   horizontalraycast_4(t_data *data, double castAngle, int i);
+double  raycast_1(t_data   *data, double castangle, int *side, int i);
 #endif

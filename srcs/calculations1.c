@@ -9,7 +9,7 @@ extern int map[w][h];
 
 // castANGLE == 0 nbp
 // 0, 90 +x -y
-double  vertical_casting_1(t_data *data, double castangle)
+double  vertical_casting_1(t_data *data, double castangle, int i)
 {
     double len;
     double rx;
@@ -40,13 +40,13 @@ double  vertical_casting_1(t_data *data, double castangle)
         data->player->box_y = (int)(ry - 1) >> 6;
         data->player->box_x = (int)rx >> 6;
     }
-    data->player->hitx = rx;
-    data->player->hity = ry;
+    data->player->ver_hitx[i] = rx;
+    data->player->ver_hity[i] = ry;
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
     return (calculate_distance(data, rx, ry, castangle));
 }
 // -x -y
-double  vertical_casting_2(t_data *data, double castangle)
+double  vertical_casting_2(t_data *data, double castangle, int i)
 {
     double len;
     int hit;
@@ -78,14 +78,14 @@ double  vertical_casting_2(t_data *data, double castangle)
         data->player->box_y = (int)(ry - 1) >> 6;
         data->player->box_x = (int)rx >> 6;    
     }
-    data->player->hitx = rx;
-    data->player->hity = ry;
+    data->player->ver_hitx[i] = rx;
+    data->player->ver_hity[i] = ry;
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
     return (calculate_distance(data, rx, ry, castangle));
 }
 
 // +x +y
-double  vertical_casting_4(t_data *data, double castangle)
+double  vertical_casting_4(t_data *data, double castangle, int i)
 {
     double len;
     int hit;
@@ -117,14 +117,14 @@ double  vertical_casting_4(t_data *data, double castangle)
         data->player->box_y = (int)ry >> 6;
         data->player->box_x = (int)rx >> 6;
     }
-    data->player->hitx = rx;
-    data->player->hity = ry;
+    data->player->ver_hitx[i] = rx;
+    data->player->ver_hity[i] = ry;
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
     return (calculate_distance(data, rx, ry, castangle));
 }
 
 // -x +y
-double  vertical_casting_3(t_data *data, double castangle)
+double  vertical_casting_3(t_data *data, double castangle, int i)
 {
     double len;
     int hit;
@@ -157,8 +157,8 @@ double  vertical_casting_3(t_data *data, double castangle)
         data->player->box_y = (int)ry >> 6;
         data->player->box_x = (int)rx >> 6;
     }
-    data->player->hitx = rx;
-    data->player->hity = ry;
+    data->player->ver_hitx[i] = rx;
+    data->player->ver_hity[i] = ry;
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
     return (calculate_distance(data, rx, ry, castangle));
 }

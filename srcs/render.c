@@ -76,13 +76,12 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
     int     y_xpm;
     int     x_offset;
     int     pixel_repeat;
-    int     i;
     double  step;
     char*   pixel;
     int     color;
 
     slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
-    x_offset = (int)data->player->hitx % (texwidth - 1); // logical error. : should get actual position of the hit.
+    x_offset = (int)data->player->ver_hitx[stripex] % (texwidth - 1); // logical error. : should get actual position of the hit.
     //printf("for stripe %d of type 0 x offset is %d hit %f\n", stripex, x_offset, data->player->hitx);
     step = 1.0 * texwidth / slice_height;
     int y_min =  SCREEN_H / 2 - slice_height / 2;
@@ -120,7 +119,6 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     int     y_xpm;
     int     x_offset;
     int     pixel_repeat;
-    int     i;
     char    *pixel;
     double  step;
     int color;
@@ -133,7 +131,7 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     //printf("putwall distance is %f slice height is %f\n", distance);
     if (side == 0)
         return (put_wall_side(data, stripex, distance, side));
-    x_offset = (int)data->player->hity % (texheight - 1);//.this.
+    x_offset = (int)data->player->ver_hity[stripex] % (texheight - 1);//.this.
     //printf("for stripe %d of type 1 x offset %d is hity is %f\n", stripex, x_offset, data->player->hity);
     step = 1.0 * texheight / slice_height; // by how much to increase  pix corrdinate.
     //printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
@@ -143,7 +141,6 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     int y_max = SCREEN_H / 2 + slice_height / 2;
     if (y_max >= SCREEN_H)
         y_max = SCREEN_H - 1;
-    i = 0;
     // textpos y : start of the texture : if wall biggerthan screen it increases downard
     double texPos = (y_min - SCREEN_H / 2 + slice_height / 2) * step;
     y_xpm = (int)texPos & (texheight - 1);
@@ -164,7 +161,20 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     //free(xpm_img);
 }
 
-double   raycast(t_data *data, double castAngle, int *side)
+void    put_walls(t_data *data)
+{
+    int i;
+
+    i = 0;
+    while  (i < SCREEN_W)
+    {
+        put_wall(data, i , data->player->distance[i], data->player->side[i]);
+        i++;
+    }
+    mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0, 0);
+}
+
+/*double   raycast(t_data *data, double castAngle, int *side)
 {
     double horizontalray;
     double verticalray;
@@ -200,11 +210,11 @@ double   raycast(t_data *data, double castAngle, int *side)
     //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
     printf("for angle %f horizontal height is %f because vertical was %f\n", castAngle, horizontalray,verticalray);
     return (horizontalray) * cos(degToRad(data->player->beta_angle));
-}
+}*/
 
 void set_new_img(t_data *data)
 {
-    if (data->img->mlx_img != NULL)
+    if (data->img->mlx_img != NULL)/*here dont destroy the img untill the new img is ready*/
     {
         mlx_destroy_image(data->mlx_ptr, data->img->mlx_img);
         mlx_clear_window(data->mlx_ptr, data->win_ptr);
@@ -217,7 +227,7 @@ void set_new_img(t_data *data)
 
 int render_walls(t_data *data)
 {
-    double wallheight;
+    //double wallheight;
     int i;
     double  sep_angle;
     double   castAngle;
@@ -238,17 +248,16 @@ int render_walls(t_data *data)
     while (i < SCREEN_W)
     {
         //printf("cast angle is %f\n", castAngle);
-        wallheight = raycast_1(data, castAngle, &side);
+        data->player->distance[i] = raycast_1(data, castAngle, data->player->side + i, i);
         //printf("for cast angle %f wallheight is %f side is %d\n", castAngle, wallheight, side);
         //printf("stripex is %d side is %d\n", i, side);
         //if (castAngle > -12 && castAngle < -8)
-        put_wall(data, i, wallheight, side);
         castAngle -= sep_angle;
         data->player->beta_angle -= sep_angle;
         i++;
     }
+    put_walls(data);
     //mlx_clear_window(data->mlx_ptr, data->win_ptr);
-    mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0, 0);
     //show_player_data(data); // write on top of new img
     //put_mini_map(data);
     return (0);

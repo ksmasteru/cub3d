@@ -171,7 +171,6 @@ void    put_walls(t_data *data)
         put_wall(data, i , data->player->distance[i], data->player->side[i]);
         i++;
     }
-    mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0, 0);
 }
 
 /*double   raycast(t_data *data, double castAngle, int *side)

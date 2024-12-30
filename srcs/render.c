@@ -102,8 +102,7 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
             x_offset * (data->xpm_imgs[0].bpp / 8);
         pixel = data->img->adrs + data->img->size_line * y_min +
             stripex * (data->img->bpp / 8);
-        color = *(int *)xpm_pixel;
-        *(int *)pixel = color;
+        *(int *)pixel = *(int *)xpm_pixel;
         y_xpm = (int)texPos & (texheight - 1);
         texPos += step;
         y_min++;
@@ -155,8 +154,7 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
             x_offset * (data->xpm_imgs[1].bpp / 8);
         pixel = data->img->adrs + data->img->size_line * y_min +
             stripex * (data->img->bpp / 8);
-        color = *(int *)xpm_pixel;
-        *(int *)pixel = color;
+        *(int *)pixel = *(int *)xpm_pixel;
         texPos += step;
         y_xpm = (int)texPos & (texheight - 1);
         y_min++;
@@ -231,7 +229,7 @@ int render_walls(t_data *data)
     sep_angle = (double)FOW / SCREEN_W;
     castAngle = data->player->view_deg + (double)FOW / 2;
     angle = data->player->view_deg;
-    update_ray_dir(&(data->ray), data->player->view_deg);
+    //update_ray_dir(&(data->ray), data->player->view_deg);
     //printf("cast angle is %f\n", castAngle);
     data->player->beta_angle = (double)FOW / 2; // works better than FOW / 2 somehow.
     //printf("start boxX[%d] boxY[%d]\n", (int)data->player->posx / 64, (int)data->player->posy / 64);
@@ -249,8 +247,9 @@ int render_walls(t_data *data)
         data->player->beta_angle -= sep_angle;
         i++;
     }
+    //mlx_clear_window(data->mlx_ptr, data->win_ptr);
     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0, 0);
-    show_player_data(data); // write on top of new img
-    put_mini_map(data);
+    //show_player_data(data); // write on top of new img
+    //put_mini_map(data);
     return (0);
 }

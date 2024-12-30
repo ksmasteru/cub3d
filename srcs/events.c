@@ -20,7 +20,7 @@ bool player_move_up(t_data *data, double old_posx, double old_posy, double ratio
 	int box_x;
 	int box_y;
 	t_ray ray;
-
+    update_ray_dir(&(data->ray), data->player->view_deg);
 	ray = data->ray;
 // update the positin then check if its a wall.
 

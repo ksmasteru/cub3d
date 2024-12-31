@@ -22,7 +22,7 @@
 #define MINI_MAP_W  (MAP_H / 10)
 #define FOW 60
 #define ROTSPEED 1.5
-#define MOVE_SPEED 31.0
+#define MOVE_SPEED 32.0
 #define w 24
 #define h 24
 #define h1 8

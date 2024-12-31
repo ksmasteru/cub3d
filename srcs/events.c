@@ -19,27 +19,13 @@ bool player_move_up(t_data *data, double old_posx, double old_posy, double ratio
 {
 	int box_x;
 	int box_y;
+	int	wally;
+	int wallx;
+
 	t_ray ray;
     update_ray_dir(&(data->ray), data->player->view_deg);
 	ray = data->ray;
-// update the positin then check if its a wall.
-
-	//ray = data->ray;
-	//box_x = (int)old_posx / texwidth * texwidth; // current box_x;
-	//box_y = (int )old_posy / texheight * texheight;// current box_y;
-	// this method doesnt seem good as playerray can have positive x componemet but still wont 
-	// go to right.
-	/*if (ray.dir_x > 0) //apply this to vertical and horizontal casting
-		box_x++;
-	else
-		box_x--;
-	if (ray.dir_y > 0)
-		box_y++;
-	else
-		box_y--;*/
-	// check if next box is a wall.
-	//printf("ray dir x %d ray dir y %d\n", ray.dir_x, ray.dir_y);
-	if (ray.dir_x > 0)
+	if (ray.dir_x > 0) /*here*/
 		data->player->posx += fabs(MOVE_SPEED * ratio * cos(degToRad(data->player->view_deg))); // MOVE SPEED VALUE ?
 	else if (ray.dir_x < 0)
 		data->player->posx -=  fabs(MOVE_SPEED * ratio * cos(degToRad(data->player->view_deg)));
@@ -49,7 +35,7 @@ bool player_move_up(t_data *data, double old_posx, double old_posy, double ratio
 		data->player->posy -= fabs(MOVE_SPEED * ratio * sin(degToRad(data->player->view_deg)));
 	// check if its inside a wall. if yes reverse
 	//printf("new player posx %d posy %d\n", (int)data->player->posx, (int)data->player->posy);
-	// first check if its out of bounds.
+	// first check if its out of bounds. .. ?????
 	if (data->player->posx > map_h * texwidth)
 		data->player->posx = map_h  * texwidth - 1;
 	else if (data->player->posx < 0)
@@ -58,8 +44,74 @@ bool player_move_up(t_data *data, double old_posx, double old_posy, double ratio
 		data->player->posy = map_h * texheight - 1;
 	else if (data->player->posy < 0)
 		data->player->posx = 1;
+	/*wall slidig test here*/
+	if (ray.dir_x == 0)
+	{
+		// get the corrdinates of the next wall.
+		wallx = (int)data->player->posx / 64 * 64;
+		if (ray.dir_y > 0 )// going down
+			wally = (int)data->player->posy / 64 * 64 + 64;
+		else
+			wally = (int)data->player->posy / 64 * 64 - 1;
+		// !! IF NEXT GRID IS A WALL. AND the distance is less than 20 make it 20
+		printf("wall y is %d wall x is %d\n", wally , wallx);
+		if (map[wally / 64][(int)data->player->posx / 64] != 0 && abs (wally - (int)data->player->posy) < 20)
+		{
+			printf("condition met\n");
+			if (ray.dir_y > 0)
+				data->player->posy = wally - 20;
+			else
+				data->player->posy = wally + 20;
+			return (true);
+		}
+	}
+	if (ray.dir_y == 0)
+	{
+		// coordinate of next wall
+		wally = (int)data->player->posy / 64 * 64;
+		if (ray.dir_x > 0) // going rihgt;
+			wallx = (int)data->player->posx / 64 * 64 + 64;
+		else
+			wallx = (int)data->player->posx / 64 * 64 - 1;
+		if (map[wally / 64][wallx / 64] != 0 && abs(wallx - (int)data->player->posx) < 20)
+		{
+			printf("condition met\n");
+			if (ray.dir_x > 0)
+				data->player->posx = wallx - 20;
+			else
+				data->player->posx = wallx + 20;
+		}
+		return (true);
+ 	}
+	
+	// if is up 
+	// try it at  raydirx = 0 and ray dir y = 0
+	/*if (map[(int)data->player->posy / texheight][(int)data->player->posx / texwidth] != 0
+	 			&& (ray.dir_x == 0))
+	{
+		// this get trigered when the player gets trigered when the player gets inside the wall.
+		// you should check if the distance is less than 12 then make it 12 dit should be tested before
+			printf("condition met\n");
+			data->player->posx = old_posx;
+			if (ray.dir_y > 0) // going down.
+			{
+				wally = (int)data->player->posy / texheight * texheight;
+				if (abs(wally - (int)data->player->posy) < 30)
+					data->player->posy = wally - 30;
+			}
+			else
+			{
+				wally = (int)data->player->posy / texheight * texheight + texheight;
+				if (abs(wally - (int)data->player->posy) < 30)
+					data->player->posy= wally + 30;
+			}
+			return (true);
+	}*/
+
 	if (map[(int)data->player->posy / texheight][(int)data->player->posx / texwidth] != 0)/*wall*/ // it could be equal to -1 : outofpbound
 	{
+		// move the player back. at 28 units from the wall wchi side ? x, y both ?
+		// units to substract from x position
 		data->player->posx = old_posx;// or increment by the necessary value. % distance.
 		data->player->posy = old_posy;
 		return (false); // dont update img.
@@ -140,7 +192,6 @@ bool rotate_player_dir(t_data *data, int keycode, double ratio)
 	//angle = data->player->view_deg;
 	return (true);
 }
-
 
 int	pressed_key_event(int keycode, t_data *data)
 {

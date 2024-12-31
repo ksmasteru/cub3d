@@ -32,6 +32,8 @@
 #define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
 #define projection_d (SCREEN_W / 2) * tan(degToRad(30))
 #define TEXTURES_NUMBERS 3
+#define FLOOR_COLOR 0x808080
+#define CEILING_COLOR 0x404040
 typedef struct s_player{
      double    posx;
      double    posy;
@@ -116,4 +118,6 @@ double   horizontalraycast_2(t_data *data, double castAngle, int i);
 double   horizontalraycast_3(t_data *data, double castAngle, int i);
 double   horizontalraycast_4(t_data *data, double castAngle, int i);
 double  raycast_1(t_data   *data, double castangle, int *side, int i);
+void    drawceiling(t_data *data, int stripex, int y_min);
+void    drawfloor(t_data *data, int stripex, int y_max);
 #endif

@@ -18,8 +18,8 @@ int map[w][h]=
   {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -93,6 +93,7 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
     double texPos = (y_min - SCREEN_H / 2 + slice_height / 2) * step;
     y_xpm = (int)texPos & (texwidth -1);
     //printf("put_wall side : starting texture y position is %d\n", y_xpm);
+    drawceiling(data, stripex, y_min);
     while (y_min != y_max)
     {
         //printf("ymin value is %d\n",- y_min);
@@ -105,6 +106,35 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
         y_xpm = (int)texPos & (texheight - 1);
         texPos += step;
         y_min++;
+    }
+    drawfloor(data, stripex, y_max);
+}
+
+void    drawceiling(t_data *data, int stripex, int y_min)
+{
+    int     i;
+    char    *pixel;
+
+    i = 0;
+    while(i < y_min)
+    {
+        pixel = data->img->adrs + data->img->size_line * i +
+            stripex * (data->img->bpp / 8);
+        *(int *)pixel = CEILING_COLOR;
+        i++;    
+    }
+}
+
+void    drawfloor(t_data *data, int stripex, int y_max)
+{
+    char    *pixel;
+
+    while(y_max < SCREEN_H)
+    {
+        pixel = data->img->adrs + data->img->size_line * y_max +
+            stripex * (data->img->bpp / 8);
+        *(int *)pixel = FLOOR_COLOR;
+        y_max++;
     }
 }
 
@@ -123,7 +153,6 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     double  step;
     int color;
     double  texpos;
-
     y_xpm = 0;
     if (distance > sqrt(MAP_H * MAP_H + MAP_W * MAP_W)) /*BOTH VERTICAL AND HORIZONAL RETURNED HIGH VALUE*/
         distance = fabs(MAP_W - data->player->posx);
@@ -145,6 +174,7 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
     double texPos = (y_min - SCREEN_H / 2 + slice_height / 2) * step;
     y_xpm = (int)texPos & (texheight - 1);
     //printf("put_wall : starting texPos is %f\n", y_xpm);
+    drawceiling(data, stripex, y_min);
     while (y_min != y_max)
     {
         xpm_pixel = data->xpm_imgs[1].adrs + data->xpm_imgs[1].size_line * y_xpm +
@@ -156,6 +186,7 @@ void    put_wall(t_data *data, int stripex,  double distance, int side)
         y_xpm = (int)texPos & (texheight - 1);
         y_min++;
     }
+    drawfloor(data, stripex, y_max);
     //mlx_destroy_image(data->mlx_ptr, xpm_img->mlx_img);
     //free(xpm_img->mlx_img);
     //free(xpm_img);
@@ -258,12 +289,12 @@ int render_walls(t_data *data)
     put_walls(data);
     // swap images.
     //mlx_clear_window(data->mlx_ptr, data->win_ptr);
-    //show_player_data(data); // write on top of new img
-    //put_mini_map(data);
     // destroy old img.
     if (data->old_img->mlx_img)/*should just be an address n need to allocat*/
         mlx_destroy_image(data->mlx_ptr, data->old_img->mlx_img);
     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0, 0);
+    show_player_data(data); // write on top of new img
+    put_mini_map(data);
     // this img becomes the old img
     data->old_img->mlx_img = data->img->mlx_img;
     return (0);

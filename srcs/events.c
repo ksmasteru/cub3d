@@ -13,8 +13,75 @@ int	close_win(t_data *data)
 	exit(0);
 }
 
+// wall detected on xside ::--> slide on y side
+bool player_slide_xside(t_data *data)
+{
+	double old_posy;
+
+	old_posy = data->player->posy;	
+	// update posy bases on viewdeg
+	if (data->ray.dir_y > 0)
+		data->player->posy += fabs(SLIDE_SPEED * sin(data->player->view_deg));
+	else
+		data->player->posy -= fabs(SLIDE_SPEED * sin(data->player->view_deg));
+	// if new coordinates inside a wall reverse op.
+	if (map[(int)data->player->posy / texheight][(int)data->player->posx / texwidth] != 0)
+	{
+		data->player->posy = old_posy;
+		return (false);
+	}
+	printf("player xslide \n");
+	return (true);
+}
+
+// wall detected on yside ::--> slide on x side
+bool player_slide_yside(t_data *data)
+{
+	double old_posx;
+
+	printf("player yslide\n");
+	old_posx = data->player->posx;
+	if (data->ray.dir_x > 0)
+		data->player->posx += fabs(SLIDE_SPEED * cos(data->player->view_deg));
+	else
+		data->player->posx -= fabs(SLIDE_SPEED * cos(data->player->view_deg));
+	if (map[(int)data->player->posy / texheight][(int)data->player->posx / texwidth] != 0)
+	{
+		data->player->posx = old_posx;
+		return (false);
+	}
+	printf("player yslide done\n");
+	return (true);
+}
+
+bool player_slide(t_data *data, int posx, int posy)
+{
+	int l_wallx;
+	int	r_wallx;
+	int up_wally;
+	int dow_wally;
+	int	wally;
+	int wallx;
+	l_wallx = (posx - 25) / texwidth;
+	r_wallx = (posx + 25) / texwidth;
+	up_wally = (posy - 25) / texheight;
+	dow_wally = (posy + 25) / texheight;
+	wally = posy / texheight;
+	wallx = posx / texwidth;
+	
+	// you should substract 1 form wall it is up side.
+	printf("wally %d wallx %d l_wallx %d r_wallx %d\n", wally, wallx, l_wallx, r_wallx);
+	if ((map[wally][l_wallx] != 0) || (map[wally][r_wallx] != 0)) // a wall on x side--- > -+y
+		return (player_slide_yside(data));
+	else if ((map[up_wally][wallx] != 0) || (map[dow_wally][wallx] != 0))
+		return (player_slide_xside(data));
+	return (false);
+}
+
 // MAKE IT MORE READEABLE WITH RAYDIRX RAYDIRY
 // if MAP[BOX_X][BOX_Y] != 0 move
+
+//LOUSY LOGIC NEEDS REDOING
 bool player_move_up(t_data *data, double old_posx, double old_posy, double ratio)
 {
 	int box_x;
@@ -70,15 +137,59 @@ bool player_move_up(t_data *data, double old_posx, double old_posy, double ratio
 		data->player->posy = old_posy;
 		return (true);
 	}
-	else
+	else /*i is less than 20 or inside the wall.*/
 	{
+		printf("player slide\n");
+		// here. which direction caused getting inside the wall radius
+		// posx got us inside the wall
 		data->player->posx = original_posx;
 		data->player->posy = original_posy;
+		// if left side x is a wall
+	/*if (map[(int)data->player->posy / 64][(int)(data->player->posx - 22) / 64] != 0
+			|| map[(int)data->player->posy / 64][(int)(data->player->posx + 22) / 64] != 0)
+	{
+		if (map[(int)(data->player->posy + 22) / 64][(int)data->player->posx / 64] != 0 
+				|| map[(int)(data->player->posy - 22) / 64][(int)data->player->posx / 64] != 0)
+		{
+			printf("junction !! stop\n");
+			return (false);
+		}
+	}*/
+		if (map[(int)data->player->posy / 64][(int)(data->player->posx - 31) / 64] != 0
+			|| map[(int)data->player->posy / 64][(int)(data->player->posx + 31) / 64] != 0)
+		{
+			/*if (map[(int)(data->player->posy + 31) / 64][(int)data->player->posx / 64] != 0 
+				|| map[(int)(data->player->posy - 31) / 64][(int)data->player->posx / 64] != 0)
+				return (false);*/
+			old_posy = data->player->posy;
+			data->player->posy -= (SLIDE_SPEED * sin(degToRad(data->player->view_deg)));
+			if (map[(int)data->player->posy / 64][(int)data->player->posx / 64] != 0)
+			{
+				data->player->posy = old_posy;
+				return (false);
+			}
+			printf("updated posy\n");
+			return true;
+		}
+		else if (map[(int)(data->player->posy + 31) / 64][(int)data->player->posx / 64] != 0 
+				|| map[(int)(data->player->posy - 31) / 64][(int)data->player->posx / 64] != 0)
+		{
+			old_posx = data->player->posx;
+			data->player->posx += (SLIDE_SPEED * cos(degToRad(data->player->view_deg)));
+			if (map[(int)data->player->posy / 64][(int)data->player->posx / 64] != 0)
+			{
+				data->player->posx = old_posx;
+				return (false);
+			}
+			printf("updated posy\n");
+			return true;
+		}
+		return (false);
 		// here slide IN!
+		//return (player_slide(data, data->player->posx, data->player->posy));
 	}
 	return (false);
 }
-
 
 // MOVE DOWN IF NO WALL IS BEHIND THE PLAYER. : inverse of move_up semantics
 // of increment/decrementing pos

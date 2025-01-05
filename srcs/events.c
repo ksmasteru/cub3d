@@ -271,16 +271,15 @@ bool player_move_down(t_data *data, double old_posx, double old_posy, double rat
 	return (true);
 }
 
-bool	update_player_posy_upkey(t_data *data, int keycode, double ratio)
+bool	update_player_posy_upkey(t_data *data, int keycode, double ratio, double castAngle)
 {
 	double	ratio_y;
 	double	old_posy;
 	int		wally;
 	int		boxy;
 
-	ratio_y = MOVE_SPEED * sin(degToRad(data->player->view_deg)) * ratio * -1.00;
-	if ((data->ray.dir_y == 0) ||
-		map[(int)(data->player->posy + ratio_y) / texheight][(int)data->player->posx / texwidth] != 0)
+	ratio_y = MOVE_SPEED * sin(degToRad(castAngle)) * ratio * -1.00;
+	if (map[(int)(data->player->posy + ratio_y) / texheight][(int)data->player->posx / texwidth] != 0)
 		return (false);
 	data->player->posy += ratio_y;
 	if (data->ray.dir_y > 0)
@@ -303,16 +302,15 @@ bool	update_player_posy_upkey(t_data *data, int keycode, double ratio)
 	return (true);
 }
 
-bool	update_player_posy_downkey(t_data	*data, int keycode, double ratio)
+bool	update_player_posy_downkey(t_data	*data, int keycode, double ratio, double castAngle)
 {
 	double	ratio_y;
 	double	old_posy;
 	int		wally;
 	int		boxy;
 
-	ratio_y = MOVE_SPEED * sin(degToRad(data->player->view_deg)) * ratio;
-	if ((data->ray.dir_y == 0) ||
-		(map[(int)(data->player->posy + ratio_y) / texheight][(int)data->player->posx / texwidth] != 0))
+	ratio_y = MOVE_SPEED * sin(degToRad(castAngle)) * ratio;
+	if ((map[(int)(data->player->posy + ratio_y) / texheight][(int)data->player->posx / texwidth] != 0))
 		return (false);
 	data->player->posy += ratio_y;
 	if (data->ray.dir_y > 0) // wall behind you going back
@@ -326,22 +324,21 @@ bool	update_player_posy_downkey(t_data	*data, int keycode, double ratio)
 		boxy = wally / texheight;
 	}
 	if (map[boxy][(int)data->player->posx / texwidth] != 0 && (abs(wally - (int)data->player->posy) < WALL_BUFFER))
-		data->player->posy = wally + WALL_BUFFER * data->ray.dir_y;
+		data->player->posy = wally + SLIDE_CST + WALL_BUFFER * data->ray.dir_y;
 	return (true);
 }
 
 // updates players posx + makes sure there is atleast 20 units away from nearest x wall.
-bool	update_player_posx_upkey(t_data *data, int keycode, double ratio)
+bool	update_player_posx_upkey(t_data *data, int keycode, double ratio, double castAngle)
 {
 	double	ratio_x;
 	double	old_posx;
 	int		wallx;
 	int		box_x;
 
-	ratio_x = MOVE_SPEED * cos(degToRad(data->player->view_deg)) * ratio;
+	ratio_x = MOVE_SPEED * cos(degToRad(castAngle)) * ratio;
 	// rounding; if ray.dir_x == 0 return false ?
-	if ((data->ray.dir_x == 0) || 
-			(map[(int)data->player->posy / texheight][(int)(data->player->posx + ratio_x) / texwidth] != 0))
+	if ((map[(int)data->player->posy / texheight][(int)(data->player->posx + ratio_x) / texwidth] != 0))
 		return (false);
 	data->player->posx += ratio_x;
 	// 20 units from the nearest wall x of his direction.
@@ -360,22 +357,21 @@ bool	update_player_posx_upkey(t_data *data, int keycode, double ratio)
 	if (map[(int)data->player->posy /texheight][box_x] != 0 && (abs(wallx - (int)data->player->posx) < WALL_BUFFER)) // is a wall and it is less
 	{
 		printf("player too close old posx is %d", data->player->posx);
-		data->player->posx = wallx + WALL_BUFFER * data->ray.dir_x * -1;
+		data->player->posx = wallx + SLIDE_CST + WALL_BUFFER * data->ray.dir_x * -1;
 		printf("new posx is %d\n", data->player->posx);
 	}
 	return (true);
 }
 
-bool	update_player_posx_downkey(t_data *data, int keycode, double ratio)
+bool	update_player_posx_downkey(t_data *data, int keycode, double ratio, double castAngle)
 {
 	double	ratio_x;
 	double	old_posx;
 	int		wallx;
 	int		box_x;
 
-	ratio_x = MOVE_SPEED * cos(degToRad(data->player->view_deg)) * ratio * -1.00;
-	if ((data->ray.dir_x == 0) ||
-			(map[(int)data->player->posy / texheight][(int)(data->player->posx + ratio_x) / texwidth] != 0))
+	ratio_x = MOVE_SPEED * cos(degToRad(castAngle)) * ratio * -1.00;
+	if ((map[(int)data->player->posy / texheight][(int)(data->player->posx + ratio_x) / texwidth] != 0))
 		return (false);
 	data->player->posx += ratio_x;
 	if (data->ray.dir_x > 0)
@@ -389,21 +385,22 @@ bool	update_player_posx_downkey(t_data *data, int keycode, double ratio)
 		box_x = wallx / texwidth;
 	}
 	if (map[(int)data->player->posy /texheight][box_x] != 0 && (abs(wallx - (int)data->player->posx) < WALL_BUFFER))
-		data->player->posx = wallx + WALL_BUFFER * data->ray.dir_x;
+		data->player->posx = wallx + SLIDE_CST +WALL_BUFFER * data->ray.dir_x;
 	return (true);
 }
 
 bool update_player_pos(t_data *data, int keycode, double ratio)
 {
 	// CANNOT MOVE UP IF A WALL IS FORWARD VICE-VERSA
-	double old_posx;
-	double old_posy;
-	int box_x;
-	int box_y;
 	bool boolx;
 	bool booly;
+	double	castAngle;
 	// there is an easier method to see if can move up;
-	update_ray_dir(&(data->ray), data->player->view_deg);
+	castAngle = data->player->view_deg;
+	if (castAngle == 0 || castAngle == 90 || castAngle == 270
+		|| castAngle == 180 || castAngle == 360)
+		castAngle += 1;
+	update_ray_dir(&(data->ray), castAngle);
 	//old_posx = data->player->posx;
 	//old_posy = data->player->posy;
 	// no need to update the ray.
@@ -412,13 +409,13 @@ bool update_player_pos(t_data *data, int keycode, double ratio)
 	//return (player_move_down(data, old_posx, old_posy, ratio));
 	if (keycode == XK_Up)
 	{
-		boolx = update_player_posx_upkey(data, keycode, ratio);
-		booly = update_player_posy_upkey(data, keycode, ratio);
+		boolx = update_player_posx_upkey(data, keycode, ratio, castAngle);
+		booly = update_player_posy_upkey(data, keycode, ratio, castAngle);
 	}
 	else if (keycode == XK_Down)
 	{
-		boolx = update_player_posx_downkey(data, keycode, ratio);
-		booly = update_player_posy_downkey(data, keycode, ratio);
+		boolx = update_player_posx_downkey(data, keycode, ratio, castAngle);
+		booly = update_player_posy_downkey(data, keycode, ratio, castAngle);
 	}
 	if (boolx || booly)
 		return (true);

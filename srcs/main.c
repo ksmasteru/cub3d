@@ -35,7 +35,7 @@ int init_data(t_data *data)
     data->img->mlx_img = NULL;
     data->player->posx = 1034;
     data->player->posy = 243;
-    data->player->view_deg = 90;
+    data->player->view_deg = 45;
 }
 
 int key_pressed(int keycode, t_data  *data)

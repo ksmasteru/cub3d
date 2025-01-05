@@ -294,10 +294,10 @@ bool	update_player_posy_upkey(t_data *data, int keycode, double ratio)
 		boxy = (wally - 1) / texheight;
 	}
 	printf("wally is %d\n",wally);
-	if (map[boxy][(int)data->player->posx / texwidth] != 0 && (abs(wally - (int)data->player->posy) < 20))
+	if (map[boxy][(int)data->player->posx / texwidth] != 0 && (abs(wally - (int)data->player->posy) < WALL_BUFFER))
 	{
 		printf("player soo close old posy %d", (int)data->player->posy);
-		data->player->posy = wally + 20 * data->ray.dir_y * -1;
+		data->player->posy = wally + WALL_BUFFER * data->ray.dir_y * -1;
 		printf("new posy %d\n", (int)data->player->posy);
 	}
 	return (true);
@@ -325,8 +325,8 @@ bool	update_player_posy_downkey(t_data	*data, int keycode, double ratio)
 		wally = (int)data->player->posy / texheight * texheight + texheight;
 		boxy = wally / texheight;
 	}
-	if (map[boxy][(int)data->player->posx / texwidth] != 0 && (abs(wally - (int)data->player->posy) < 20))
-		data->player->posy = wally + 20 * data->ray.dir_y;
+	if (map[boxy][(int)data->player->posx / texwidth] != 0 && (abs(wally - (int)data->player->posy) < WALL_BUFFER))
+		data->player->posy = wally + WALL_BUFFER * data->ray.dir_y;
 	return (true);
 }
 
@@ -357,10 +357,10 @@ bool	update_player_posx_upkey(t_data *data, int keycode, double ratio)
 		box_x = (wallx - 1) / texwidth;
 	}
 	printf("next wall x is %d\n", wallx);
-	if (map[(int)data->player->posy /texheight][box_x] != 0 && (abs(wallx - (int)data->player->posx) < 20)) // is a wall and it is less
+	if (map[(int)data->player->posy /texheight][box_x] != 0 && (abs(wallx - (int)data->player->posx) < WALL_BUFFER)) // is a wall and it is less
 	{
 		printf("player too close old posx is %d", data->player->posx);
-		data->player->posx = wallx + 20 * data->ray.dir_x * -1;
+		data->player->posx = wallx + WALL_BUFFER * data->ray.dir_x * -1;
 		printf("new posx is %d\n", data->player->posx);
 	}
 	return (true);
@@ -388,8 +388,8 @@ bool	update_player_posx_downkey(t_data *data, int keycode, double ratio)
 		wallx = (int)data->player->posx / texwidth * texwidth + texwidth;
 		box_x = wallx / texwidth;
 	}
-	if (map[(int)data->player->posy /texheight][box_x] != 0 && (abs(wallx - (int)data->player->posx) < 20))
-		data->player->posx = wallx + 20 * data->ray.dir_x;
+	if (map[(int)data->player->posy /texheight][box_x] != 0 && (abs(wallx - (int)data->player->posx) < WALL_BUFFER))
+		data->player->posx = wallx + WALL_BUFFER * data->ray.dir_x;
 	return (true);
 }
 

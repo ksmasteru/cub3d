@@ -35,6 +35,7 @@
 #define FLOOR_COLOR 0x808080
 #define CEILING_COLOR 0x404040
 #define SLIDE_SPEED 7.0
+#define WALL_BUFFER 20.0
 typedef struct s_player{
      double    posx;
      double    posy;

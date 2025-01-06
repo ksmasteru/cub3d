@@ -1,5 +1,5 @@
 #include "../includes/cub3d.h"
-
+// Rotate the point of view with the mouse.
 int init_data(t_data *data)
 {
     data->mlx_ptr = mlx_init();
@@ -35,6 +35,7 @@ int init_data(t_data *data)
     data->img->mlx_img = NULL;
     data->player->posx = 1034;
     data->player->posy = 243;
+    data->player->mouse_x = SCREEN_W / 2;
     data->player->view_deg = 45;
 }
 
@@ -74,6 +75,37 @@ int set_up_wall_xpms(t_data *data)
     return (1);
 }
 
+void    update_player_dir(t_data *data, double move_ratio)
+{
+    data->player->view_deg = (int)(move_ratio * ROTSPEED + data->player->view_deg) % 360;
+    if (data->player->view_deg < -180)
+			data->player->view_deg = 180 - abs((int)data->player->view_deg) % 180;
+}
+
+int mouse_move(int x, int y, t_data *data)
+{
+    bool    update_img;
+    double  move_ratio;
+
+    printf("old x is %d newx is %d\n", data->player->mouse_x, x);
+    if (data->player->mouse_x > x)
+    {
+        data->player->view_deg += 1.2;
+        if (data->player->view_deg > 360.0)
+            data->player->view_deg -= 360;
+    }
+    else if (data->player->mouse_x < x)
+    {
+        data->player->view_deg -= 1.2;
+        if (data->player->view_deg < -180)
+		    data->player->view_deg = 180 - abs((int)data->player->view_deg) % 180;
+    }
+    else
+        return (0);
+    data->player->mouse_x = x;
+    return (render_walls(data));
+}
+
 int main()
 {
     t_data *data;
@@ -88,6 +120,6 @@ int main()
     render_walls(data);
 	mlx_hook(data->win_ptr, 17, 0, close_win, data);
     mlx_hook(data->win_ptr, 2, 1L<<0, pressed_key_event, data);
-	//mlx_key_hook(data->win_ptr, pressed_key_event, data);
+	mlx_hook(data->win_ptr, 6, 1L<<6, mouse_move, data);
     mlx_loop(data->mlx_ptr);
 }

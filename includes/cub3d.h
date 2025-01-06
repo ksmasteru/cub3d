@@ -43,6 +43,7 @@ typedef struct s_player{
      double    view_deg;
      double    beta_angle;
      double    hitx;
+     int       mouse_x;
      double    hity;
      int       box_x;
      int       box_y;

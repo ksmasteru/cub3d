@@ -32,13 +32,13 @@ int fill_square_pixels(t_map *map, t_image *img, int color)
     p_x = map->p_x;
     it = 1;
     it1 = 1;
-    while (it++ < map->w_pixels)
+    while (it++ < map->w_pixels + 1)
     {
         p_y = map->p_y;
         pixel = img->adrs + img->size_line * p_y + p_x * (img->bpp) / 8; 
         *(int *)pixel = color;
         it1 = 1;
-        while (it1++ < map->h_pixels)
+        while (it1++ < map->h_pixels + 1)
         {
             pixel = img->adrs + img->size_line * p_y++ + p_x * img->bpp / 8;
             *(int *)pixel = color;
@@ -127,13 +127,13 @@ int put_mini_map(t_data *data)
         {
             mini_map.p_x = j * mini_map.w_pixels;
             if (map[i][j] != 0)
-            {
+            {//0x3333FF
                 // paint 4 pixels wide and 4 pixels height.
                 //printf("map p_x is %d p_y is %d\n", mini_map.p_x, mini_map.p_y);
-                fill_square_pixels(&mini_map, data->mini_map, 0x00ff00); // struct for map variables.
+                fill_square_pixels(&mini_map, data->mini_map, 0x3333FF); // struct for map variables.
             }
             else
-                fill_square_pixels(&mini_map, data->mini_map, 0xffffff); // struct for map variables.
+                fill_square_pixels(&mini_map, data->mini_map, 0x99CCFF); // struct for map variables.
             j++;
         }
         i++;

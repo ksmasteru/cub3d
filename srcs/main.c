@@ -102,6 +102,7 @@ int mouse_move(int x, int y, t_data *data)
     }
     else
         return (0);
+    printf("new view deg is %f\n", data->player->view_deg);
     data->player->mouse_x = x;
     return (render_walls(data));
 }
@@ -120,6 +121,6 @@ int main()
     render_walls(data);
 	mlx_hook(data->win_ptr, 17, 0, close_win, data);
     mlx_hook(data->win_ptr, 2, 1L<<0, pressed_key_event, data);
-	mlx_hook(data->win_ptr, 6, 1L<<6, mouse_move, data);
+	//mlx_hook(data->win_ptr, 6, 1L<<6, mouse_move, data);
     mlx_loop(data->mlx_ptr);
 }

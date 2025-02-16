@@ -6,14 +6,29 @@
 
 extern int map[w][h];
 
-double  raycast_1(t_data   *data, double castangle, int *side, int i)
+void    reset_verhit(t_data *data, int i)
+{
+    data->player->ver_hitx[i] = data->player->hor_hitx[i];
+    data->player->ver_hity[i] = data->player->hor_hity[i];
+    data->player->wall_type = map[(int)data->player->hity / texheight][(int)data->player->hitx / texwidth];
+}
+
+double  cast_axes(t_data *data, double castangle, int *side, int i)
+{
+    if (castangle == 0 || castangle == 180.0 || castangle == 360)
+    {
+        *side = 1;
+        return (x_axis_raycast(data, castangle, i));
+    }
+    *side = 0;
+    return (y_axis_raycast(data, castangle, i));
+}
+
+double  raycast_2(t_data    *data, double castangle, int *side, int i)
 {
     double horizontalray;
-    double verticalray;
-    double  ver_hitx;
-    double  ver_hity;
-    if (castangle < 0)
-        castangle += 360.0;
+    double verticalray; 
+
     if (castangle > 0 && castangle < 90)
     {
         horizontalray = horizontalraycast_1(data, castangle, i);
@@ -24,7 +39,23 @@ double  raycast_1(t_data   *data, double castangle, int *side, int i)
         horizontalray = horizontalraycast_2(data, castangle, i);
         verticalray = vertical_casting_2(data, castangle, i);
     }
-    else if (castangle > 180 && castangle < 270)
+    if (verticalray < horizontalray)
+    {
+        *side = 0;
+        return (verticalray);
+    }
+    *side = 1;
+    reset_verhit(data, i);
+    return (horizontalray);
+}
+
+double  raycast_3(t_data    *data, double castangle, int *side, int i)
+{
+    double horizontalray;
+    double verticalray; 
+    double smallest_distance;
+
+    if (castangle > 180 && castangle < 270)
     {
         horizontalray = horizontalraycast_3(data, castangle, i);
         verticalray = vertical_casting_3(data, castangle, i);
@@ -34,34 +65,35 @@ double  raycast_1(t_data   *data, double castangle, int *side, int i)
         horizontalray = horizontalraycast_4(data, castangle, i);
         verticalray = vertical_casting_4(data, castangle, i);
     }
-    else if (castangle > 360)
-    {
-         castangle -= 360.0;
-         return (raycast_1(data, castangle, side, i));
-    }
-    else if (castangle == 0 || castangle == 180.0 || castangle == 360)
-    {
-        *side = 1;
-        return (x_axis_raycast(data, castangle, i));
-    }
-    else if (castangle == 90.0 || castangle == 270.0)
-    {
-        *side = 0;
-        return (y_axis_raycast(data, castangle, i));
-    }
     if (verticalray < horizontalray)
     {
-        //printf("for angle %f vertical height is %f because horizontal is %f\n", castangle, verticalray, horizontalray);
         *side = 0;
-        return (verticalray) * cos(degToRad(data->player->beta_angle));
+        return (verticalray);
     }
     *side = 1;
-    data->player->ver_hitx[i] = data->player->hor_hitx[i];
-    data->player->ver_hity[i] = data->player->hor_hity[i];
-    data->player->wall_type = map[(int)data->player->hity / texheight][(int)data->player->hitx / texwidth]; 
-    //}
-    //printf("distance to the wall is %f\n", horizontalray);
-    //printf("corrected distance to the wall is %f\n", horizontalray * cos(degToRad(data->player->beta_angle)));
-    //printf("for angle %f horizontal height is %f because vertical was %f\n", castangle, horizontalray,verticalray);
-    return (horizontalray) * cos(degToRad(data->player->beta_angle));
+    reset_verhit(data, i);
+    return (horizontalray);
+}
+
+double  raycast_1(t_data   *data, double castangle, int *side, int i)
+{
+    double  smallest_distance;
+
+    if (castangle < 0)
+        castangle += 360.0;
+    else if (castangle > 360)
+    {
+        castangle -= 360.0;
+        return (raycast_1(data, castangle, side, i));
+    }
+    if (castangle == 0 || castangle == 180.0 || castangle == 360.0
+        ||  castangle == 90.0 || castangle == 270.0)
+    {
+        return (cast_axes(data, castangle, side, i));
+    }
+    if (castangle > 0 && castangle < 180)
+        smallest_distance = raycast_2(data, castangle, side, i);
+    else if (castangle > 180 && castangle < 360)
+        smallest_distance = raycast_3(data, castangle, side , i);
+    return (smallest_distance) * cos(degToRad(data->player->beta_angle));
 }

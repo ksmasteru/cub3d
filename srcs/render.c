@@ -92,12 +92,9 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
         y_max = SCREEN_H - 1;
     double texPos = (y_min - SCREEN_H / 2 + slice_height / 2) * step;
     y_xpm = (int)texPos & (texwidth -1);
-    //printf("put_wall side : starting texture y position is %d\n", y_xpm);
     drawceiling(data, stripex, y_min);
     while (y_min != y_max)
     {
-        //printf("ymin value is %d\n",- y_min);
-        // find a way to get the scaling xpm_pixel
         xpm_pixel = data->xpm_imgs[0].adrs + data->xpm_imgs[0].size_line * y_xpm +
             x_offset * (data->xpm_imgs[0].bpp / 8);
         pixel = data->img->adrs + data->img->size_line * y_min +
@@ -262,10 +259,10 @@ int render_walls(t_data *data)
     double  sep_angle;
     double   castAngle;
     int side;
-    i = 0;
     
+    i = 0;
     //fflush(stdout);
-    printf("-------------------player view is %f---------------------\n", data->player->view_deg);
+    //printf("-------------------player view is %f---------------------\n", data->player->view_deg);
     sep_angle = (double)FOW / SCREEN_W;
     angle = data->player->view_deg;
     castAngle = data->player->view_deg + (double)FOW / 2;

@@ -6,7 +6,6 @@
 
 extern int map[w][h];
 
-// 0, 90 : +x -y
 double   horizontalraycast_1(t_data *data, double castAngle, int i)
 {
     double len;
@@ -25,7 +24,7 @@ double   horizontalraycast_1(t_data *data, double castAngle, int i)
     ry = tan(degToRad(castAngle)) * (rx - data->player->posx);
     ry = data->player->posy - fabs(ry); // pos tan no need for fabs.
     data->player->box_y = (int)ry >> 6;
-    if (ry < 0) /*enough ?*/
+    if (ry < 0)
     {
         //printf("!!!!!!!!!!at angle %f ry is too high %f!!!!!!!!!!!!!\n", castAngle, ry);
         return (1e30);
@@ -129,7 +128,7 @@ double   horizontalraycast_4(t_data *data, double castAngle, int i)
     double rx;
     double ry;
     double xa;
-    double ya;  
+    double ya;
     double distance;
 
     hit = 0;

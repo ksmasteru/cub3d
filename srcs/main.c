@@ -21,6 +21,11 @@ int init_data(t_data *data)
     data->mini_map = malloc(sizeof(t_image));
     if (!data->mini_map)
         return (-1);
+    return (init_data2(data));
+}
+
+int init_data2(t_data *data)
+{
     data->player->distance = (double *)malloc(sizeof(double) * MAP_W);
     if (!data->player->distance)
         return (-1);
@@ -37,13 +42,12 @@ int init_data(t_data *data)
     data->player->posy = 243;
     data->player->mouse_x = SCREEN_W / 2;
     data->player->view_deg = 45;
+    return (1);
 }
 
 int key_pressed(int keycode, t_data  *data)
 {
-    printf("keycode %d was held pressed\n", keycode); //works.
-    // so how.
-    // player moves up by which ratio ?
+    printf("keycode %d was held pressed\n", keycode);
     if (keycode == XK_Up || keycode == XK_Down)
     {
         printf("keypress up/down\n");
@@ -51,7 +55,7 @@ int key_pressed(int keycode, t_data  *data)
     }
     if (keycode == XK_Right || keycode == XK_Left)
     {
-                printf("keypress r/l\n");
+            printf("keypress r/l\n");
         return (rotate_player_dir(data, keycode, 0.5));
     }
     return (0);
@@ -121,6 +125,5 @@ int main()
     render_walls(data);
 	mlx_hook(data->win_ptr, 17, 0, close_win, data);
     mlx_hook(data->win_ptr, 2, 1L<<0, pressed_key_event, data);
-	//mlx_hook(data->win_ptr, 6, 1L<<6, mouse_move, data);
     mlx_loop(data->mlx_ptr);
 }

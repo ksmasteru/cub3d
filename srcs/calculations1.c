@@ -5,7 +5,7 @@
 #define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
 
 extern int map[w][h];
-// 0, 90 +x -y
+
 double  vertical_casting_1(t_data *data, double castangle, int i)
 {
     t_rayvars ray_data;
@@ -33,7 +33,7 @@ double  vertical_casting_1(t_data *data, double castangle, int i)
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
     return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
 }
-// -x -y
+
 double  vertical_casting_2(t_data *data, double castangle, int i)
 {
     t_rayvars ray_data;

@@ -47,7 +47,7 @@ double  vertical_casting_2(t_data *data, double castangle, int i)
     data->player->box_x = (int)ray_data.rx >> 6;
     if (ray_data.rx < 0)
          return (1e30);
-    while (map[data->player->box_y][data->player->box_x] == 0)/*could be improved*/
+    while (map[data->player->box_y][data->player->box_x] == 0)
     {
         ray_data.ry += ray_data.ya;
         ray_data.rx += ray_data.xa;

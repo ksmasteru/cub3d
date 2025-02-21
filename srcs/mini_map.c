@@ -2,7 +2,7 @@
 extern int map[w][h];
 // fils an image addr pixels with a square
 
-t_map fill_map_data()
+t_map fill_map_data(t_data *data)
 {
     t_map map;
 
@@ -16,9 +16,13 @@ t_map fill_map_data()
     map.h_pixels = map.mini_map_h / h;
     map.p_x = 0;
     map.p_y = 0;
+    if (data->mini_map->mlx_img != NULL)
+        mlx_destroy_image(data->mlx_ptr, data->mini_map->mlx_img);
+    data->mini_map->mlx_img = mlx_new_image(data->mlx_ptr, map.mini_map_w, map.mini_map_h);
+    data->mini_map->adrs = mlx_get_data_addr(data->mini_map->mlx_img, &(data->mini_map->bpp), &(data->mini_map->size_line),
+        &data->mini_map->endian);
     return (map);
 }
-
 
 int fill_square_pixels(t_map *map, t_image *img, int color)
 {
@@ -103,13 +107,7 @@ int put_mini_map(t_data *data)
 
     i  = 0;
     j  = 0;
-    t_map mini_map = fill_map_data();
-    char    *pixel;
-    if (data->mini_map->mlx_img != NULL)
-        mlx_destroy_image(data->mlx_ptr, data->mini_map->mlx_img);
-    data->mini_map->mlx_img = mlx_new_image(data->mlx_ptr, mini_map.mini_map_w, mini_map.mini_map_h);
-    data->mini_map->adrs = mlx_get_data_addr(data->mini_map->mlx_img, &(data->mini_map->bpp), &(data->mini_map->size_line),
-        &data->mini_map->endian);
+    t_map mini_map = fill_map_data(data);
     while (i < w)
     {
         j = 0;

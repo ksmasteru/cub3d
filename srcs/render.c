@@ -2,9 +2,6 @@
 #include <math.h>
 
 
-// each wall is 64*64.
-//            cx = (int)(data->player->posx / texwidth) * texwidth + texwidth;
-
 double angle;
 int map[w][h]=
 {
@@ -33,17 +30,6 @@ int map[w][h]=
   {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
-/*int map[w1][h1] = 
-{
-    {1,1,1,1,1,1,1,1,1},
-    {1,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,1},
-    {1,1,1,1,1,1,1,1,1}  
-};*/
 
 t_image     *get_xpm_img(t_data *data)
 {
@@ -68,20 +54,6 @@ t_image     *get_xpm_img(t_data *data)
     return (img);
 }
 
-void    draw_wall_side(t_data   *data, int stripex, t_pixdata *pixdata, double texpos)
-{
-    while (pixdata->y_min != pixdata->y_max)
-    {
-        pixdata->xpm_pixel = data->xpm_imgs[0].adrs + data->xpm_imgs[0].size_line * pixdata->y_xpm +
-            pixdata->x_offset * (data->xpm_imgs[0].bpp / 8);
-        pixdata->pixel = data->img->adrs + data->img->size_line * pixdata->y_min +
-            stripex * (data->img->bpp / 8);
-        *(int *)pixdata->pixel = *(int *)pixdata->xpm_pixel;
-        pixdata->y_xpm = (int)texpos & (texheight - 1);
-        texpos += pixdata->step;
-        pixdata->y_min++;
-    }  
-}
 /*for side == 0 x_side hit*/
 void    put_wall_side(t_data *data, int stripex, double distance, int side)
 {
@@ -104,49 +76,6 @@ void    put_wall_side(t_data *data, int stripex, double distance, int side)
     drawfloor(data, stripex, pixdata.y_max);
 }
 
-void    drawceiling(t_data *data, int stripex, int y_min)
-{
-    int     i;
-    char    *pixel;
-
-    i = 0;
-    while(i < y_min)
-    {
-        pixel = data->img->adrs + data->img->size_line * i +
-            stripex * (data->img->bpp / 8);
-        *(int *)pixel = CEILING_COLOR;
-        i++;    
-    }
-}
-
-void    drawfloor(t_data *data, int stripex, int y_max)
-{
-    char    *pixel;
-
-    while(y_max < SCREEN_H)
-    {
-        pixel = data->img->adrs + data->img->size_line * y_max +
-            stripex * (data->img->bpp / 8);
-        *(int *)pixel = FLOOR_COLOR;
-        y_max++;
-    }
-}
-
-/*for side == 1 yside hit*/
-void    draw_walls_1(t_data *data, t_pixdata* pixdata, int stripex, double texpos)
-{
-    while (pixdata->y_min != pixdata->y_max)
-    {
-        pixdata->xpm_pixel = data->xpm_imgs[1].adrs + data->xpm_imgs[1].size_line * pixdata->y_xpm +
-            pixdata->x_offset * (data->xpm_imgs[1].bpp / 8);
-        pixdata->pixel = data->img->adrs + data->img->size_line * pixdata->y_min +
-            stripex * (data->img->bpp / 8);
-        *(int *)pixdata->pixel = *(int *)pixdata->xpm_pixel;
-        texpos += pixdata->step;
-        pixdata->y_xpm = (int)texpos & (texheight - 1);
-        pixdata->y_min++;
-    }
-}
 void    put_wall(t_data *data, int stripex,  double distance, int side)
 {
     t_pixdata pixdata;
@@ -183,12 +112,6 @@ void    put_walls(t_data *data)
         put_wall(data, i , data->player->distance[i], data->player->side[i]);
         i++;
     }
-}
-
-void set_new_img(t_data *data)
-{
-    data->img->mlx_img = mlx_new_image(data->mlx_ptr, SCREEN_W, SCREEN_H);
-    data->img->adrs = mlx_get_data_addr(data->img->mlx_img, &(data->img->bpp), &(data->img->size_line), &(data->img->endian));
 }
 
 int render_walls(t_data *data)

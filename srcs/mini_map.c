@@ -51,14 +51,6 @@ int fill_square_pixels(t_map *map, t_image *img, int color)
     }
 }
 
-void    fill_player_position(t_map *mini_map, t_image *img, t_data *data, int color)
-{
-    mini_map->p_x = (int)data->player->posx / texwidth * mini_map->w_pixels; // 12;
-    mini_map->p_y = (int)data->player->posy / texheight * mini_map->h_pixels;
-    printf("p_x %d p_y %d\n", mini_map->p_x, mini_map->p_y);
-    fill_square_pixels(mini_map, img, color);
-}
-
 int put_ray(double view_deg, t_data  *data, t_map *map)
 {
     int x = 0;

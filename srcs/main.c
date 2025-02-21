@@ -79,37 +79,6 @@ int set_up_wall_xpms(t_data *data)
     return (1);
 }
 
-void    update_player_dir(t_data *data, double move_ratio)
-{
-    data->player->view_deg = (int)(move_ratio * ROTSPEED + data->player->view_deg) % 360;
-    if (data->player->view_deg < -180)
-			data->player->view_deg = 180 - abs((int)data->player->view_deg) % 180;
-}
-
-int mouse_move(int x, int y, t_data *data)
-{
-    bool    update_img;
-    double  move_ratio;
-
-    printf("old x is %d newx is %d\n", data->player->mouse_x, x);
-    if (data->player->mouse_x > x)
-    {
-        data->player->view_deg += 1.2;
-        if (data->player->view_deg > 360.0)
-            data->player->view_deg -= 360;
-    }
-    else if (data->player->mouse_x < x)
-    {
-        data->player->view_deg -= 1.2;
-        if (data->player->view_deg < -180)
-		    data->player->view_deg = 180 - abs((int)data->player->view_deg) % 180;
-    }
-    else
-        return (0);
-    printf("new view deg is %f\n", data->player->view_deg);
-    data->player->mouse_x = x;
-    return (render_walls(data));
-}
 
 int main()
 {

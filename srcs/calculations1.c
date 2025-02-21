@@ -5,160 +5,117 @@
 #define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
 
 extern int map[w][h];
-// !!USE SHIFT TO DEVIDE BY 64 WHILE LOOPING FOR WALL
-
-// castANGLE == 0 nbp
 // 0, 90 +x -y
 double  vertical_casting_1(t_data *data, double castangle, int i)
 {
-    double len;
-    double rx;
-    double ry;
-    double xa;
-    double ya;
-
-    xa = texwidth / tan(degToRad(castangle));
-    ya = texheight * -1;
-    //printf("ver cast 1 xa %f ya %f\n", xa, ya);
-    ry = ((int)data->player->posy >> 6) << 6;
-    data->player->box_y = (int)(ry - 1) >> 6;
-    //printf("-vertical casting: next square y is %f box_y is %d\n", ry, data->player->box_y );
-    rx = ((data->player->posy - ry) / tan(degToRad(castangle)));
-    rx = data->player->posx + fabs(rx); // rx should be postive remove fabs
-    data->player->box_x = (int)rx >> 6;
-    if (rx > MAP_W)
-    {
-         //printf("!!!!!width is too high!!!!! rx is %f\n", rx);
+    t_rayvars ray_data;
+    
+    ray_data.xa = texwidth / tan(degToRad(castangle));
+    ray_data.ya = texheight * -1;
+    ray_data.ry = ((int)data->player->posy >> 6) << 6;
+    data->player->box_y = (int)(ray_data.ry - 1) >> 6;
+    ray_data.rx = ((data->player->posy - ray_data.ry) / tan(degToRad(castangle)));
+    ray_data.rx = data->player->posx + fabs(ray_data.rx);
+    data->player->box_x = (int)ray_data.rx >> 6;
+    if (ray_data.rx > MAP_W)
          return (1e30);
-    }
-    while (map[data->player->box_y][data->player->box_x] == 0)/*could be improved*/
+    while (map[data->player->box_y][data->player->box_x] == 0)
     {
-        ry += ya;
-        rx += xa;
-        if (rx > MAP_W) // always pos.
+        ray_data.ry += ray_data.ya;
+        ray_data.rx += ray_data.xa;
+        if (ray_data.rx > MAP_W)
             return (1e30);
-        data->player->box_y = (int)(ry - 1) >> 6;
-        data->player->box_x = (int)rx >> 6;
+        data->player->box_y = (int)(ray_data.ry - 1) >> 6;
+        data->player->box_x = (int)ray_data.rx >> 6;
     }
-    data->player->ver_hitx[i] = rx;
-    data->player->ver_hity[i] = ry;
+    data->player->ver_hitx[i] = ray_data.rx;
+    data->player->ver_hity[i] = ray_data.ry;
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
-    return (calculate_distance(data, rx, ry, castangle));
+    return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
 }
 // -x -y
 double  vertical_casting_2(t_data *data, double castangle, int i)
 {
-    double len;
-    int hit;
-    double rx;
-    double ry;
-    hit = 0;
-    double xa;
-    double ya;
+    t_rayvars ray_data;
 
-    xa = texwidth / tan(degToRad(castangle)); // negative tan negative xa
-    ya = texheight * -1;
-    //printf("ver cast 2 xa %f ya %f\n", xa, ya);
-    ry = ((int)data->player->posy >> 6) << 6;
-    data->player->box_y = (int)(ry - 1) >> 6;
-    rx = ((data->player->posy - ry) / tan(degToRad(castangle)));
-    rx = data->player->posx - fabs(rx); // negative tan you could + rx
-    data->player->box_x = (int)rx >> 6;
-    if (rx < 0)
-    {
-         //printf("!!!!!width is too high!!!!! rx is %f\n", rx);
+    ray_data.xa = texwidth / tan(degToRad(castangle));
+    ray_data.ya = texheight * -1;
+    ray_data.ry = ((int)data->player->posy >> 6) << 6;
+    data->player->box_y = (int)(ray_data.ry - 1) >> 6;
+    ray_data.rx = ((data->player->posy - ray_data.ry) / tan(degToRad(castangle)));
+    ray_data.rx = data->player->posx - fabs(ray_data.rx);
+    data->player->box_x = (int)ray_data.rx >> 6;
+    if (ray_data.rx < 0)
          return (1e30);
-    }
     while (map[data->player->box_y][data->player->box_x] == 0)/*could be improved*/
     {
-        ry += ya;
-        rx += xa;
-        if (rx < 0)// !! ? can set rx to 0 for 1 calculation ?
+        ray_data.ry += ray_data.ya;
+        ray_data.rx += ray_data.xa;
+        if (ray_data.rx < 0)
             return (1e30);
-        data->player->box_y = (int)(ry - 1) >> 6;
-        data->player->box_x = (int)rx >> 6;    
+        data->player->box_y = (int)(ray_data.ry - 1) >> 6;
+        data->player->box_x = (int)ray_data.rx >> 6;    
     }
-    data->player->ver_hitx[i] = rx;
-    data->player->ver_hity[i] = ry;
+    data->player->ver_hitx[i] = ray_data.rx;
+    data->player->ver_hity[i] = ray_data.ry;
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
-    return (calculate_distance(data, rx, ry, castangle));
+    return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
 }
 
 // +x +y
 double  vertical_casting_4(t_data *data, double castangle, int i)
 {
-    double len;
-    int hit;
-    double rx;
-    double ry;
-    hit = 0;
-    double xa;
-    double ya;
+    t_rayvars raydata;
 
-    xa = texwidth / tan(degToRad(castangle)) * -1;
-    ya = texheight;
-    ry = (((int)data->player->posy >> 6) << 6) + texheight;
-    data->player->box_y = (int)ry >> 6;
-        //printf("vertical casting: next square y is %f box_y is %d\n", ry, data->player->box_y );
-    rx = (ry - data->player->posy) / tan(degToRad(castangle));
-    rx = data->player->posx + fabs(rx);
-    data->player->box_x = (int)rx >> 6;
-    if (rx < 0)
-    {
-         //printf("!!!!!width is too high!!!!! rx is %f\n", rx);
+    raydata.xa = texwidth / tan(degToRad(castangle)) * -1;
+    raydata.ya = texheight;
+    raydata.ry = (((int)data->player->posy >> 6) << 6) + texheight;
+    data->player->box_y = (int)raydata.ry >> 6;
+    raydata.rx = (raydata.ry - data->player->posy) / tan(degToRad(castangle));
+    raydata.rx = data->player->posx + fabs(raydata.rx);
+    data->player->box_x = (int)raydata.rx >> 6;
+    if (raydata.rx < 0)
          return (1e30);
-    }
-    while (map[data->player->box_y][data->player->box_x] == 0)/*could be improved*/
+    while (map[data->player->box_y][data->player->box_x] == 0)
     {
-        ry += ya;
-        rx += xa;
-        if (rx > MAP_H)
+        raydata.ry += raydata.ya;
+        raydata.rx += raydata.xa;
+        if (raydata.rx > MAP_H)
             return (1e30);
-        data->player->box_y = (int)ry >> 6;
-        data->player->box_x = (int)rx >> 6;
+        data->player->box_y = (int)raydata.ry >> 6;
+        data->player->box_x = (int)raydata.rx >> 6;
     }
-    data->player->ver_hitx[i] = rx;
-    data->player->ver_hity[i] = ry;
+    data->player->ver_hitx[i] = raydata.rx;
+    data->player->ver_hity[i] = raydata.ry;
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
-    return (calculate_distance(data, rx, ry, castangle));
+    return (calculate_distance(data, raydata.rx, raydata.ry, castangle));
 }
 
 // -x +y
 double  vertical_casting_3(t_data *data, double castangle, int i)
 {
-    double len;
-    int hit;
-    double rx;
-    double ry;
-    hit = 0;
-    double xa;
-    double ya;
+    t_rayvars ray_data;
 
-    xa = texwidth / tan(degToRad(castangle)) * -1;
-    ya = texheight;
-    ry = (((int)data->player->posy >> 6) << 6) + texheight;
-    data->player->box_y = (int)ry >> 6;
-        //printf("vertical casting: next square y is %f box_y is %d\n", ry, data->player->box_y );
-    //printf("ver cast 4 xa %f ya %f\n", xa, ya);
-    rx = (ry - data->player->posy) / tan(degToRad(castangle));
-    rx = data->player->posx - fabs(rx);
-    data->player->box_x = (int)rx >> 6;
-    if (rx < 0)
-    {
-         //printf("!!!!!width is too high!!!!! rx is %f\n", rx);
+    ray_data.xa = texwidth / tan(degToRad(castangle)) * -1;
+    ray_data.ya = texheight;
+    ray_data.ry = (((int)data->player->posy >> 6) << 6) + texheight;
+    data->player->box_y = (int)ray_data.ry >> 6;
+    ray_data.rx = (ray_data.ry - data->player->posy) / tan(degToRad(castangle));
+    ray_data.rx = data->player->posx - fabs(ray_data.rx);
+    data->player->box_x = (int)ray_data.rx >> 6;
+    if (ray_data.rx < 0)
          return (1e30);
-    }
-    while (map[data->player->box_y][data->player->box_x] == 0)/*could be improved*/
+    while (map[data->player->box_y][data->player->box_x] == 0)
     {
-        ry += ya;
-        rx += xa;
-        if (rx < 0)
+        ray_data.ry += ray_data.ya;
+        ray_data.rx += ray_data.xa;
+        if (ray_data.rx < 0)
             return (1e30);
-        data->player->box_y = (int)ry >> 6;
-        data->player->box_x = (int)rx >> 6;
+        data->player->box_y = (int)ray_data.ry >> 6;
+        data->player->box_x = (int)ray_data.rx >> 6;
     }
-    data->player->ver_hitx[i] = rx;
-    data->player->ver_hity[i] = ry;
+    data->player->ver_hitx[i] = ray_data.rx;
+    data->player->ver_hity[i] = ray_data.ry;
     data->player->wall_type = map[data->player->box_y][data->player->box_x];
-    return (calculate_distance(data, rx, ry, castangle));
+    return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
 }

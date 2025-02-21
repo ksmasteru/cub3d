@@ -13,16 +13,6 @@ void    reset_verhit(t_data *data, int i)
     data->player->wall_type = map[(int)data->player->hity / texheight][(int)data->player->hitx / texwidth];
 }
 
-double  cast_axes(t_data *data, double castangle, int *side, int i)
-{
-    if (castangle == 0 || castangle == 180.0 || castangle == 360)
-    {
-        *side = 1;
-        return (x_axis_raycast(data, castangle, i));
-    }
-    *side = 0;
-    return (y_axis_raycast(data, castangle, i));
-}
 
 double  raycast_2(t_data    *data, double castangle, int *side, int i)
 {
@@ -89,7 +79,7 @@ double  raycast_1(t_data   *data, double castangle, int *side, int i)
     if (castangle == 0 || castangle == 180.0 || castangle == 360.0
         ||  castangle == 90.0 || castangle == 270.0)
     {
-        return (cast_axes(data, castangle, side, i));
+        return (raycast_1(data, castangle + 60.0 / SCREEN_W, side, i));
     }
     if (castangle > 0 && castangle < 180)
         smallest_distance = raycast_2(data, castangle, side, i);

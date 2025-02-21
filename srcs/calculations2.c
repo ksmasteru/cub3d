@@ -5,13 +5,7 @@
 #define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
 
 
-typedef struct s_rayvars{
-    int hit;
-    double rx;
-    double ry;
-    double xa;
-    double ya;
-}t_rayvars;
+
 extern int map[w][h];
 
 
@@ -21,11 +15,11 @@ double   horizontalraycast_1(t_data *data, double castAngle, int i)
     t_rayvars rayvars;
 
     rayvars.xa = texwidth;
-    rayvars.ya = tan(degToRad(castAngle)) * texheight * -1; // negative ya.
-    rayvars.rx = (((int)data->player->posx >> 6) << 6) + texwidth; // box x
+    rayvars.ya = tan(degToRad(castAngle)) * texheight * -1;
+    rayvars.rx = (((int)data->player->posx >> 6) << 6) + texwidth;
     data->player->box_x = (int)rayvars.rx >> 6;
     rayvars.ry = tan(degToRad(castAngle)) * (rayvars.rx - data->player->posx);
-    rayvars.ry = data->player->posy - fabs(rayvars.ry); // pos tan no need for fabs.
+    rayvars.ry = data->player->posy - fabs(rayvars.ry);
     data->player->box_y = (int)rayvars.ry >> 6;
     if (rayvars.ry < 0)
         return (1e30);
@@ -51,13 +45,13 @@ double   horizontalraycast_2(t_data *data, double castAngle, int i)
     t_rayvars rayvars;
 
     rayvars.xa = texwidth * -1;    
-    rayvars.ya = tan(degToRad(castAngle)) * texheight; //neg tan
+    rayvars.ya = tan(degToRad(castAngle)) * texheight;
     rayvars.rx = ((int)data->player->posx >> 6) << 6;
     data->player->box_x = (int)(rayvars.rx - 1) >> 6;
     rayvars.ry =  tan(degToRad(castAngle)) * (data->player->posx - rayvars.rx);
-    rayvars.ry = data->player->posy - fabs(rayvars.ry); // negative tan : could + ry
+    rayvars.ry = data->player->posy - fabs(rayvars.ry);
     data->player->box_y = (int)rayvars.ry >> 6;
-    if (rayvars.ry < 0) /*enough ?*/
+    if (rayvars.ry < 0)
         return (1e30);
     while (map[data->player->box_y][data->player->box_x] == 0)
     {

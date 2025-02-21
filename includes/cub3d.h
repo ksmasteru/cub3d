@@ -46,6 +46,21 @@ typedef struct s_rayvars{
     double ya;
 }t_rayvars;
 
+typedef struct s_pixdata{
+     int     slice_height;
+     char    *xpm_pixel;
+     int     x_xpm;
+     int     y_xpm;
+     int     x_offset;
+     int     pixel_repeat;
+     char    *pixel;
+     double  step;
+     double texpos; 
+    int color;
+     int y_max;
+     int y_min;
+}t_pixdata;
+
 typedef struct s_player{
      double    posx;
      double    posy;
@@ -57,7 +72,7 @@ typedef struct s_player{
      int       box_x;
      int       box_y;
      int       wall_type;
-     double    *ver_hitx;//not necessary
+     double    *ver_hitx;
      double    *ver_hity;
      double    *hor_hitx;
      double    *hor_hity;

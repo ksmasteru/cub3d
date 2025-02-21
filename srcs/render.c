@@ -68,43 +68,41 @@ t_image     *get_xpm_img(t_data *data)
     return (img);
 }
 
+void    draw_wall_side(t_data   *data, int stripex, t_pixdata *pixdata, double texpos)
+{
+    while (pixdata->y_min != pixdata->y_max)
+    {
+        pixdata->xpm_pixel = data->xpm_imgs[0].adrs + data->xpm_imgs[0].size_line * pixdata->y_xpm +
+            pixdata->x_offset * (data->xpm_imgs[0].bpp / 8);
+        pixdata->pixel = data->img->adrs + data->img->size_line * pixdata->y_min +
+            stripex * (data->img->bpp / 8);
+        *(int *)pixdata->pixel = *(int *)pixdata->xpm_pixel;
+        pixdata->y_xpm = (int)texpos & (texheight - 1);
+        texpos += pixdata->step;
+        pixdata->y_min++;
+    }  
+}
 /*for side == 0 x_side hit*/
 void    put_wall_side(t_data *data, int stripex, double distance, int side)
 {
-    int     slice_height;
-    char    *xpm_pixel;
-    int     y_xpm;
-    int     x_offset;
-    int     pixel_repeat;
-    double  step;
-    char*   pixel;
-    int     color;
+    t_pixdata pixdata;
+    double  texpos;
 
-    slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
-    x_offset = (int)data->player->ver_hitx[stripex] % (texwidth - 1); // logical error. : should get actual position of the hit.
+    pixdata.slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
+    pixdata.x_offset = (int)data->player->ver_hitx[stripex] % (texwidth - 1); // logical error. : should get actual position of the hit.
     //printf("for stripe %d of type 0 x offset is %d hit %f\n", stripex, x_offset, data->player->hitx);
-    step = 1.0 * texwidth / slice_height;
-    int y_min =  SCREEN_H / 2 - slice_height / 2;
-    if (y_min < 0)
-        y_min = 0;
-    int y_max = SCREEN_H / 2 + slice_height / 2;
-    if (y_max >= SCREEN_H)
-        y_max = SCREEN_H - 1;
-    double texPos = (y_min - SCREEN_H / 2 + slice_height / 2) * step;
-    y_xpm = (int)texPos & (texwidth -1);
-    drawceiling(data, stripex, y_min);
-    while (y_min != y_max)
-    {
-        xpm_pixel = data->xpm_imgs[0].adrs + data->xpm_imgs[0].size_line * y_xpm +
-            x_offset * (data->xpm_imgs[0].bpp / 8);
-        pixel = data->img->adrs + data->img->size_line * y_min +
-            stripex * (data->img->bpp / 8);
-        *(int *)pixel = *(int *)xpm_pixel;
-        y_xpm = (int)texPos & (texheight - 1);
-        texPos += step;
-        y_min++;
-    }
-    drawfloor(data, stripex, y_max);
+    pixdata.step = 1.0 * texwidth / pixdata.slice_height;
+    pixdata.y_min =  SCREEN_H / 2 - pixdata.slice_height / 2;
+    if (pixdata.y_min < 0)
+        pixdata.y_min = 0;
+    pixdata.y_max = SCREEN_H / 2 + pixdata.slice_height / 2;
+    if (pixdata.y_max >= SCREEN_H)
+        pixdata.y_max = SCREEN_H - 1;
+    texpos = (pixdata.y_min - SCREEN_H / 2 + pixdata.slice_height / 2) * pixdata.step;
+    pixdata.y_xpm = (int)texpos & (texwidth -1);
+    drawceiling(data, stripex, pixdata.y_min);
+    draw_wall_side(data, stripex, &pixdata, texpos);
+    drawfloor(data, stripex, pixdata.y_max);
 }
 
 void    drawceiling(t_data *data, int stripex, int y_min)
@@ -136,57 +134,44 @@ void    drawfloor(t_data *data, int stripex, int y_max)
 }
 
 /*for side == 1 yside hit*/
+void    draw_walls_1(t_data *data, t_pixdata* pixdata, int stripex, double texpos)
+{
+    while (pixdata->y_min != pixdata->y_max)
+    {
+        pixdata->xpm_pixel = data->xpm_imgs[1].adrs + data->xpm_imgs[1].size_line * pixdata->y_xpm +
+            pixdata->x_offset * (data->xpm_imgs[1].bpp / 8);
+        pixdata->pixel = data->img->adrs + data->img->size_line * pixdata->y_min +
+            stripex * (data->img->bpp / 8);
+        *(int *)pixdata->pixel = *(int *)pixdata->xpm_pixel;
+        texpos += pixdata->step;
+        pixdata->y_xpm = (int)texpos & (texheight - 1);
+        pixdata->y_min++;
+    }
+}
 void    put_wall(t_data *data, int stripex,  double distance, int side)
 {
-    // PUTS VERLINE .
-    // distance ratio ?
-    int     slice_height;
-    char    *xpm_pixel;
-    int     x_xpm;
-    int     y_xpm;
-    int     x_offset;
-    int     pixel_repeat;
-    char    *pixel;
-    double  step;
-    int color;
+    t_pixdata pixdata;
     double  texpos;
-    y_xpm = 0;
+
+    pixdata.y_xpm = 0;
     if (distance > sqrt(MAP_H * MAP_H + MAP_W * MAP_W)) /*BOTH VERTICAL AND HORIZONAL RETURNED HIGH VALUE*/
         distance = fabs(MAP_W - data->player->posx);
-    slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
-    //printf("putwall distance is %f slice height is %f\n", distance);
+    pixdata.slice_height = ((double)texheight / distance) * (projection_d); // this should be round up distance too small ? 
     if (side == 0)
         return (put_wall_side(data, stripex, distance, side));
-    x_offset = (int)data->player->ver_hity[stripex] % (texheight - 1);//.this.
-    //printf("for stripe %d of type 1 x offset %d is hity is %f\n", stripex, x_offset, data->player->hity);
-    step = 1.0 * texheight / slice_height; // by how much to increase  pix corrdinate.
-    //printf("stripex value %d side value %d x_offset value %d\n",stripex, side, x_offset);
-    int y_min =  SCREEN_H / 2 - slice_height / 2;
-    if (y_min < 0)
-        y_min = 0;
-    int y_max = SCREEN_H / 2 + slice_height / 2;
-    if (y_max >= SCREEN_H)
-        y_max = SCREEN_H - 1;
-    // textpos y : start of the texture : if wall biggerthan screen it increases downard
-    double texPos = (y_min - SCREEN_H / 2 + slice_height / 2) * step;
-    y_xpm = (int)texPos & (texheight - 1);
-    //printf("put_wall : starting texPos is %f\n", y_xpm);
-    drawceiling(data, stripex, y_min);
-    while (y_min != y_max)
-    {
-        xpm_pixel = data->xpm_imgs[1].adrs + data->xpm_imgs[1].size_line * y_xpm +
-            x_offset * (data->xpm_imgs[1].bpp / 8);
-        pixel = data->img->adrs + data->img->size_line * y_min +
-            stripex * (data->img->bpp / 8);
-        *(int *)pixel = *(int *)xpm_pixel;
-        texPos += step;
-        y_xpm = (int)texPos & (texheight - 1);
-        y_min++;
-    }
-    drawfloor(data, stripex, y_max);
-    //mlx_destroy_image(data->mlx_ptr, xpm_img->mlx_img);
-    //free(xpm_img->mlx_img);
-    //free(xpm_img);
+    pixdata.x_offset = (int)data->player->ver_hity[stripex] % (texheight - 1);//.this.
+    pixdata.step = 1.0 * texheight / pixdata.slice_height; // by how much to increase  pix corrdinate.
+    pixdata.y_min =  SCREEN_H / 2 - pixdata.slice_height / 2;
+    if (pixdata.y_min < 0)
+        pixdata.y_min = 0;
+    pixdata.y_max = SCREEN_H / 2 + pixdata.slice_height / 2;
+    if (pixdata.y_max >= SCREEN_H)
+        pixdata.y_max = SCREEN_H - 1;
+    texpos = (pixdata.y_min - SCREEN_H / 2 + pixdata.slice_height / 2) * pixdata.step;
+    pixdata.y_xpm = (int)texpos & (texheight - 1);
+    drawceiling(data, stripex, pixdata.y_min);
+    draw_walls_1(data, &pixdata, stripex, texpos);
+    drawfloor(data, stripex, pixdata.y_max);
 }
 
 void    put_walls(t_data *data)

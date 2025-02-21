@@ -1,6 +1,5 @@
 #include "../includes/cub3d.h"
 
-/*given an angle sets raydirx and raydiry*/
 extern double angle;
 
 void update_ray_dir2(t_ray *ray, double view_deg)

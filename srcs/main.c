@@ -1,5 +1,5 @@
 #include "../includes/cub3d.h"
-// Rotate the point of view with the mouse.
+
 int init_data(t_data *data)
 {
     data->mlx_ptr = mlx_init();

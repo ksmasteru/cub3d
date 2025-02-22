@@ -14,7 +14,7 @@
 
 static int	count_size(int n)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (n < 0)
@@ -27,7 +27,7 @@ static int	count_size(int n)
 	return (i);
 }
 
-char		*ft_itoa(int num)
+char	*ft_itoa(int num)
 {
 	char		*dst;
 	int			count;
@@ -39,8 +39,8 @@ char		*ft_itoa(int num)
 	i = 0;
 	if (n < 0 || count == 0)
 		count++;
-    dst = (char *)malloc(sizeof(char) * (count + 1));
-    dst[count] = 0;
+	dst = (char *)malloc(sizeof(char) * (count + 1));
+	dst[count] = 0;
 	if (n < 0)
 	{
 		n *= -1;
@@ -98,8 +98,8 @@ char	*ft_strjoin(char *s1, char *s2)
 
 char	*ft_strjoin2(char *s1, char *s2, char *str)
 {
-	int	i;
-	int	j;
+	int i;
+	int j;
 
 	i = 0;
 	j = 0;

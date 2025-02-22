@@ -1,21 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   events.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hes-saqu <hes-saqu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/22 18:38:55 by hes-saqu          #+#    #+#             */
+/*   Updated: 2025/02/22 18:48:36 by hes-saqu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3d.h"
 #include <stdbool.h>
 
 #define map_w 24
 #define map_h 24
-extern int map[24][24];
-extern double angle;
 
+extern int		map[24][24];
+extern double	angle;
 
-bool	update_player_posx_upkey(t_data *data, int keycode, double ratio, double castAngle)
+bool	update_player_posx_upkey(t_data *data, int keycode, double ratio,
+		double castAngle)
 {
 	double	ratio_x;
 	double	old_posx;
 	int		wallx;
 	int		box_x;
 
-	ratio_x = MOVE_SPEED * cos(degToRad(castAngle)) * ratio;
-	if ((map[(int)data->player->posy / texheight][(int)(data->player->posx + ratio_x) / texwidth] != 0))
+	ratio_x = MOVE_SPEED * cos(degtorad(castAngle)) * ratio;
+	if ((map[(int)data->player->posy / texheight][(int)(data->player->posx
+				+ ratio_x) / texwidth] != 0))
 		return (false);
 	data->player->posx += ratio_x;
 	if (data->ray.dir_x > 0)
@@ -28,20 +42,24 @@ bool	update_player_posx_upkey(t_data *data, int keycode, double ratio, double ca
 		wallx = (int)data->player->posx / texwidth * texwidth;
 		box_x = (wallx - 1) / texwidth;
 	}
-	if (map[(int)data->player->posy /texheight][box_x] != 0 && (abs(wallx - (int)data->player->posx) < WALL_BUFFER))
-		data->player->posx = wallx + SLIDE_CST + WALL_BUFFER * data->ray.dir_x * -1;
+	if (map[(int)data->player->posy / texheight][box_x] != 0 && (abs(wallx
+				- (int)data->player->posx) < WALL_BUFFER))
+		data->player->posx = wallx + SLIDE_CST + WALL_BUFFER * data->ray.dir_x *
+			-1;
 	return (true);
 }
 
-bool	update_player_posx_downkey(t_data *data, int keycode, double ratio, double castAngle)
+bool	update_player_posx_downkey(t_data *data, int keycode, double ratio,
+		double castAngle)
 {
 	double	ratio_x;
 	double	old_posx;
 	int		wallx;
 	int		box_x;
 
-	ratio_x = MOVE_SPEED * cos(degToRad(castAngle)) * ratio * -1.00;
-	if ((map[(int)data->player->posy / texheight][(int)(data->player->posx + ratio_x) / texwidth] != 0))
+	ratio_x = MOVE_SPEED * cos(degtorad(castAngle)) * ratio * -1.00;
+	if ((map[(int)data->player->posy / texheight][(int)(data->player->posx
+				+ ratio_x) / texwidth] != 0))
 		return (false);
 	data->player->posx += ratio_x;
 	if (data->ray.dir_x > 0)
@@ -54,16 +72,18 @@ bool	update_player_posx_downkey(t_data *data, int keycode, double ratio, double 
 		wallx = (int)data->player->posx / texwidth * texwidth + texwidth;
 		box_x = wallx / texwidth;
 	}
-	if (map[(int)data->player->posy /texheight][box_x] != 0 && (abs(wallx - (int)data->player->posx) < WALL_BUFFER))
-		data->player->posx = wallx + SLIDE_CST +WALL_BUFFER * data->ray.dir_x;
+	if (map[(int)data->player->posy / texheight][box_x] != 0 && (abs(wallx
+				- (int)data->player->posx) < WALL_BUFFER))
+		data->player->posx = wallx + SLIDE_CST + WALL_BUFFER * data->ray.dir_x;
 	return (true);
 }
 
-bool update_player_pos(t_data *data, int keycode, double ratio)
+bool	update_player_pos(t_data *data, int keycode, double ratio)
 {
-	bool boolx;
-	bool booly;
+	bool	boolx;
+	bool	booly;
 	double	castAngle;
+
 	castAngle = data->player->view_deg;
 	if (castAngle == 0 || castAngle == 90 || castAngle == 270
 		|| castAngle == 180 || castAngle == 360)
@@ -84,34 +104,36 @@ bool update_player_pos(t_data *data, int keycode, double ratio)
 	return (false);
 }
 
-bool rotate_player_dir(t_data *data, int keycode, double ratio)
+bool	rotate_player_dir(t_data *data, int keycode, double ratio)
 {
 	if (keycode == XK_Right)
 	{
 		data->player->view_deg -= ratio * ROTSPEED * 10;
 		if (data->player->view_deg < -180)
-			data->player->view_deg = 180 - abs((int)data->player->view_deg) % 180;
+			data->player->view_deg = 180 - abs((int)data->player->view_deg)
+				% 180;
 	}
 	else
-		data->player->view_deg = (int)(ratio * ROTSPEED * 10 + data->player->view_deg) % 360;
+		data->player->view_deg = (int)(ratio * ROTSPEED * 10
+				+ data->player->view_deg) % 360;
 	return (true);
 }
 
 int	pressed_key_event(int keycode, t_data *data)
 {
-  bool update_img;
-  update_img = true;
-	if (keycode == 53 || keycode  == XK_Up || keycode == XK_Down
-    		|| keycode == XK_Right || keycode == XK_Left)
+	bool update_img;
+	update_img = true;
+	if (keycode == 53 || keycode == XK_Up || keycode == XK_Down
+		|| keycode == XK_Right || keycode == XK_Left)
 	{
 		if (keycode == 53)
-	    	close_win(data);
+			close_win(data);
 		else if (keycode == XK_Down || keycode == XK_Up)
 			update_img = update_player_pos(data, keycode, 0.3);
-        else if (keycode == XK_Right || keycode == XK_Left)
-            update_img = rotate_player_dir(data, keycode, 0.3);
+		else if (keycode == XK_Right || keycode == XK_Left)
+			update_img = rotate_player_dir(data, keycode, 0.3);
 		if (update_img)
-            render_walls(data);
+			render_walls(data);
 	}
-    return (0);
+	return (0);
 }

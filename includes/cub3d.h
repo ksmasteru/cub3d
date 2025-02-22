@@ -28,9 +28,6 @@
 #define h1 8
 #define w1 8
 #define M_PI   3.14159265358979323846264338327950288
-#define degToRad(angleInDegrees) ((angleInDegrees) * M_PI / 180.0)
-#define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
-#define projection_d (SCREEN_W / 2) * tan(degToRad(30))
 #define TEXTURES_NUMBERS 3
 #define FLOOR_COLOR 0x808080
 #define CEILING_COLOR 0x404040
@@ -148,4 +145,7 @@ double   horizontalraycast_4(t_data *data, double castAngle, int i);
 double  raycast_1(t_data   *data, double castangle, int *side, int i);
 void    drawceiling(t_data *data, int stripex, int y_min);
 void    drawfloor(t_data *data, int stripex, int y_max);
+double	degtorad(double degrees);
+double	radtodeg(double  radians);
+
 #endif

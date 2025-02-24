@@ -12,8 +12,15 @@
 
 #include "../includes/cub3d.h"
 
-int	init_data(t_data *data)
+int	init_data(int ac, char **av, t_data *data)
 {
+	data->map_data = parse_cub_file(ac, av);
+	if (!data->map_data)
+	{
+		printf("parsing failed : needs to be handled\n");
+		exit (1);
+	}
+	printf("parse cub file succeded\n");
 	data->mlx_ptr = mlx_init();
 	if (!data->mlx_ptr)
 		return (-1);
@@ -37,6 +44,55 @@ int	init_data(t_data *data)
 	return (init_data2(data));
 }
 
+void	set_2d_int_map(t_data	*data)
+{
+	int i;
+	int j;
+	
+	i = 0;
+	data->map = (int**)malloc(sizeof(int *) * data->map_data->map_height);
+	while (i < data->map_data->map_height)
+		data->map[i++] = (int *)malloc(sizeof(int) * data->map_data->map_width);
+	i = 0;
+	while (i < data->map_data->map_height)
+	{
+		j = 0;
+		while (j < data->map_data->map_width)
+		{
+			if (data->map_data->map[i][j] >= '0' && data->map_data->map[i][j] <= '9')
+				data->map[i][j] = data->map_data->map[i][j] - 48;
+			else if (data->map_data->map[i][j] == '\0')/*completes the line in case of small string*/
+			{
+				while (j < data->map_data->map_width)
+					data->map[i][j++] = 1;
+				continue;
+			}
+			else
+				data->map[i][j] = 0;
+			printf("%d", data->map[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+}
+
+
+void	init_player_data(t_data *data)
+{
+	data->player->posx = data->map_data->player_x * texwidth + texwidth / 2;
+	data->player->posy = data->map_data->player_y * texheight + texheight / 2;
+	if (data->map_data->player_dir == 'N')
+		data->player->view_deg = 90;
+	else if (data->map_data->player_dir == 'E')
+		data->player->view_deg = 180;
+	else if (data->map_data->player_dir == 'S')
+		data->player->view_deg = 270;
+	else
+		data->player->view_deg = 0;
+	set_2d_int_map(data);
+}
+
 int	init_data2(t_data *data)
 {
 	data->player->distance = (double *)malloc(sizeof(double) * MAP_W);
@@ -51,10 +107,8 @@ int	init_data2(t_data *data)
 	data->player->ver_hity = (double *)malloc(sizeof(double) * MAP_W);
 	data->mini_map->mlx_img = NULL;
 	data->img->mlx_img = NULL;
-	data->player->posx = 1034;
-	data->player->posy = 243;
 	data->player->mouse_x = SCREEN_W / 2;
-	data->player->view_deg = 45;
+	init_player_data(data);
 	return (1);
 }
 
@@ -100,14 +154,14 @@ int	set_up_wall_xpms(t_data *data)
 	return (1);
 }
 
-int	main(void)
+int	main(int ac, char **av)
 {
 	t_data *data;
 
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (1);
-	if (!init_data(data))
+	if (!init_data(ac, av, data))
 		return (1);
 	if (!set_up_wall_xpms(data))
 		return (1);

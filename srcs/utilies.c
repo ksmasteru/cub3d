@@ -1,4 +1,22 @@
-#include "parsing.h"
+#include "../includes/parsing.h"
+
+void	on_off(char *change)
+{
+	static char	c;
+
+    if (change == NULL)
+        return ;
+	if (c == '\0')
+	{
+		c = *change;
+		*change = '\0';
+	}
+	else
+	{
+		*change = c;
+		c = '\0';
+	}
+}
 
 int	open_file(char *file_name, int close_flag)
 {
@@ -69,4 +87,35 @@ void	ft_trim(char *str)
 	{
 		str++;
 	}
+}
+void trim_buffer(char **buffer) {
+    // Check if the buffer is empty or NULL
+    if (buffer == NULL || *buffer == NULL || **buffer == '\0') {
+        return;
+    }
+
+    char *start = *buffer;
+
+    // Trim leading spaces
+    while (*start != '\0' && is_space((unsigned char)*start)) {
+        start++;
+    }
+
+    // If the string is all spaces
+    if (*start == '\0') {
+        *buffer = start;  // Set buffer to an empty string
+        return;
+    }
+
+    // Trim trailing spaces by finding the end of the string
+    char *end = start + strlen(start) - 1;
+    while (end > start && is_space((unsigned char)*end)) {
+        end--;
+    }
+
+    // Null-terminate the string after trimming
+    *(end + 1) = '\n';
+
+    // Update the original buffer to point to the trimmed string
+    *buffer = start;
 }

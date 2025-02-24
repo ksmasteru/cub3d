@@ -1,4 +1,4 @@
-#include "parsing.h"
+#include "../includes/parsing.h"
 
 void	p(char *str)
 {

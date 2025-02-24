@@ -9,6 +9,8 @@
 #include <math.h>
 #include <stdbool.h>
 # include <X11/keysym.h>
+#include "parsing.h"
+
 // THE MAP HAS NOTHING TO DO WITH THE SCREEN : FOW OF PLAYER IS THE SCREEN.
 #define texheight 64
 #define texwidth 64
@@ -93,6 +95,7 @@ typedef struct s_ray
 
 typedef struct s_data{
      t_player *player;
+     int       **map;
      void      *mlx_ptr;
      void      *win_ptr;
      t_image   *img;
@@ -100,6 +103,7 @@ typedef struct s_data{
      t_image   *mini_map;
      t_image   *xpm_imgs;
      t_ray     ray;
+     t_map_data     *map_data;
 }t_data;
 
 typedef struct s_map{
@@ -147,5 +151,8 @@ void    drawceiling(t_data *data, int stripex, int y_min);
 void    drawfloor(t_data *data, int stripex, int y_max);
 double	degtorad(double degrees);
 double	radtodeg(double  radians);
+t_map_data	*parse_cub_file(int ac, char **av);
+void	init_player_data(t_data *data);
+void	set_2d_int_map(t_data	*data);
 
 #endif

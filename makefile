@@ -7,7 +7,11 @@ END			= \e[0m
 SRCS		=	srcs/main.c srcs/events.c srcs/render.c srcs/calculations.c  \
 				srcs/events_calc.c srcs/ft_strjoin.c srcs/mini_map.c	\
 				srcs/calculations1.c srcs/calculations2.c srcs/dispatcher.c \
-				srcs/events2.c srcs/mini_map2.c srcs/draw.c
+				srcs/events2.c srcs/mini_map2.c srcs/draw.c \
+				srcs/get_next_line_utils.c srcs/get_next_line.c \
+				srcs/official_clean_map.c srcs/official_clr.c srcs/official_file_check.c \
+				srcs/official_main.c srcs/official_txt.c \
+				srcs/utilies.c
 SRCS_B		= 	srcs_bonus/main_bonus.c \
 
 NAME		= cub3d

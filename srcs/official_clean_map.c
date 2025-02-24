@@ -1,4 +1,4 @@
-#include "parsing.h"
+#include "../includes/parsing.h"
 
 void	hanlde_error(error_code err)
 {
@@ -35,7 +35,6 @@ static void	set_map_line(char *buffer, size_t *size, t_map_data *data)
 
 	new_line = strchr(buffer, '\n');
 	on_off(new_line);
-	*new_line = '\0';
 	(data)->map[*size] = strdup(buffer);
 	on_off(new_line);
 	*size += 1;
@@ -43,7 +42,7 @@ static void	set_map_line(char *buffer, size_t *size, t_map_data *data)
 
 static int	is_allawed(char *iter)
 {
-	
+
 	if (*iter != '1' && *iter != '0' &&  *iter != 'N' &&
 		  *iter != 'W' && *iter != 'E' && *iter != 'S' && *iter != ' ')
 		  hanlde_error(ERR_INVALID_MAP_CHAR);
@@ -150,4 +149,3 @@ int	is_map(char *buffer, t_map_data *data, int fd)
 	}
 	return (size);
 }
-

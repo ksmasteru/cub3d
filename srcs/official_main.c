@@ -1,4 +1,4 @@
-#include "parsing.h"
+#include "../includes/parsing.h"
 
 
 void print_map_data(t_map_data data) {
@@ -150,21 +150,15 @@ static void	start_parsing(int fd, char *buffer, t_map_data *data)
 	{
 		if (*buffer != '\n')
 		{
-			// trim spaces
-			while (is_space(*buffer))
-				buffer++;
-			buffer_size = strlen(buffer);
-			// if (!buffer || !*buffer || buffer_size <= 3)
-			// 	return ;
+			trim_buffer(&buffer);
 			err_texture = is_texture(buffer, data);
 			err_img = is_color(buffer, data);
 			size = is_map(buffer, data, fd);
 			if ((err_texture != ERR_NONE && err_texture != ERR_NOT_TEXTURE)
 				|| (err_img != ERR_NONE && err_img != ERR_NOT_IMG))
-				exit(printf("error o safi"));
+					exit(printf("error o safi"));
 			else if ((err_texture == ERR_NOT_TEXTURE) && (err_img == ERR_NOT_IMG) && size == 0)
 				exit(printf("imposter line [%s]", buffer));
-			// we are in the map
 			else if (size > 0)
 				break;
 		}
@@ -172,57 +166,44 @@ static void	start_parsing(int fd, char *buffer, t_map_data *data)
 	}
 }
 
-int main(int ac, char **av)
+t_map_data* parse_cub_file(int ac, char **av)
 {
-	t_map_data	data;
+	t_map_data	*data;
 	size_t		size;
 	int			fd;
 	char		*buffer;
 	error_code	err;
 
+	data = (t_map_data *)malloc(sizeof(t_map_data));
 	if (ac == 2)
 	{
 		check_file(av[1], &fd);
 		close (fd);
-		assign_struct(&data);
+		assign_struct(data);
 		fd = open_file(av[1], 0);
 		buffer = get_next_line(fd);
 		if (buffer == NULL)
-			hanlde_error(ERR_INVALID_LINE);
-		//**this function will read and parse if there is erro it will exi
-		//**emidiately */
-		start_parsing(fd, buffer, &data);
-
-		printf("done parsing\n");
-		if (data.map_height > 0)
 		{
-			char *iter = data.map[data.map_height-1];
+			hanlde_error(ERR_INVALID_LINE);
+			return (NULL);
+		}
+		start_parsing(fd, buffer, data);
+		printf("done parsing\n");
+		if (data->map_height > 0)
+		{
+			char *iter = data->map[data->map_height-1];
 			while (*iter)
 			{
 				if (*iter != '1')
-					return(printf("error last 11111111\n"), 1);
+					return(printf("error last 11111111\n"), NULL);
 				iter++;
 			}
 		}
-
-		//**check if there any missing path */
-		if (!data.east_texture || !data.west_texture || !data.south_texture || !data.north_texture)
-			return(printf("misssing paths\n"), 1);
-
-		//**check if repetitve */
-
-		// if (is_repitor(&data))
-		// {
-		// 	return(printf("repetiive paths\n"), 1);
-		// }
-
-		//**check if there's duplicate paths */
-		print_map_data(data);
-		return (0);
+		if (!data->east_texture || !data->west_texture || !data->south_texture || !data->north_texture)
+			return(printf("misssing paths\n"), NULL);
+		return (data);
 	}
 	else
 		printf("entre correct args number!!\n");
-	return 0;
+	return (NULL);
 }
-
-

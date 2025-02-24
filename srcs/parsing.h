@@ -37,6 +37,7 @@ typedef enum {
     ERR_MULTIPLE_PLAYERS,    // More than one player (N, S, E, W) found
     ERR_MISSING_PLAYER,      // No player position found
     ERR_INVALID_MAP_START,   // The map appears before textures or colors
+	ERR_NEW_LINE_IN_MAP,
 
     // 🔄 General errors
     ERR_INVALID_LINE,        // A line does not match any expected format
@@ -98,6 +99,8 @@ void	cleanup(void);
 int		is_space(char c);
 int		is_digit(char c);
 int		ft_atoi(const char *str);
+void	trim_buffer(char **buffer);
+void	on_off(char *change);
 
 //read
 char	**read_filo(char *file_name, int *fd, t_map_data *data);

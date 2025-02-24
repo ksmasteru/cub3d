@@ -12,7 +12,6 @@
 
 #include "../includes/mini_map.h"
 
-extern int	map[w][h];
 
 void	fill_player_position(t_map *mini_map, t_image *img, t_data *data,
 		int color)

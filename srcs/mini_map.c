@@ -12,20 +12,18 @@
 
 #include "../includes/mini_map.h"
 
-extern int	map[w][h];
-
 t_map	fill_map_data(t_data *data)
 {
 	t_map	map;
 
 	map.mini_map_w = SCREEN_W / 4;
 	map.mini_map_h = SCREEN_H / 4;
-	while (map.mini_map_w % w != 0)
+	while (map.mini_map_w % data->map_data->map_width != 0)
 		map.mini_map_w++;
-	while (map.mini_map_h % h != 0)
+	while (map.mini_map_h % data->map_data->map_height != 0)
 		map.mini_map_h++;
-	map.w_pixels = map.mini_map_w / w;
-	map.h_pixels = map.mini_map_h / h;
+	map.w_pixels = map.mini_map_w / data->map_data->map_width;
+	map.h_pixels = map.mini_map_h / data->map_data->map_height;
 	map.p_x = 0;
 	map.p_y = 0;
 	if (data->mini_map->mlx_img != NULL)
@@ -118,14 +116,14 @@ int	put_mini_map(t_data *data)
 	i = 0;
 	j = 0;
 	mini_map = fill_map_data(data);
-	while (i < w)
+	while (i < data->map_data->map_width)
 	{
 		j = 0;
 		mini_map.p_y = i * mini_map.h_pixels;
-		while (j < h)
+		while (j < data->map_data->map_height)
 		{
 			mini_map.p_x = j * mini_map.w_pixels;
-			if (map[i][j] != 0)
+			if (data->map[i][j] != 0)
 				fill_square_pixels(&mini_map, data->mini_map, 0x3333FF);
 			else
 				fill_square_pixels(&mini_map, data->mini_map, 0x99CCFF);

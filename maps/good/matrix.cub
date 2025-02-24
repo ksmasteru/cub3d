@@ -1,10 +1,10 @@
-NO ./bluestone.xpm
-SO ./eagle.xpm
-WE ./colorstone.xpm
-EA ./wood.xpm
+NO textures/matrix.xpm
+SO textures/matrix.xpm
+WE textures/matrix.xpm
+EA textures/matrix.xpm
 
-F 220,100,0
-C 225,30,0
+F 0,0,0
+C 0,0,0
 
 111111111111111111111
 101000001000000000001
@@ -27,3 +27,4 @@ C 225,30,0
 101010111011111111101
 1N1000001000000000001
 111111111111111111111
+

@@ -14,7 +14,6 @@
 #include <math.h>
 #define M_PI 3.14159265358979323846264338327950288
 
-extern int	map[w][h];
 
 double	calculate_distance(t_data *data, double cx, double cy, double castAngle)
 {

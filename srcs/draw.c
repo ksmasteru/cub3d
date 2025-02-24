@@ -13,16 +13,14 @@
 #include "../includes/cub3d.h"
 #include <math.h>
 
-extern int	map[24][24];
-
 void	draw_walls_1(t_data *data, t_pixdata *pixdata, int stripex,
 		double texpos)
 {
 	while (pixdata->y_min != pixdata->y_max)
 	{
-		pixdata->xpm_pixel = data->xpm_imgs[1].adrs
-			+ data->xpm_imgs[1].size_line * pixdata->y_xpm + pixdata->x_offset
-			* (data->xpm_imgs[1].bpp / 8);
+		pixdata->xpm_pixel = data->xpm_imgs[data->player->wall_type].adrs
+			+ data->xpm_imgs[data->player->wall_type].size_line * pixdata->y_xpm + pixdata->x_offset
+			* (data->xpm_imgs[data->player->wall_type].bpp / 8);
 		pixdata->pixel = data->img->adrs + data->img->size_line * pixdata->y_min
 			+ stripex * (data->img->bpp / 8);
 		*(int *)pixdata->pixel = *(int *)pixdata->xpm_pixel;
@@ -65,9 +63,9 @@ void	draw_wall_side(t_data *data, int stripex, t_pixdata *pixdata,
 {
 	while (pixdata->y_min != pixdata->y_max)
 	{
-		pixdata->xpm_pixel = data->xpm_imgs[0].adrs
-			+ data->xpm_imgs[0].size_line * pixdata->y_xpm + pixdata->x_offset
-			* (data->xpm_imgs[0].bpp / 8);
+		pixdata->xpm_pixel = data->xpm_imgs[data->player->wall_type].adrs
+			+ data->xpm_imgs[data->player->wall_type].size_line * pixdata->y_xpm + pixdata->x_offset
+			* (data->xpm_imgs[data->player->wall_type].bpp / 8);
 		pixdata->pixel = data->img->adrs + data->img->size_line * pixdata->y_min
 			+ stripex * (data->img->bpp / 8);
 		*(int *)pixdata->pixel = *(int *)pixdata->xpm_pixel;

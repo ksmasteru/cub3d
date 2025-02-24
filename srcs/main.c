@@ -44,6 +44,7 @@ int	init_data(int ac, char **av, t_data *data)
 	return (init_data2(data));
 }
 
+/*needs to be freed.*/
 void	set_2d_int_map(t_data	*data)
 {
 	int i;
@@ -68,7 +69,12 @@ void	set_2d_int_map(t_data	*data)
 				continue;
 			}
 			else
+			{
 				data->map[i][j] = 0;
+				data->player->posy = i * texheight + texheight / 2;
+				data->player->posx = j * texwidth + texwidth / 2;
+				printf("\nplayer x %d player y %d\n", j, i);
+			}
 			printf("%d", data->map[i][j]);
 			j++;
 		}
@@ -80,35 +86,35 @@ void	set_2d_int_map(t_data	*data)
 
 void	init_player_data(t_data *data)
 {
-	data->player->posx = data->map_data->player_x * texwidth + texwidth / 2;
-	data->player->posy = data->map_data->player_y * texheight + texheight / 2;
 	if (data->map_data->player_dir == 'N')
-		data->player->view_deg = 90;
+		data->player->view_deg = 91;
 	else if (data->map_data->player_dir == 'E')
-		data->player->view_deg = 180;
+		data->player->view_deg = 181;
 	else if (data->map_data->player_dir == 'S')
-		data->player->view_deg = 270;
+		data->player->view_deg = 271;
 	else
-		data->player->view_deg = 0;
+		data->player->view_deg = 1;
+	data->map_data->w = texwidth * data->map_data->map_width;
+	data->map_data->h = texheight * data->map_data->map_height;
 	set_2d_int_map(data);
 }
 
 int	init_data2(t_data *data)
 {
-	data->player->distance = (double *)malloc(sizeof(double) * MAP_W);
+	init_player_data(data);
+	data->player->distance = (double *)malloc(sizeof(double) * data->map_data->w);
 	if (!data->player->distance)
 		return (-1);
-	data->player->side = (int *)malloc(sizeof(int) * MAP_W);
+	data->player->side = (int *)malloc(sizeof(int) * data->map_data->w);
 	if (!data->player->side)
 		return (-1);
-	data->player->hor_hitx = (double *)malloc(sizeof(double) * MAP_W);
-	data->player->hor_hity = (double *)malloc(sizeof(double) * MAP_W);
-	data->player->ver_hitx = (double *)malloc(sizeof(double) * MAP_W);
-	data->player->ver_hity = (double *)malloc(sizeof(double) * MAP_W);
+	data->player->hor_hitx = (double *)malloc(sizeof(double) * data->map_data->w);
+	data->player->hor_hity = (double *)malloc(sizeof(double) * data->map_data->w);
+	data->player->ver_hitx = (double *)malloc(sizeof(double) * data->map_data->w);
+	data->player->ver_hity = (double *)malloc(sizeof(double) * data->map_data->w);
 	data->mini_map->mlx_img = NULL;
 	data->img->mlx_img = NULL;
 	data->player->mouse_x = SCREEN_W / 2;
-	init_player_data(data);
 	return (1);
 }
 
@@ -137,20 +143,25 @@ int	set_up_wall_xpms(t_data *data)
 	if (!data->xpm_imgs)
 		return (-1);
 	data->xpm_imgs[0].mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, 
-		"./eagle.xpm", &width, &height);
+		data->map_data->north_texture, &width, &height);
 	data->xpm_imgs[0].adrs = mlx_get_data_addr(data->xpm_imgs[0].mlx_img,
 		&(data->xpm_imgs[0].bpp), &(data->xpm_imgs[0].size_line),
 			&(data->xpm_imgs[0].endian));
 	data->xpm_imgs[1].mlx_img = mlx_xpm_file_to_image(data->mlx_ptr,
-		"./bluestone.xpm", &width, &height);
+		data->map_data->west_texture, &width, &height);
 	data->xpm_imgs[1].adrs = mlx_get_data_addr(data->xpm_imgs[1].mlx_img,
 		&(data->xpm_imgs[1].bpp), &(data->xpm_imgs[1].size_line),
 			&(data->xpm_imgs[1].endian));
 	data->xpm_imgs[2].mlx_img = mlx_xpm_file_to_image(data->mlx_ptr,
-		"./colorstone.xpm", &width, &height);
+		data->map_data->east_texture, &width, &height);
 	data->xpm_imgs[2].adrs = mlx_get_data_addr(data->xpm_imgs[2].mlx_img,
 		&(data->xpm_imgs[2].bpp), &(data->xpm_imgs[2].size_line),
 			&(data->xpm_imgs[2].endian));
+	data->xpm_imgs[3].mlx_img = mlx_xpm_file_to_image(data->mlx_ptr,
+		data->map_data->south_texture, &width, &height);
+	data->xpm_imgs[3].adrs = mlx_get_data_addr(data->xpm_imgs[3].mlx_img,
+		&(data->xpm_imgs[3].bpp), &(data->xpm_imgs[3].size_line),
+			&(data->xpm_imgs[3].endian));
 	return (1);
 }
 

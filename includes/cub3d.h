@@ -16,21 +16,13 @@
 #define texwidth 64
 #define SCREEN_W 640
 #define SCREEN_H 480
-#define MAP_W 1536
-#define MAP_H 1536
-#define MAP_W1 512
-#define MAP_H1 512
-#define MINI_MAP_H   (MAP_W / 10)
-#define MINI_MAP_W  (MAP_H / 10)
 #define FOW 60
 #define ROTSPEED 1.5
 #define MOVE_SPEED 32.0
-#define w 24
-#define h 24
 #define h1 8
 #define w1 8
 #define M_PI   3.14159265358979323846264338327950288
-#define TEXTURES_NUMBERS 3
+#define TEXTURES_NUMBERS 4
 #define FLOOR_COLOR 0x808080
 #define CEILING_COLOR 0x404040
 #define SLIDE_SPEED 7.0

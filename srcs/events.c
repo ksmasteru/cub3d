@@ -13,11 +13,6 @@
 #include "../includes/cub3d.h"
 #include <stdbool.h>
 
-#define map_w 24
-#define map_h 24
-
-extern int		map[24][24];
-extern double	angle;
 
 bool	update_player_posx_upkey(t_data *data, int keycode, double ratio,
 		double castAngle)
@@ -28,7 +23,7 @@ bool	update_player_posx_upkey(t_data *data, int keycode, double ratio,
 	int		box_x;
 
 	ratio_x = MOVE_SPEED * cos(degtorad(castAngle)) * ratio;
-	if ((map[(int)data->player->posy / texheight][(int)(data->player->posx
+	if ((data->map[(int)data->player->posy / texheight][(int)(data->player->posx
 				+ ratio_x) / texwidth] != 0))
 		return (false);
 	data->player->posx += ratio_x;
@@ -42,7 +37,7 @@ bool	update_player_posx_upkey(t_data *data, int keycode, double ratio,
 		wallx = (int)data->player->posx / texwidth * texwidth;
 		box_x = (wallx - 1) / texwidth;
 	}
-	if (map[(int)data->player->posy / texheight][box_x] != 0 && (abs(wallx
+	if (data->map[(int)data->player->posy / texheight][box_x] != 0 && (abs(wallx
 				- (int)data->player->posx) < WALL_BUFFER))
 		data->player->posx = wallx + SLIDE_CST + WALL_BUFFER * data->ray.dir_x *
 			-1;
@@ -58,7 +53,7 @@ bool	update_player_posx_downkey(t_data *data, int keycode, double ratio,
 	int		box_x;
 
 	ratio_x = MOVE_SPEED * cos(degtorad(castAngle)) * ratio * -1.00;
-	if ((map[(int)data->player->posy / texheight][(int)(data->player->posx
+	if ((data->map[(int)data->player->posy / texheight][(int)(data->player->posx
 				+ ratio_x) / texwidth] != 0))
 		return (false);
 	data->player->posx += ratio_x;
@@ -72,7 +67,7 @@ bool	update_player_posx_downkey(t_data *data, int keycode, double ratio,
 		wallx = (int)data->player->posx / texwidth * texwidth + texwidth;
 		box_x = wallx / texwidth;
 	}
-	if (map[(int)data->player->posy / texheight][box_x] != 0 && (abs(wallx
+	if (data->map[(int)data->player->posy / texheight][box_x] != 0 && (abs(wallx
 				- (int)data->player->posx) < WALL_BUFFER))
 		data->player->posx = wallx + SLIDE_CST + WALL_BUFFER * data->ray.dir_x;
 	return (true);

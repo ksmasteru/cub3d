@@ -14,14 +14,11 @@
 #include <math.h>
 #define M_PI 3.14159265358979323846264338327950288
 
-extern int	map[w][h];
-
-void	reset_verhit(t_data *data, int i)
+void	reset_verhit(t_data *data, int i, double castangle)
 {
 	data->player->ver_hitx[i] = data->player->hor_hitx[i];
 	data->player->ver_hity[i] = data->player->hor_hity[i];
-	data->player->wall_type = map[(int)data->player->hity
-		/ texheight][(int)data->player->hitx / texwidth];
+	set_wall_type(data, castangle);
 }
 
 double	raycast_2(t_data *data, double castangle, int *side, int i)
@@ -45,7 +42,7 @@ double	raycast_2(t_data *data, double castangle, int *side, int i)
 		return (verticalray);
 	}
 	*side = 1;
-	reset_verhit(data, i);
+	reset_verhit(data, i, castangle);
 	return (horizontalray);
 }
 
@@ -71,7 +68,7 @@ double	raycast_3(t_data *data, double castangle, int *side, int i)
 		return (verticalray);
 	}
 	*side = 1;
-	reset_verhit(data, i);
+	reset_verhit(data, i, castangle);
 	return (horizontalray);
 }
 

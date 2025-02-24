@@ -1,10 +1,10 @@
 NO ./bluestone.xpm
-SO ./eagle.xpm
-WE ./colorstone.xpm
-EA ./wood.xpm
+SO ./bluestone.xpm
+WE ./bluestone.xpm
+EA ./bluestone.xpm
 
-F 220,100,0
-C 225,30,0
+F 164,169,20
+C 153,204,255
 
 111111111111111111111
 101000001000000000001
@@ -27,3 +27,4 @@ C 225,30,0
 101010111011111111101
 1N1000001000000000001
 111111111111111111111
+

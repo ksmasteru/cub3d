@@ -14,7 +14,6 @@
 #include <math.h>
 #define M_PI 3.14159265358979323846264338327950288
 
-extern int	map[w][h];
 
 double	vertical_casting_1(t_data *data, double castangle, int i)
 {
@@ -28,21 +27,33 @@ double	vertical_casting_1(t_data *data, double castangle, int i)
 			/ tan(degtorad(castangle)));
 	ray_data.rx = data->player->posx + fabs(ray_data.rx);
 	data->player->box_x = (int)ray_data.rx >> 6;
-	if (ray_data.rx > MAP_W)
+	if (ray_data.rx > data->map_data->w)
 		return (1e30);
-	while (map[data->player->box_y][data->player->box_x] == 0)
+	while (data->map[data->player->box_y][data->player->box_x] == 0)
 	{
 		ray_data.ry += ray_data.ya;
 		ray_data.rx += ray_data.xa;
-		if (ray_data.rx > MAP_W)
+		if (ray_data.rx > data->map_data->w)
 			return (1e30);
 		data->player->box_y = (int)(ray_data.ry - 1) >> 6;
 		data->player->box_x = (int)ray_data.rx >> 6;
 	}
 	data->player->ver_hitx[i] = ray_data.rx;
 	data->player->ver_hity[i] = ray_data.ry;
-	data->player->wall_type = map[data->player->box_y][data->player->box_x];
+	set_wall_type(data, castangle);
 	return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
+}
+
+void	set_wall_type(t_data	*data, double castangle)
+{
+	if ((castangle >= 90 - 45) && (castangle <= 90 + 45))
+		data->player->wall_type = 0;
+	else if ((castangle >= 180 - 45) && (castangle >= 180 + 45))
+		data->player->wall_type = 1;
+	else if ((castangle >= 45) && (castangle <= 360 - 45))
+		data->player->wall_type = 2;
+	else
+		data->player->wall_type = 3;
 }
 
 double	vertical_casting_2(t_data *data, double castangle, int i)
@@ -59,7 +70,7 @@ double	vertical_casting_2(t_data *data, double castangle, int i)
 	data->player->box_x = (int)ray_data.rx >> 6;
 	if (ray_data.rx < 0)
 		return (1e30);
-	while (map[data->player->box_y][data->player->box_x] == 0)
+	while (data->map[data->player->box_y][data->player->box_x] == 0)
 	{
 		ray_data.ry += ray_data.ya;
 		ray_data.rx += ray_data.xa;
@@ -70,7 +81,7 @@ double	vertical_casting_2(t_data *data, double castangle, int i)
 	}
 	data->player->ver_hitx[i] = ray_data.rx;
 	data->player->ver_hity[i] = ray_data.ry;
-	data->player->wall_type = map[data->player->box_y][data->player->box_x];
+	set_wall_type(data, castangle);
 	return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
 }
 
@@ -87,18 +98,18 @@ double	vertical_casting_4(t_data *data, double castangle, int i)
 	data->player->box_x = (int)raydata.rx >> 6;
 	if (raydata.rx < 0)
 		return (1e30);
-	while (map[data->player->box_y][data->player->box_x] == 0)
+	while (data->map[data->player->box_y][data->player->box_x] == 0)
 	{
 		raydata.ry += raydata.ya;
 		raydata.rx += raydata.xa;
-		if (raydata.rx > MAP_H)
+		if (raydata.rx > data->map_data->w)
 			return (1e30);
 		data->player->box_y = (int)raydata.ry >> 6;
 		data->player->box_x = (int)raydata.rx >> 6;
 	}
 	data->player->ver_hitx[i] = raydata.rx;
 	data->player->ver_hity[i] = raydata.ry;
-	data->player->wall_type = map[data->player->box_y][data->player->box_x];
+	set_wall_type(data, castangle);
 	return (calculate_distance(data, raydata.rx, raydata.ry, castangle));
 }
 
@@ -115,7 +126,7 @@ double	vertical_casting_3(t_data *data, double castangle, int i)
 	data->player->box_x = (int)ray_data.rx >> 6;
 	if (ray_data.rx < 0)
 		return (1e30);
-	while (map[data->player->box_y][data->player->box_x] == 0)
+	while (data->map[data->player->box_y][data->player->box_x] == 0)
 	{
 		ray_data.ry += ray_data.ya;
 		ray_data.rx += ray_data.xa;
@@ -126,6 +137,6 @@ double	vertical_casting_3(t_data *data, double castangle, int i)
 	}
 	data->player->ver_hitx[i] = ray_data.rx;
 	data->player->ver_hity[i] = ray_data.ry;
-	data->player->wall_type = map[data->player->box_y][data->player->box_x];
+	set_wall_type(data, castangle);
 	return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
 }

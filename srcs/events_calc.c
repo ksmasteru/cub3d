@@ -12,7 +12,6 @@
 
 #include "../includes/cub3d.h"
 
-extern double	angle;
 
 double	degtorad(double degrees)
 {

@@ -65,7 +65,8 @@ typedef struct s_map_data {
     char **map;           // 2D array of map characters
     int map_height;
     int map_width;
-
+    int w;
+    int h;
     // Player info
     int player_x;         // Starting X position
     int player_y;         // Starting Y position

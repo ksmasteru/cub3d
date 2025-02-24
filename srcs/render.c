@@ -13,82 +13,7 @@
 #include "../includes/cub3d.h"
 #include <math.h>
 
-int map[w][h] =
-	{
-		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 4, 0, 0, 0, 0, 3, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 4, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			1},
-		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1}};
-
-t_image	*get_xpm_img(t_data *data)
-{
-	int		width;
-	int		height;
-	t_image	*img;
-
-	img = malloc(sizeof(t_image));
-	if (data->player->wall_type == 1)
-		img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./eagle.xpm",
-				&width, &height);
-	else if (data->player->wall_type == 2)
-		img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./bluestone.xpm",
-				&width, &height);
-	else
-		img->mlx_img = mlx_xpm_file_to_image(data->mlx_ptr, "./colorstone.xpm",
-				&width, &height);
-	if (img->mlx_img == NULL)
-	{
-		printf("null img\n");
-		exit(1);
-	}
-	img->adrs = mlx_get_data_addr(img->mlx_img, &(img->bpp), &(img->size_line),
-			&(img->endian));
-	return (img);
-}
+/*not used.*/
 
 /*for side == 0 x_side hit*/
 void	put_wall_side(t_data *data, int stripex, double distance, int side)
@@ -123,8 +48,8 @@ void	put_wall(t_data *data, int stripex, double distance, int side)
 
 	projection_d = (SCREEN_W / 2) * tan(degtorad(30));
 	pixdata.y_xpm = 0;
-	if (distance > sqrt(MAP_H * MAP_H + MAP_W * MAP_W))
-		distance = fabs(MAP_W - data->player->posx);
+	if (distance > sqrt(data->map_data->h * data->map_data->h + data->map_data->w * data->map_data->w))
+		distance = fabs(data->map_data->w - data->player->posx);
 	pixdata.slice_height = ((double)texheight / distance) * (projection_d);
 	if (side == 0)
 		return (put_wall_side(data, stripex, distance, side));

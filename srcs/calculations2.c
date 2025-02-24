@@ -14,8 +14,6 @@
 #include <math.h>
 #define M_PI 3.14159265358979323846264338327950288
 
-extern int	map[w][h];
-
 double	horizontalraycast_1(t_data *data, double castAngle, int i)
 {
 	double		distance;
@@ -30,7 +28,7 @@ double	horizontalraycast_1(t_data *data, double castAngle, int i)
 	data->player->box_y = (int)rayvars.ry >> 6;
 	if (rayvars.ry < 0)
 		return (1e30);
-	while (map[data->player->box_y][data->player->box_x] == 0)
+	while (data->map[data->player->box_y][data->player->box_x] == 0)
 	{
 		rayvars.ry += rayvars.ya;
 		rayvars.rx += rayvars.xa;
@@ -60,7 +58,7 @@ double	horizontalraycast_2(t_data *data, double castAngle, int i)
 	data->player->box_y = (int)rayvars.ry >> 6;
 	if (rayvars.ry < 0)
 		return (1e30);
-	while (map[data->player->box_y][data->player->box_x] == 0)
+	while (data->map[data->player->box_y][data->player->box_x] == 0)
 	{
 		rayvars.ry += rayvars.ya;
 		rayvars.rx += rayvars.xa;
@@ -88,13 +86,14 @@ double	horizontalraycast_3(t_data *data, double castAngle, int i)
 	rayvars.ry = tan(degtorad(castAngle)) * (data->player->posx - rayvars.rx);
 	rayvars.ry = data->player->posy + fabs(rayvars.ry);
 	data->player->box_y = (int)rayvars.ry >> 6;
-	if (rayvars.ry > MAP_H)
+	if (rayvars.ry > data->map_data->h)
 		return (1e30);
-	while (map[data->player->box_y][data->player->box_x] == 0)
+	printf("data->player->box_y is %d data->player->box_x %d\n", data->player->box_y, data->player->box_x);
+	while (data->map[data->player->box_y][data->player->box_x] == 0)
 	{
 		rayvars.ry += rayvars.ya;
 		rayvars.rx += rayvars.xa;
-		if (rayvars.ry > MAP_W)
+		if (rayvars.ry > data->map_data->h)
 			return (1e30);
 		data->player->box_x = (int)(rayvars.rx - 1) >> 6;
 		data->player->box_y = (int)rayvars.ry >> 6;
@@ -118,12 +117,12 @@ double	horizontalraycast_4(t_data *data, double castAngle, int i)
 	rayvars.ry = tan(degtorad(castAngle)) * (rayvars.rx - data->player->posx);
 	rayvars.ry = data->player->posy + fabs(rayvars.ry);
 	data->player->box_y = (int)rayvars.ry >> 6;
-	if (rayvars.ry > MAP_H)
+	if (rayvars.ry > data->map_data->h)
 		return (1e30);
-	while (map[data->player->box_y][data->player->box_x] == 0)
+	while (data->map[data->player->box_y][data->player->box_x] == 0)
 	{
 		rayvars.ry += rayvars.ya;
-		if (rayvars.ry > MAP_W)
+		if (rayvars.ry > data->map_data->h)
 			return (1e30);
 		rayvars.rx += rayvars.xa;
 		data->player->box_x = (int)(rayvars.rx) >> 6;

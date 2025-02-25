@@ -18,7 +18,7 @@ void	reset_verhit(t_data *data, int i, double castangle)
 {
 	data->player->ver_hitx[i] = data->player->hor_hitx[i];
 	data->player->ver_hity[i] = data->player->hor_hity[i];
-	set_wall_type(data, castangle);
+	//set_wall_type(data, castangle);
 }
 
 double	raycast_2(t_data *data, double castangle, int *side, int i)
@@ -92,5 +92,5 @@ double	raycast_1(t_data *data, double castangle, int *side, int i)
 		smallest_distance = raycast_2(data, castangle, side, i);
 	else if (castangle > 180 && castangle < 360)
 		smallest_distance = raycast_3(data, castangle, side, i);
-	return ((smallest_distance)*cos(degtorad(data->player->beta_angle)));
+	return ((smallest_distance) * cos(degtorad(data->player->beta_angle)));
 }

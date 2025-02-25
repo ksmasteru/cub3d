@@ -1,7 +1,7 @@
 #include "../includes/parsing.h"
 
-
-void print_map_data(t_map_data data) {
+void print_map_data(t_map_data data)
+{
 	printf("\n");
 	printf("--------------\n");
     printf("North texture: %s\n", data.north_texture);
@@ -19,14 +19,11 @@ void print_map_data(t_map_data data) {
     for (int i = 0; i < data.map_height; i++) {
         printf("%s\n", data.map[i]);
     }
-
     printf("Player position: (%d, %d)\n", data.player_x, data.player_y);
     printf("Player direction: %c\n", data.player_dir);
 	printf("--------------");
 	printf("\n");
-
 }
-
 
 int is_repitor(t_map_data *data)
 {
@@ -117,7 +114,6 @@ void print_error_message(error_code code)
             printf("Unknown error code\n");
     }
 }
-
 
 static void	assign_struct(t_map_data *data)
 {

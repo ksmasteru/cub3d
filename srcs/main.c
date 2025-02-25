@@ -44,7 +44,6 @@ int	init_data(int ac, char **av, t_data *data)
 	return (init_data2(data));
 }
 
-/*needs to be freed.*/
 void	set_2d_int_map(t_data	*data)
 {
 	int i;
@@ -82,7 +81,6 @@ void	set_2d_int_map(t_data	*data)
 		i++;
 	}
 }
-
 
 void	init_player_data(t_data *data)
 {
@@ -147,21 +145,21 @@ int	set_up_wall_xpms(t_data *data)
 	data->xpm_imgs[0].adrs = mlx_get_data_addr(data->xpm_imgs[0].mlx_img,
 		&(data->xpm_imgs[0].bpp), &(data->xpm_imgs[0].size_line),
 			&(data->xpm_imgs[0].endian));
-	data->xpm_imgs[1].mlx_img = mlx_xpm_file_to_image(data->mlx_ptr,
-		data->map_data->west_texture, &width, &height);
-	data->xpm_imgs[1].adrs = mlx_get_data_addr(data->xpm_imgs[1].mlx_img,
-		&(data->xpm_imgs[1].bpp), &(data->xpm_imgs[1].size_line),
-			&(data->xpm_imgs[1].endian));
 	data->xpm_imgs[2].mlx_img = mlx_xpm_file_to_image(data->mlx_ptr,
-		data->map_data->east_texture, &width, &height);
+		data->map_data->west_texture, &width, &height);
 	data->xpm_imgs[2].adrs = mlx_get_data_addr(data->xpm_imgs[2].mlx_img,
 		&(data->xpm_imgs[2].bpp), &(data->xpm_imgs[2].size_line),
 			&(data->xpm_imgs[2].endian));
 	data->xpm_imgs[3].mlx_img = mlx_xpm_file_to_image(data->mlx_ptr,
-		data->map_data->south_texture, &width, &height);
+		data->map_data->east_texture, &width, &height);
 	data->xpm_imgs[3].adrs = mlx_get_data_addr(data->xpm_imgs[3].mlx_img,
 		&(data->xpm_imgs[3].bpp), &(data->xpm_imgs[3].size_line),
 			&(data->xpm_imgs[3].endian));
+	data->xpm_imgs[1].mlx_img = mlx_xpm_file_to_image(data->mlx_ptr,
+		data->map_data->south_texture, &width, &height);
+	data->xpm_imgs[1].adrs = mlx_get_data_addr(data->xpm_imgs[1].mlx_img,
+		&(data->xpm_imgs[1].bpp), &(data->xpm_imgs[1].size_line),
+			&(data->xpm_imgs[1].endian));
 	return (1);
 }
 

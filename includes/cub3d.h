@@ -146,5 +146,5 @@ double	radtodeg(double  radians);
 t_map_data	*parse_cub_file(int ac, char **av);
 void	init_player_data(t_data *data);
 void	set_2d_int_map(t_data	*data);
-
+void	set_wall_type(t_data	*data, int side);
 #endif

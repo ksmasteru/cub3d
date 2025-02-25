@@ -14,7 +14,6 @@
 #include <math.h>
 #define M_PI 3.14159265358979323846264338327950288
 
-
 double	vertical_casting_1(t_data *data, double castangle, int i)
 {
 	t_rayvars	ray_data;
@@ -40,19 +39,20 @@ double	vertical_casting_1(t_data *data, double castangle, int i)
 	}
 	data->player->ver_hitx[i] = ray_data.rx;
 	data->player->ver_hity[i] = ray_data.ry;
-	set_wall_type(data, castangle);
+	//set_wall_type(data, castangle);
 	return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
 }
 
-void	set_wall_type(t_data	*data, double castangle)
+void	set_wall_type(t_data	*data, int side)
 {
-	if ((castangle >= 90 - 45) && (castangle <= 90 + 45))
+	// set ray dirx and raydiry.
+	if (side == 0 && data->ray.dir_y < 0)
 		data->player->wall_type = 0;
-	else if ((castangle >= 180 - 45) && (castangle >= 180 + 45))
+	if (side == 0 && data->ray.dir_y >= 0)
 		data->player->wall_type = 1;
-	else if ((castangle >= 45) && (castangle <= 360 - 45))
+	if (side == 1 && data->ray.dir_x < 0)
 		data->player->wall_type = 2;
-	else
+	if (side == 1 && data->ray.dir_x >= 0)
 		data->player->wall_type = 3;
 }
 
@@ -137,6 +137,5 @@ double	vertical_casting_3(t_data *data, double castangle, int i)
 	}
 	data->player->ver_hitx[i] = ray_data.rx;
 	data->player->ver_hity[i] = ray_data.ry;
-	set_wall_type(data, castangle);
 	return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
 }

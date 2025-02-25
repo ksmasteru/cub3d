@@ -46,6 +46,7 @@ void	put_wall(t_data *data, int stripex, double distance, int side)
 	double		texpos;
 	double		projection_d;
 
+	set_wall_type(data, side);
 	projection_d = (SCREEN_W / 2) * tan(degtorad(30));
 	pixdata.y_xpm = 0;
 	if (distance > sqrt(data->map_data->h * data->map_data->h + data->map_data->w * data->map_data->w))
@@ -72,11 +73,17 @@ void	put_wall(t_data *data, int stripex, double distance, int side)
 void	put_walls(t_data *data)
 {
 	int	i;
+	double	castangle;
+	double	sep_angle;
 
+	sep_angle = (double)FOW / SCREEN_W;
+	castangle = data->player->view_deg + (double)FOW / 2;
 	i = 0;
 	while (i < SCREEN_W)
 	{
+		update_ray_dir(&(data->ray), castangle);
 		put_wall(data, i, data->player->distance[i], data->player->side[i]);
+		castangle -= sep_angle;
 		i++;
 	}
 }

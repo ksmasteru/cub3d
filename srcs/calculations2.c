@@ -43,7 +43,6 @@ double	horizontalraycast_1(t_data *data, double castAngle, int i)
 	return (distance);
 }
 
-// 90, 180 : -x -y
 double	horizontalraycast_2(t_data *data, double castAngle, int i)
 {
 	double		distance;
@@ -73,7 +72,6 @@ double	horizontalraycast_2(t_data *data, double castAngle, int i)
 	return (distance);
 }
 
-// 180 , 270 : -x + y
 double	horizontalraycast_3(t_data *data, double castAngle, int i)
 {
 	t_rayvars	rayvars;
@@ -88,7 +86,6 @@ double	horizontalraycast_3(t_data *data, double castAngle, int i)
 	data->player->box_y = (int)rayvars.ry >> 6;
 	if (rayvars.ry > data->map_data->h)
 		return (1e30);
-	printf("data->player->box_y is %d data->player->box_x %d\n", data->player->box_y, data->player->box_x);
 	while (data->map[data->player->box_y][data->player->box_x] == 0)
 	{
 		rayvars.ry += rayvars.ya;
@@ -104,7 +101,6 @@ double	horizontalraycast_3(t_data *data, double castAngle, int i)
 	return (distance);
 }
 
-// 270, 360 : +x +y
 double	horizontalraycast_4(t_data *data, double castAngle, int i)
 {
 	t_rayvars	rayvars;

@@ -13,9 +13,6 @@
 #include "../includes/cub3d.h"
 #include <math.h>
 
-/*not used.*/
-
-/*for side == 0 x_side hit*/
 void	put_wall_side(t_data *data, int stripex, double distance, int side)
 {
 	t_pixdata	pixdata;
@@ -111,7 +108,6 @@ int	render_walls(t_data *data)
 		mlx_destroy_image(data->mlx_ptr, data->old_img->mlx_img);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0,
 			0);
-	show_player_data(data);
 	put_mini_map(data);
 	data->old_img->mlx_img = data->img->mlx_img;
 	return (0);

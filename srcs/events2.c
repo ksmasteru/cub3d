@@ -13,10 +13,24 @@
 #include "../includes/cub3d.h"
 #include <stdbool.h>
 
+void	free_t_data(t_data	*data)
+{
+	int i;
+
+	i = 0;
+	while (i < data->map_data->map_height)
+	{
+		free(data->map[i]);
+		i++;
+	}
+	free(data->map);
+}
+
 int	close_win(t_data *data)
 {
 	mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 	free(data->mlx_ptr);
+	free_t_data(data);
 	exit(0);
 }
 

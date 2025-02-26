@@ -13,7 +13,6 @@
 #include "../includes/cub3d.h"
 #include <stdbool.h>
 
-
 bool	update_player_posx_upkey(t_data *data, int keycode, double ratio,
 		double castAngle)
 {

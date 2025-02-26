@@ -39,13 +39,11 @@ double	vertical_casting_1(t_data *data, double castangle, int i)
 	}
 	data->player->ver_hitx[i] = ray_data.rx;
 	data->player->ver_hity[i] = ray_data.ry;
-	//set_wall_type(data, castangle);
 	return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
 }
 
 void	set_wall_type(t_data	*data, int side)
 {
-	// set ray dirx and raydiry.
 	if (side == 0 && data->ray.dir_y < 0)
 		data->player->wall_type = 0;
 	if (side == 0 && data->ray.dir_y >= 0)

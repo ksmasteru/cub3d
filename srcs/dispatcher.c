@@ -18,7 +18,6 @@ void	reset_verhit(t_data *data, int i, double castangle)
 {
 	data->player->ver_hitx[i] = data->player->hor_hitx[i];
 	data->player->ver_hity[i] = data->player->hor_hity[i];
-	//set_wall_type(data, castangle);
 }
 
 double	raycast_2(t_data *data, double castangle, int *side, int i)

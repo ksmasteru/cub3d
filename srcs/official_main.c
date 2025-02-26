@@ -162,6 +162,19 @@ static void	start_parsing(int fd, char *buffer, t_map_data *data)
 	}
 }
 
+t_map_data  *init_t_map_data()
+{
+    t_map_data *data;
+
+    data = (t_map_data *)malloc(sizeof(t_map_data));
+    data->north_texture = NULL;
+    data->south_texture = NULL;
+    data->west_texture = NULL;
+    data->east_texture = NULL;
+    data->map = NULL;
+    return (data);
+}
+
 t_map_data* parse_cub_file(int ac, char **av)
 {
 	t_map_data	*data;
@@ -170,7 +183,7 @@ t_map_data* parse_cub_file(int ac, char **av)
 	char		*buffer;
 	error_code	err;
 
-	data = (t_map_data *)malloc(sizeof(t_map_data));
+    data = init_t_map_data();
 	if (ac == 2)
 	{
 		check_file(av[1], &fd);

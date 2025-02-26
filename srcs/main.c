@@ -12,15 +12,36 @@
 
 #include "../includes/cub3d.h"
 
+void	free_2d_str(char	**str)
+{
+	int i;
+
+	i = 0;
+	while(str[i])
+		free(str[i++]);
+	free(str[i]);
+	free(str);
+}
+
+void	free_t_map_data(t_map_data	 *data)
+{
+	if (data->north_texture)
+		free(data->north_texture);
+	if (data->south_texture)
+		free(data->south_texture);
+	if (data->west_texture)
+		free(data->west_texture);
+	if (data->east_texture)
+		free(data->east_texture);
+	if (data->map)
+		free_2d_str(data->map);	
+}
+
 int	init_data(int ac, char **av, t_data *data)
 {
 	data->map_data = parse_cub_file(ac, av);
 	if (!data->map_data)
-	{
-		printf("parsing failed : needs to be handled\n");
-		exit (1);
-	}
-	printf("parse cub file succeded\n");
+		free_t_map_data(data->map_data);
 	data->mlx_ptr = mlx_init();
 	if (!data->mlx_ptr)
 		return (-1);
@@ -48,7 +69,7 @@ void	set_2d_int_map(t_data	*data)
 {
 	int i;
 	int j;
-	
+
 	i = 0;
 	data->map = (int**)malloc(sizeof(int *) * data->map_data->map_height);
 	while (i < data->map_data->map_height)
@@ -61,7 +82,7 @@ void	set_2d_int_map(t_data	*data)
 		{
 			if (data->map_data->map[i][j] >= '0' && data->map_data->map[i][j] <= '9')
 				data->map[i][j] = data->map_data->map[i][j] - 48;
-			else if (data->map_data->map[i][j] == '\0')/*completes the line in case of small string*/
+			else if (data->map_data->map[i][j] == '\0')
 			{
 				while (j < data->map_data->map_width)
 					data->map[i][j++] = 1;

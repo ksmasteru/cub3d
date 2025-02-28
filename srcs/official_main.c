@@ -159,6 +159,7 @@ static void	start_parsing(int fd, char *buffer, t_map_data *data)
 				break;
 		}
 		buffer = get_next_line(fd);
+        allocs_addback(&data->allocs, buffer);
 	}
 }
 
@@ -172,6 +173,7 @@ t_map_data  *init_t_map_data()
     data->west_texture = NULL;
     data->east_texture = NULL;
     data->map = NULL;
+    data->allocs = NULL;
     return (data);
 }
 
@@ -191,6 +193,7 @@ t_map_data* parse_cub_file(int ac, char **av)
 		assign_struct(data);
 		fd = open_file(av[1], 0);
 		buffer = get_next_line(fd);
+        allocs_addback(&data->allocs, buffer);
 		if (buffer == NULL)
 		{
 			hanlde_error(ERR_INVALID_LINE);

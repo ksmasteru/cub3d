@@ -11,7 +11,7 @@ SRCS		=	srcs/main.c srcs/events.c srcs/render.c srcs/calculations.c  \
 				srcs/get_next_line_utils.c srcs/get_next_line.c \
 				srcs/official_clean_map.c srcs/official_clr.c srcs/official_file_check.c \
 				srcs/official_main.c srcs/official_txt.c \
-				srcs/utilies.c
+				srcs/utilies.c srcs/t_allocs.c
 SRCS_B		= 	srcs_bonus/main_bonus.c \
 
 NAME		= cub3d

@@ -50,6 +50,11 @@ typedef enum {
 } error_code;
 
 
+typedef struct s_allocs{
+    struct s_allocs *next;
+    void    *addr;
+}t_allocs;
+
 typedef struct s_map_data {
     // Texture paths
     char *north_texture;
@@ -71,6 +76,7 @@ typedef struct s_map_data {
     int player_x;         // Starting X position
     int player_y;         // Starting Y position
     char player_dir;      // N, S, E, or W
+    t_allocs    *allocs;
 } t_map_data;
 
 
@@ -111,5 +117,8 @@ int	open_file(char *file_name, int close_flag);
 void	hanlde_error(error_code err);
 void print_map_data(t_map_data data);
 void print_error_message(error_code code);
+void allocs_addback(t_allocs **allocs, void *addr);
+void    allocs_clean_up(t_allocs **allocs);
+t_allocs* make_new_node(void    *addr);
 
 #endif

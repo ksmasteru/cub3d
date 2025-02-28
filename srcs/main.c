@@ -33,8 +33,10 @@ void	free_t_map_data(t_map_data	 *data)
 		free(data->west_texture);
 	if (data->east_texture)
 		free(data->east_texture);
-	if (data->map)
-		free_2d_str(data->map);	
+	/*if (data->map)
+		free_2d_str(data->map);*/
+	if (data->allocs != NULL)
+	 	allocs_clean_up(&data->allocs);
 }
 
 int	init_data(int ac, char **av, t_data *data)
@@ -192,9 +194,15 @@ int	main(int ac, char **av)
 	if (!data)
 		return (1);
 	if (!init_data(ac, av, data))
+	{
+		free_t_map_data(data->map_data);
 		return (1);
+	}
 	if (!set_up_wall_xpms(data))
+	{
+		free_t_map_data(data->map_data);
 		return (1);
+	}
 	render_walls(data);
 	mlx_hook(data->win_ptr, 17, 0, close_win, data);
 	mlx_hook(data->win_ptr, 2, 1L << 0, pressed_key_event, data);

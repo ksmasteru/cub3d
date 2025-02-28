@@ -30,6 +30,7 @@ int	close_win(t_data *data)
 {
 	mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 	free(data->mlx_ptr);
+	free_t_map_data(data->map_data);
 	free_t_data(data);
 	exit(0);
 }

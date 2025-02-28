@@ -5,7 +5,7 @@ void	hanlde_error(error_code err)
 	print_error_message(err);
 	exit(err);
 }
-void    resize(char ***array, int size)
+void    resize(t_map_data	*data, char ***array, int size)
 {
     char    **vector;
     int        i;
@@ -27,6 +27,7 @@ void    resize(char ***array, int size)
 	//if (*array)
     	//free(*array);
     *array = vector;
+	allocs_addback(&data->allocs, vector);//!??
 }
 
 static void	set_map_line(char *buffer, size_t *size, t_map_data *data)
@@ -36,6 +37,7 @@ static void	set_map_line(char *buffer, size_t *size, t_map_data *data)
 	new_line = strchr(buffer, '\n');
 	on_off(new_line);
 	(data)->map[*size] = strdup(buffer);
+	allocs_addback(&data->allocs, (data)->map[*size]);
 	on_off(new_line);
 	*size += 1;
 }
@@ -107,22 +109,25 @@ static void	read_map(int fd, t_map_data *data, size_t *size)
 		}
 		check_last_close(iter);
 		assign_directions(w, h, data);
-		resize(&data->map, *size);
+		resize(data, &data->map, *size);
 		set_map_line(buffer, size, data);
 		buffer = get_next_line(fd);
+		allocs_addback(&data->allocs, buffer);
 	}
 }
 
-static void	check_eomap(int fd)
+static void	check_eomap(t_map_data *data, int fd)
 {
 	char	*buffer;
 
 	buffer = get_next_line(fd);
+	allocs_addback(&data->allocs, buffer);
 	while (buffer)
 	{
 		if (*buffer != '\n')
 		hanlde_error(ERR_INVALID_LINE);
 		buffer = get_next_line(fd);
+		allocs_addback(&data->allocs, buffer);
 	}
 }
 
@@ -140,12 +145,12 @@ int	is_map(char *buffer, t_map_data *data, int fd)
 			iter++;
 		if ((*iter != '\n') && iter > buffer)
 			hanlde_error(ERR_INVALID_MAP_START);
-		resize(&data->map, size);
+		resize(data, &data->map, size);
 		set_map_line(buffer, &size, data);
 		read_map(fd, data, &size);
 		if (!data->player_x || !data->player_y || !data->player_dir)
 			hanlde_error(ERR_MISSING_PLAYER);
-		check_eomap(fd);
+		check_eomap(data, fd);
 	}
 	return (size);
 }

@@ -27,7 +27,7 @@ void    resize(t_map_data	*data, char ***array, int size)
 	//if (*array)
     	//free(*array);
     *array = vector;
-	allocs_addback(&data->allocs, vector);//!??
+	allocs_addback(&data->allocs, vector);
 }
 
 static void	set_map_line(char *buffer, size_t *size, t_map_data *data)
@@ -94,6 +94,7 @@ static void	read_map(int fd, t_map_data *data, size_t *size)
 
 	h = 1;
 	buffer = get_next_line(fd);
+	allocs_addback(&data->allocs, buffer);
 	while (buffer && *buffer != '\n')
 	{
 		w = 0;

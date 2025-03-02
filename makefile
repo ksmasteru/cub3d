@@ -12,7 +12,7 @@ SRCS		=	srcs/main.c srcs/events.c srcs/render.c srcs/calculations.c  \
 				srcs/official_clean_map.c srcs/official_clr.c srcs/official_file_check.c \
 				srcs/official_main.c srcs/official_txt.c srcs/errors.c \
 				srcs/utilies.c srcs/t_allocs.c srcs/official_clean_map2.c srcs/utilies1.c \
-				srcs/utilies2.c srcs/main_2.c
+				srcs/utilies2.c srcs/main_2.c srcs/official_main2.c
 SRCS_B		= 	srcs_bonus/main_bonus.c \
 
 NAME		= cub3d

@@ -26,7 +26,7 @@ void	draw_walls_1(t_data *data, t_pixdata *pixdata, int stripex,
 			+ stripex * (data->img->bpp / 8);
 		*(int *)pixdata->pixel = *(int *)pixdata->xpm_pixel;
 		texpos += pixdata->step;
-		pixdata->y_xpm = (int)texpos & (texheight - 1);
+		pixdata->y_xpm = (int)texpos & (data->texheight - 1);
 		pixdata->y_min++;
 	}
 }
@@ -73,7 +73,7 @@ void	draw_wall_side(t_data *data, int stripex, t_pixdata *pixdata,
 		pixdata->pixel = data->img->adrs + data->img->size_line * pixdata->y_min
 			+ stripex * (data->img->bpp / 8);
 		*(int *)pixdata->pixel = *(int *)pixdata->xpm_pixel;
-		pixdata->y_xpm = (int)texpos & (texheight - 1);
+		pixdata->y_xpm = (int)texpos & (data->texheight - 1);
 		texpos += pixdata->step;
 		pixdata->y_min++;
 	}

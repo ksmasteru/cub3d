@@ -15,7 +15,7 @@
 
 void	free_t_data(t_data	*data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < data->map_data->map_height)
@@ -44,8 +44,8 @@ bool	player_slide_xside(t_data *data)
 		data->player->posy += fabs(SLIDE_SPEED * sin(data->player->view_deg));
 	else
 		data->player->posy -= fabs(SLIDE_SPEED * sin(data->player->view_deg));
-	if (data->map[(int)data->player->posy / texheight][(int)data->player->posx
-		/ texwidth] != 0)
+	if (data->map[(int)data->player->posy / data->texheight]
+		[(int)data->player->posx / data->texwidth] != 0)
 	{
 		data->player->posy = old_posy;
 		return (false);
@@ -57,28 +57,29 @@ bool	update_player_posy_upkey(t_data *data, int keycode, double ratio,
 		double castAngle)
 {
 	double	ratio_y;
-	double	old_posy;
 	int		wally;
 	int		boxy;
 
 	ratio_y = MOVE_SPEED * sin(degtorad(castAngle)) * ratio * -1.00;
 	if (data->map[(int)(data->player->posy + ratio_y)
-		/ texheight][(int)data->player->posx / texwidth] != 0)
+		/ data->texheight][(int)data->player->posx / data->texwidth] != 0)
 		return (false);
 	data->player->posy += ratio_y;
 	if (data->ray.dir_y > 0)
 	{
-		wally = (int)data->player->posy / texheight * texheight + texheight;
-		boxy = wally / texheight;
+		wally = (int)data->player->posy / data->texheight
+			* data->texheight + data->texheight;
+		boxy = wally / data->texheight;
 	}
 	else
 	{
-		wally = (int)data->player->posy / texheight * texheight;
-		boxy = (wally - 1) / texheight;
+		wally = (int)data->player->posy / data->texheight
+			* data->texheight;
+		boxy = (wally - 1) / data->texheight;
 	}
-	if (data->map[boxy][(int)data->player->posx / texwidth] != 0 && (abs(wally
-				- (int)data->player->posy) < WALL_BUFFER))
-		data->player->posy = wally + WALL_BUFFER * data->ray.dir_y * -1;
+	if (data->map[boxy][(int)data->player->posx / data->texwidth] != 0
+		&& (abs(wally - (int)data->player->posy) < W_B))
+		data->player->posy = wally + W_B * data->ray.dir_y * -1;
 	return (true);
 }
 
@@ -92,21 +93,22 @@ bool	update_player_posy_downkey(t_data *data, int keycode, double ratio,
 
 	ratio_y = MOVE_SPEED * sin(degtorad(castAngle)) * ratio;
 	if ((data->map[(int)(data->player->posy + ratio_y)
-			/ texheight][(int)data->player->posx / texwidth] != 0))
+			/ data->texheight][(int)data->player->posx / data->texwidth] != 0))
 		return (false);
 	data->player->posy += ratio_y;
 	if (data->ray.dir_y > 0)
 	{
-		wally = (int)data->player->posy / texheight * texheight;
-		boxy = (wally - 1) / texheight;
+		wally = (int)data->player->posy / data->texheight * data->texheight;
+		boxy = (wally - 1) / data->texheight;
 	}
 	else
 	{
-		wally = (int)data->player->posy / texheight * texheight + texheight;
-		boxy = wally / texheight;
+		wally = (int)data->player->posy / data->texheight
+			* data->texheight + data->texheight;
+		boxy = wally / data->texheight;
 	}
-	if (data->map[boxy][(int)data->player->posx / texwidth] != 0 && (abs(wally
-				- (int)data->player->posy) < WALL_BUFFER))
-		data->player->posy = wally + SLIDE_CST + WALL_BUFFER * data->ray.dir_y;
+	if (data->map[boxy][(int)data->player->posx / data->texwidth] != 0
+		&& (abs(wally - (int)data->player->posy) < W_B))
+		data->player->posy = wally + S + W_B * data->ray.dir_y;
 	return (true);
 }

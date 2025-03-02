@@ -16,16 +16,16 @@
 
 double	horizontalraycast_1(t_data *data, double castAngle, int i)
 {
-	double		distance;
 	t_rayvars	rayvars;
 
-	rayvars.xa = texwidth;
-	rayvars.ya = tan(degtorad(castAngle)) * texheight * -1;
-	rayvars.rx = (((int)data->player->posx >> 6) << 6) + texwidth;
-	data->player->box_x = (int)rayvars.rx >> 6;
+	rayvars.xa = data->texwidth;
+	rayvars.ya = tan(degtorad(castAngle)) * data->texheight * -1;
+	rayvars.rx = (((int)data->player->posx / data->texwidth)
+			* data->texwidth) + data->texwidth;
+	data->player->box_x = (int)rayvars.rx / data->texwidth;
 	rayvars.ry = tan(degtorad(castAngle)) * (rayvars.rx - data->player->posx);
 	rayvars.ry = data->player->posy - fabs(rayvars.ry);
-	data->player->box_y = (int)rayvars.ry >> 6;
+	data->player->box_y = (int)rayvars.ry / data->texheight;
 	if (rayvars.ry < 0)
 		return (1e30);
 	while (data->map[data->player->box_y][data->player->box_x] == 0)
@@ -34,27 +34,26 @@ double	horizontalraycast_1(t_data *data, double castAngle, int i)
 		rayvars.rx += rayvars.xa;
 		if (rayvars.ry < 0)
 			return (1e30);
-		data->player->box_x = (int)rayvars.rx >> 6;
-		data->player->box_y = (int)rayvars.ry >> 6;
+		data->player->box_x = (int)rayvars.rx / data->texwidth;
+		data->player->box_y = (int)rayvars.ry / data->texheight;
 	}
 	data->player->hor_hitx[i] = rayvars.rx;
 	data->player->hor_hity[i] = rayvars.ry;
-	distance = calculate_distance(data, rayvars.rx, rayvars.ry, castAngle);
-	return (distance);
+	return (calculate_distance(data, rayvars.rx, rayvars.ry, castAngle));
 }
 
 double	horizontalraycast_2(t_data *data, double castAngle, int i)
 {
-	double		distance;
 	t_rayvars	rayvars;
 
-	rayvars.xa = texwidth * -1;
-	rayvars.ya = tan(degtorad(castAngle)) * texheight;
-	rayvars.rx = ((int)data->player->posx >> 6) << 6;
-	data->player->box_x = (int)(rayvars.rx - 1) >> 6;
+	rayvars.xa = data->texwidth * -1;
+	rayvars.ya = tan(degtorad(castAngle)) * data->texheight;
+	rayvars.rx = ((int)data->player->posx / data->texwidth)
+		* data->texwidth;
+	data->player->box_x = (int)(rayvars.rx - 1) / data->texwidth;
 	rayvars.ry = tan(degtorad(castAngle)) * (data->player->posx - rayvars.rx);
 	rayvars.ry = data->player->posy - fabs(rayvars.ry);
-	data->player->box_y = (int)rayvars.ry >> 6;
+	data->player->box_y = (int)rayvars.ry / data->texheight;
 	if (rayvars.ry < 0)
 		return (1e30);
 	while (data->map[data->player->box_y][data->player->box_x] == 0)
@@ -63,27 +62,25 @@ double	horizontalraycast_2(t_data *data, double castAngle, int i)
 		rayvars.rx += rayvars.xa;
 		if (rayvars.ry < 0)
 			return (1e30);
-		data->player->box_x = (int)(rayvars.rx - 1) >> 6;
-		data->player->box_y = (int)rayvars.ry >> 6;
+		data->player->box_x = (int)(rayvars.rx - 1) / data->texwidth;
+		data->player->box_y = (int)rayvars.ry / data->texwidth;
 	}
 	data->player->hor_hitx[i] = rayvars.rx;
 	data->player->hor_hity[i] = rayvars.ry;
-	distance = calculate_distance(data, rayvars.rx, rayvars.ry, castAngle);
-	return (distance);
+	return (calculate_distance(data, rayvars.rx, rayvars.ry, castAngle));
 }
 
 double	horizontalraycast_3(t_data *data, double castAngle, int i)
 {
 	t_rayvars	rayvars;
-	double		distance;
 
-	rayvars.xa = texwidth * -1;
-	rayvars.ya = tan(degtorad(castAngle)) * texheight;
-	rayvars.rx = ((int)data->player->posx >> 6) << 6;
-	data->player->box_x = (int)(rayvars.rx - 1) >> 6;
+	rayvars.xa = data->texwidth * -1;
+	rayvars.ya = tan(degtorad(castAngle)) * data->texheight;
+	rayvars.rx = ((int)data->player->posx / data->texwidth) * data->texwidth;
+	data->player->box_x = (int)(rayvars.rx - 1) / data->texwidth;
 	rayvars.ry = tan(degtorad(castAngle)) * (data->player->posx - rayvars.rx);
 	rayvars.ry = data->player->posy + fabs(rayvars.ry);
-	data->player->box_y = (int)rayvars.ry >> 6;
+	data->player->box_y = (int)rayvars.ry / data->texheight;
 	if (rayvars.ry > data->map_data->h)
 		return (1e30);
 	while (data->map[data->player->box_y][data->player->box_x] == 0)
@@ -92,27 +89,26 @@ double	horizontalraycast_3(t_data *data, double castAngle, int i)
 		rayvars.rx += rayvars.xa;
 		if (rayvars.ry > data->map_data->h)
 			return (1e30);
-		data->player->box_x = (int)(rayvars.rx - 1) >> 6;
-		data->player->box_y = (int)rayvars.ry >> 6;
+		data->player->box_x = (int)(rayvars.rx - 1) / data->texwidth;
+		data->player->box_y = (int)rayvars.ry / data->texheight;
 	}
 	data->player->hor_hitx[i] = rayvars.rx;
 	data->player->hor_hity[i] = rayvars.ry;
-	distance = calculate_distance(data, rayvars.rx, rayvars.ry, castAngle);
-	return (distance);
+	return (calculate_distance(data, rayvars.rx, rayvars.ry, castAngle));
 }
 
 double	horizontalraycast_4(t_data *data, double castAngle, int i)
 {
 	t_rayvars	rayvars;
-	double		distance;
 
-	rayvars.xa = texwidth;
-	rayvars.ya = tan(degtorad(castAngle)) * texheight * -1;
-	rayvars.rx = (((int)data->player->posx >> 6) << 6) + texwidth;
-	data->player->box_x = (int)rayvars.rx >> 6;
+	rayvars.xa = data->texwidth;
+	rayvars.ya = tan(degtorad(castAngle)) * data->texheight * -1;
+	rayvars.rx = (((int)data->player->posx / data->texwidth)
+			* data->texwidth) + data->texwidth;
+	data->player->box_x = (int)rayvars.rx / data->texwidth;
 	rayvars.ry = tan(degtorad(castAngle)) * (rayvars.rx - data->player->posx);
 	rayvars.ry = data->player->posy + fabs(rayvars.ry);
-	data->player->box_y = (int)rayvars.ry >> 6;
+	data->player->box_y = (int)rayvars.ry / data->texheight;
 	if (rayvars.ry > data->map_data->h)
 		return (1e30);
 	while (data->map[data->player->box_y][data->player->box_x] == 0)
@@ -121,11 +117,10 @@ double	horizontalraycast_4(t_data *data, double castAngle, int i)
 		if (rayvars.ry > data->map_data->h)
 			return (1e30);
 		rayvars.rx += rayvars.xa;
-		data->player->box_x = (int)(rayvars.rx) >> 6;
-		data->player->box_y = (int)rayvars.ry >> 6;
+		data->player->box_x = (int)(rayvars.rx) / data->texwidth;
+		data->player->box_y = (int)rayvars.ry / data->texheight;
 	}
-	distance = calculate_distance(data, rayvars.rx, rayvars.ry, castAngle);
 	data->player->hor_hitx[i] = rayvars.rx;
 	data->player->hor_hity[i] = rayvars.ry;
-	return (distance);
+	return (calculate_distance(data, rayvars.rx, rayvars.ry, castAngle));
 }

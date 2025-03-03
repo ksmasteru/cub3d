@@ -12,7 +12,6 @@
 
 #include "../includes/cub3d.h"
 
-
 void	free_2d_str(char **str)
 {
 	int	i;

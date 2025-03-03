@@ -103,6 +103,15 @@ typedef struct s_ptrs
 	char			**ptr_map;
 }					t_ptrs;
 
+typedef struct s_parse
+{
+	size_t		size;
+	size_t		buffer_size;
+	error_code	err_texture;
+	error_code	err_img;
+	error_code	err_map;
+}t_parse;
+
 // enum values	check_file(char *file_name, int *fd);
 
 error_code			is_texture(char *buffer, t_map_data *data);
@@ -144,4 +153,8 @@ void				ft_trim(char *str);
 void				check_errors(char *buffer, size_t size, error_code err_img,
 						error_code err_texture);
 int					is_repitor(t_map_data *data);
+void				print_error_message(error_code code);
+void				print_map_errors(error_code code);
+void				print_color_errors(error_code code);
+void				print_texture_errors(error_code code);
 #endif

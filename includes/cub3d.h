@@ -23,9 +23,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-// THE MAP HAS NOTHING TO DO WITH THE SCREEN : FOW OF PLAYER IS THE SCREEN.
-# define Texheight 64
-# define Texwidth 64
+# define TEXHEIGHT 64
+# define TEXWDITH 64
 # define SCREEN_W 640
 # define SCREEN_H 480
 # define FOW 60
@@ -33,7 +32,6 @@
 # define MOVE_SPEED 32.0
 # define H1 8
 # define S 2.0
-# define M_PI 3.14159265358979323846264338327950288
 # define TEXTURES_NUMBERS 4
 # define FLOOR_COLOR 0x808080
 # define CEILING_COLOR 0x404040
@@ -41,11 +39,12 @@
 # define W_B 20.0
 # define SLIDE_CST 2.0
 
-typedef	struct s_wallvars{
-	double	ratio_x;
-	int		wallx;
-	int		box_x;
-}t_wallvars;
+typedef struct s_wallvars
+{
+	double		ratio_x;
+	int			wallx;
+	int			box_x;
+}				t_wallvars;
 
 typedef struct s_rayvars
 {
@@ -157,7 +156,6 @@ char			*ft_strdup2(char *s1);
 char			*ft_strjoin(char *s1, char *s2);
 char			*ft_strjoin2(char *s1, char *s2, char *str);
 char			*ft_itoa(int num);
-static int		count_size(int n);
 void			put_wall_side(t_data *data, int stripex, double distance,
 					int side);
 int				put_mini_map(t_data *data);
@@ -178,4 +176,6 @@ t_map_data		*parse_cub_file(int ac, char **av);
 void			init_player_data(t_data *data);
 void			set_2d_int_map(t_data *data);
 void			set_wall_type(t_data *data, int side);
+void			free_t_map_data(t_map_data *data);
+int				init_data(int ac, char **av, t_data *data);
 #endif

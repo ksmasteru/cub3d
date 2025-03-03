@@ -12,7 +12,7 @@
 
 #include "../includes/parsing.h"
 
-void	hanlde_error(error_code err)
+void	hanlde_error(t_error_code err)
 {
 	printf("Error\n");
 	print_error_message(err);
@@ -51,7 +51,7 @@ static void	set_color(char *buffer, char type, t_map_data *data, char *start)
 	on_off(buffer);
 }
 
-static void	clr(char *buffer, t_map_data *data, error_code *code, char type)
+static void	clr(char *buffer, t_map_data *data, t_error_code *code, char type)
 {
 	char	*start;
 
@@ -79,11 +79,11 @@ static void	clr(char *buffer, t_map_data *data, error_code *code, char type)
 	*code = ERR_NONE;
 }
 
-error_code	is_color(char *buffer, t_map_data *data)
+t_error_code	is_color(char *buffer, t_map_data *data)
 {
-	char		*start;
-	char		type;
-	error_code	code;
+	char			*start;
+	char			type;
+	t_error_code	code;
 
 	if ((*buffer == 'F' || *buffer == 'C') && is_space(*(buffer + 1)))
 	{

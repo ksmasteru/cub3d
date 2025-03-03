@@ -25,7 +25,7 @@ OBJS_B		= $(SRCS_B:.c=.o)
 OBJECTS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
 OBJECTS_PREFIXED_B = $(addprefix $(OBJS_DIR_B), $(OBJS_B))
 CC			= gcc
-CC_FLAGS	= -g #-Wall -Werror -Wextra
+CC_FLAGS	= -g -Wall -Werror -Wextra
 MLB_FLAGS	= -I -g3 -L /usr/X11/lib -Lincludes -L./mlx -lmlx -Imlx -lXext -lX11 -lz -lm
 
 $(OBJS_DIR)%.o : %.c includes/cub3d.h

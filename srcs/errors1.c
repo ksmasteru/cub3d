@@ -24,7 +24,7 @@ int	is_repitor(t_map_data *data)
 	return (0);
 }
 
-void	print_texture_errors(error_code code)
+void	print_texture_errors(t_error_code code)
 {
 	if (code == ERR_MISSING_TEXTURE)
 		printf("ERR_MISSING_TEXTURE\n");
@@ -36,7 +36,7 @@ void	print_texture_errors(error_code code)
 		printf("ERR_TEXTURE_FILE_MISSING\n");
 }
 
-void	print_color_errors(error_code code)
+void	print_color_errors(t_error_code code)
 {
 	if (code == ERR_MISSING_COLOR)
 		printf("ERR_MISSING_COLOR\n");
@@ -48,7 +48,7 @@ void	print_color_errors(error_code code)
 		printf("ERR_COLOR_OUT_OF_RANGE\n");
 }
 
-void	print_map_errors(error_code code)
+void	print_map_errors(t_error_code code)
 {
 	if (code == ERR_MAP_NOT_CLOSED)
 		printf("ERR_MAP_NOT_CLOSED\n");
@@ -64,7 +64,7 @@ void	print_map_errors(error_code code)
 		printf("ERR_INVALID_LINE\n");
 }
 
-void	print_error_message(error_code code)
+void	print_error_message(t_error_code code)
 {
 	if (code == ERR_NONE)
 		printf("ERR_NONE\n");

@@ -56,8 +56,8 @@ void	set_2d_int_map_helper(t_data	*data, int i, int j)
 			else
 			{
 				data->map[i][j] = 0;
-				data->player->posy = i * Texheight + Texheight / 2;
-				data->player->posx = j * Texwidth + Texwidth / 2;
+				data->player->posy = i * TEXHEIGHT + TEXHEIGHT / 2;
+				data->player->posx = j * TEXWDITH + TEXWDITH / 2;
 			}
 			j++;
 		}

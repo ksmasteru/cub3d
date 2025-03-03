@@ -13,7 +13,7 @@
 #include "../includes/cub3d.h"
 #include <stdbool.h>
 
-bool	update_player_posx_upkey(t_data *data, int keycode, double ratio,
+bool	update_player_posx_upkey(t_data *data, double ratio,
 		double castAngle)
 {
 	t_wallvars	wallvars;
@@ -43,7 +43,7 @@ bool	update_player_posx_upkey(t_data *data, int keycode, double ratio,
 	return (true);
 }
 
-bool	update_player_posx_downkey(t_data *data, int keycode, double ratio,
+bool	update_player_posx_downkey(t_data *data, double ratio,
 		double castAngle)
 {
 	t_wallvars	wallvars;
@@ -85,13 +85,13 @@ bool	update_player_pos(t_data *data, int keycode, double ratio)
 	update_ray_dir(&(data->ray), castangle);
 	if (keycode == XK_Up)
 	{
-		boolx = update_player_posx_upkey(data, keycode, ratio, castangle);
-		booly = update_player_posy_upkey(data, keycode, ratio, castangle);
+		boolx = update_player_posx_upkey(data, ratio, castangle);
+		booly = update_player_posy_upkey(data, ratio, castangle);
 	}
 	else if (keycode == XK_Down)
 	{
-		boolx = update_player_posx_downkey(data, keycode, ratio, castangle);
-		booly = update_player_posy_downkey(data, keycode, ratio, castangle);
+		boolx = update_player_posx_downkey(data, ratio, castangle);
+		booly = update_player_posy_downkey(data, ratio, castangle);
 	}
 	if (boolx || booly)
 		return (true);

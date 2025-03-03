@@ -69,7 +69,7 @@ static int	set_texture(t_map_data *data, char *buffer, char *img_path)
 		return (0);
 }
 
-error_code	is_texture(char *buffer, t_map_data *data)
+t_error_code	is_texture(char *buffer, t_map_data *data)
 {
 	char	*img_path;
 

@@ -12,7 +12,7 @@
 
 #include "../includes/parsing.h"
 
-void	print_file_errors(error_code code)
+void	print_file_errors(t_error_code code)
 {
 	if (code == ERR_FILE_NOT_FOUND)
 		printf("ERR_FILE_NOT_FOUND\n");
@@ -24,7 +24,7 @@ void	print_file_errors(error_code code)
 		printf("ERR_FILE_PERMISSION\n");
 }
 
-void	print_texture_errors(error_code code)
+void	print_texture_errors(t_error_code code)
 {
 	if (code == ERR_MISSING_TEXTURE)
 		printf("ERR_MISSING_TEXTURE\n");
@@ -36,7 +36,7 @@ void	print_texture_errors(error_code code)
 		printf("ERR_TEXTURE_FILE_MISSING\n");
 }
 
-void	print_color_errors(error_code code)
+void	print_color_errors(t_error_code code)
 {
 	if (code == ERR_MISSING_COLOR)
 		printf("ERR_MISSING_COLOR\n");
@@ -48,7 +48,7 @@ void	print_color_errors(error_code code)
 		printf("ERR_COLOR_OUT_OF_RANGE\n");
 }
 
-void	print_map_errors(error_code code)
+void	print_map_errors(t_error_code code)
 {
 	if (code == ERR_MAP_NOT_CLOSED)
 		printf("ERR_MAP_NOT_CLOSED\n");
@@ -62,7 +62,7 @@ void	print_map_errors(error_code code)
 		printf("ERR_INVALID_MAP_START\n");
 }
 
-void	print_general_errors(error_code code)
+void	print_general_errors(t_error_code code)
 {
 	if (code == ERR_INVALID_LINE)
 		printf("ERR_INVALID_LINE\n");

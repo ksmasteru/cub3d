@@ -18,4 +18,6 @@
 t_map	fill_map_data(t_data *data);
 int		fill_square_pixels(t_map *map, t_image *img, int color);
 int		put_mini_map(t_data *data);
+void	fill_player_position(t_map *mini_map, t_image *img, t_data *data,
+		int color);
 #endif

@@ -21,6 +21,7 @@ void	hanlde_error(t_error_code err)
 
 void	print_error(t_map_data	*data, char	*msg)
 {
+	(void) data;
 	printf("Error\n");
 	printf("%s\n", msg);
 	exit (1);
@@ -81,7 +82,6 @@ static void	clr(char *buffer, t_map_data *data, t_error_code *code, char type)
 
 t_error_code	is_color(char *buffer, t_map_data *data)
 {
-	char			*start;
 	char			type;
 	t_error_code	code;
 

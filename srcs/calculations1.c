@@ -12,7 +12,6 @@
 
 #include "../includes/cub3d.h"
 #include <math.h>
-#define M_PI 3.14159265358979323846264338327950288
 
 double	vertical_casting_1(t_data *data, double castangle, int i)
 {
@@ -39,7 +38,7 @@ double	vertical_casting_1(t_data *data, double castangle, int i)
 	}
 	data->player->ver_hitx[i] = ray_data.rx;
 	data->player->ver_hity[i] = ray_data.ry;
-	return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
+	return (calculate_distance(data, ray_data.ry, castangle));
 }
 
 void	set_wall_type(t_data	*data, int side)
@@ -80,7 +79,7 @@ double	vertical_casting_2(t_data *data, double castangle, int i)
 	data->player->ver_hitx[i] = ray_data.rx;
 	data->player->ver_hity[i] = ray_data.ry;
 	set_wall_type(data, castangle);
-	return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
+	return (calculate_distance(data, ray_data.ry, castangle));
 }
 
 double	vertical_casting_4(t_data *data, double castangle, int i)
@@ -109,7 +108,7 @@ double	vertical_casting_4(t_data *data, double castangle, int i)
 	data->player->ver_hitx[i] = raydata.rx;
 	data->player->ver_hity[i] = raydata.ry;
 	set_wall_type(data, castangle);
-	return (calculate_distance(data, raydata.rx, raydata.ry, castangle));
+	return (calculate_distance(data, raydata.ry, castangle));
 }
 
 double	vertical_casting_3(t_data *data, double castangle, int i)
@@ -137,5 +136,5 @@ double	vertical_casting_3(t_data *data, double castangle, int i)
 	}
 	data->player->ver_hitx[i] = ray_data.rx;
 	data->player->ver_hity[i] = ray_data.ry;
-	return (calculate_distance(data, ray_data.rx, ray_data.ry, castangle));
+	return (calculate_distance(data, ray_data.ry, castangle));
 }

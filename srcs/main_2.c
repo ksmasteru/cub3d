@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d.h"
 
-int	init_data(int ac, char **av, t_data *data)
+int	init_data(t_data *data)
 {
 	data->mlx_ptr = mlx_init();
 	if (!data->mlx_ptr)

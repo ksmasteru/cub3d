@@ -61,6 +61,7 @@ int	fill_square_pixels(t_map *map, t_image *img, int color)
 		}
 		p_x++;
 	}
+	return (0);
 }
 
 int	put_mini_map(t_data *data)
@@ -90,4 +91,5 @@ int	put_mini_map(t_data *data)
 	fill_player_position(&mini_map, data->mini_map, data, 0xff0000);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
 		data->mini_map->mlx_img, 0, 0);
+	return (0);
 }

@@ -132,4 +132,8 @@ void				print_error_message(t_error_code code);
 void				print_map_errors(t_error_code code);
 void				print_color_errors(t_error_code code);
 void				print_texture_errors(t_error_code code);
+void				init_t_map_data(t_map_data *data);
+void				start_parsing(int fd, char *buffer, t_map_data *data);
+void				check_last_close(char *iter);
+void				resize(t_map_data *data, char ***array, int size);
 #endif

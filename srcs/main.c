@@ -110,7 +110,7 @@ int	main(int ac, char **av)
 	data->map_data = parse_cub_file(ac, av);
 	if (!data->map_data)
 		free_t_map_data(data->map_data);
-	if (!init_data(ac, av, data))
+	if (!init_data(data))
 	{
 		free_t_map_data(data->map_data);
 		return (1);

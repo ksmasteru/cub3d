@@ -12,9 +12,8 @@
 
 #include "../includes/cub3d.h"
 #include <math.h>
-#define M_PI 3.14159265358979323846264338327950288
 
-void	reset_verhit(t_data *data, int i, double castangle)
+void	reset_verhit(t_data *data, int i)
 {
 	data->player->ver_hitx[i] = data->player->hor_hitx[i];
 	data->player->ver_hity[i] = data->player->hor_hity[i];
@@ -41,7 +40,7 @@ double	raycast_2(t_data *data, double castangle, int *side, int i)
 		return (verticalray);
 	}
 	*side = 1;
-	reset_verhit(data, i, castangle);
+	reset_verhit(data, i);
 	return (horizontalray);
 }
 
@@ -49,7 +48,6 @@ double	raycast_3(t_data *data, double castangle, int *side, int i)
 {
 	double	horizontalray;
 	double	verticalray;
-	double	smallest_distance;
 
 	if (castangle > 180 && castangle < 270)
 	{
@@ -67,7 +65,7 @@ double	raycast_3(t_data *data, double castangle, int *side, int i)
 		return (verticalray);
 	}
 	*side = 1;
-	reset_verhit(data, i, castangle);
+	reset_verhit(data, i);
 	return (horizontalray);
 }
 

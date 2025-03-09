@@ -39,12 +39,6 @@ char	*is_path(char *path)
 	return (NULL);
 }
 
-static int	is_texture_full(t_map_data *data)
-{
-	return (data->north_texture && data->south_texture
-		&& data->west_texture && data->east_texture);
-}
-
 static int	identifier_found(char *buffer)
 {
 	if (((buffer[0] == 'N') && (buffer[1] == 'O') && (is_space(buffer[2])))

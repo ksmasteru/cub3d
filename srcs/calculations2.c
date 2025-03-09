@@ -12,7 +12,6 @@
 
 #include "../includes/cub3d.h"
 #include <math.h>
-#define M_PI 3.14159265358979323846264338327950288
 
 double	horizontalraycast_1(t_data *data, double castAngle, int i)
 {
@@ -39,7 +38,7 @@ double	horizontalraycast_1(t_data *data, double castAngle, int i)
 	}
 	data->player->hor_hitx[i] = rayvars.rx;
 	data->player->hor_hity[i] = rayvars.ry;
-	return (calculate_distance(data, rayvars.rx, rayvars.ry, castAngle));
+	return (calculate_distance(data, rayvars.ry, castAngle));
 }
 
 double	horizontalraycast_2(t_data *data, double castAngle, int i)
@@ -67,7 +66,7 @@ double	horizontalraycast_2(t_data *data, double castAngle, int i)
 	}
 	data->player->hor_hitx[i] = rayvars.rx;
 	data->player->hor_hity[i] = rayvars.ry;
-	return (calculate_distance(data, rayvars.rx, rayvars.ry, castAngle));
+	return (calculate_distance(data, rayvars.ry, castAngle));
 }
 
 double	horizontalraycast_3(t_data *data, double castAngle, int i)
@@ -94,7 +93,7 @@ double	horizontalraycast_3(t_data *data, double castAngle, int i)
 	}
 	data->player->hor_hitx[i] = rayvars.rx;
 	data->player->hor_hity[i] = rayvars.ry;
-	return (calculate_distance(data, rayvars.rx, rayvars.ry, castAngle));
+	return (calculate_distance(data, rayvars.ry, castAngle));
 }
 
 double	horizontalraycast_4(t_data *data, double castAngle, int i)
@@ -122,5 +121,5 @@ double	horizontalraycast_4(t_data *data, double castAngle, int i)
 	}
 	data->player->hor_hitx[i] = rayvars.rx;
 	data->player->hor_hity[i] = rayvars.ry;
-	return (calculate_distance(data, rayvars.rx, rayvars.ry, castAngle));
+	return (calculate_distance(data, rayvars.ry, castAngle));
 }

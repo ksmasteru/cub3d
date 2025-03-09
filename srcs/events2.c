@@ -53,14 +53,14 @@ bool	player_slide_xside(t_data *data)
 	return (true);
 }
 
-bool	update_player_posy_upkey(t_data *data, int keycode, double ratio,
-		double castAngle)
+bool	update_player_posy_upkey(t_data *data, double ratio,
+		double castangle)
 {
 	double	ratio_y;
 	int		wally;
 	int		boxy;
 
-	ratio_y = MOVE_SPEED * sin(degtorad(castAngle)) * ratio * -1.00;
+	ratio_y = MOVE_SPEED * sin(degtorad(castangle)) * ratio * -1.00;
 	if (data->map[(int)(data->player->posy + ratio_y)
 		/ data->texheight][(int)data->player->posx / data->texwidth] != 0)
 		return (false);
@@ -83,11 +83,9 @@ bool	update_player_posy_upkey(t_data *data, int keycode, double ratio,
 	return (true);
 }
 
-bool	update_player_posy_downkey(t_data *data, int keycode, double ratio,
-		double castAngle)
+bool	update_player_posy_downkey(t_data *data, double ratio, double castAngle)
 {
 	double	ratio_y;
-	double	old_posy;
 	int		wally;
 	int		boxy;
 

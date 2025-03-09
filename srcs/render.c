@@ -20,7 +20,7 @@ void	draw_planes(t_data	*data, int stripex, t_pixdata pixdata)
 	drawfloor(data, stripex, pixdata.y_max);
 }
 
-void	put_wall_side(t_data *data, int stripex, double distance, int side)
+void	put_wall_side(t_data *data, int stripex, double distance)
 {
 	t_pixdata	pixdata;
 	double		texpos;
@@ -59,7 +59,7 @@ void	put_wall(t_data *data, int stripex, double distance, int side)
 	pixdata.slice_height = ((double)data->texheight / distance)
 		* (pixdata.projection_d);
 	if (side == 0)
-		return (put_wall_side(data, stripex, distance, side));
+		return (put_wall_side(data, stripex, distance));
 	pixdata.x_offset = (int)data->player->ver_hity[stripex]
 		% (data->texheight - 1);
 	pixdata.step = 1.0 * data->texheight / pixdata.slice_height;

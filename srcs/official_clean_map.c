@@ -50,6 +50,7 @@ int	is_allawed(char *iter)
 	if (*iter != '1' && *iter != '0' && *iter != 'N' && *iter != 'W'
 		&& *iter != 'E' && *iter != 'S' && *iter != ' ')
 		hanlde_error(ERR_INVALID_MAP_CHAR);
+	return (0);
 }
 
 void	check_position(char *iter, t_map_data *data, int w, int h)

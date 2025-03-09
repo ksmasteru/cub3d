@@ -75,7 +75,6 @@ void	check_eomap(t_map_data *data, int fd)
 int	is_map(char *buffer, t_map_data *data, int fd)
 {
 	char	*iter;
-	char	*new_line;
 	size_t	size;
 
 	size = 0;

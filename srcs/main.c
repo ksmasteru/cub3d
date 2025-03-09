@@ -103,7 +103,9 @@ int	set_up_wall_xpms(t_data *data)
 int	main(int ac, char **av)
 {
 	t_data	*data;
-
+	
+	if (ac != 2)
+		return(printf("Error : please enter correct number of arguments\n"), 1);
 	data = (t_data *)malloc(sizeof(t_data));
 	if (!data)
 		return (1);

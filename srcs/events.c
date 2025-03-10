@@ -83,12 +83,12 @@ bool	update_player_pos(t_data *data, int keycode, double ratio)
 		|| castangle == 180 || castangle == 360)
 		castangle += 1;
 	update_ray_dir(&(data->ray), castangle);
-	if (keycode == XK_Up)
+	if (keycode == XK_w)
 	{
 		boolx = update_player_posx_upkey(data, ratio, castangle);
 		booly = update_player_posy_upkey(data, ratio, castangle);
 	}
-	else if (keycode == XK_Down)
+	else if (keycode == XK_s)
 	{
 		boolx = update_player_posx_downkey(data, ratio, castangle);
 		booly = update_player_posy_downkey(data, ratio, castangle);
@@ -116,14 +116,14 @@ bool	rotate_player_dir(t_data *data, int keycode, double ratio)
 int	pressed_key_event(int keycode, t_data *data)
 {
 	bool	update_img;
-
 	update_img = true;
-	if (keycode == 53 || keycode == XK_Up || keycode == XK_Down
+	printf("pressed key is %d\n", keycode);
+	if (keycode == 53 || keycode == XK_w || keycode == XK_s
 		|| keycode == XK_Right || keycode == XK_Left)
 	{
 		if (keycode == 53)
 			close_win(data);
-		else if (keycode == XK_Down || keycode == XK_Up)
+		else if (keycode == XK_w || keycode == XK_s)
 			update_img = update_player_pos(data, keycode, 0.3);
 		else if (keycode == XK_Right || keycode == XK_Left)
 			update_img = rotate_player_dir(data, keycode, 0.3);

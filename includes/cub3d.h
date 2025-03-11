@@ -42,8 +42,11 @@
 typedef struct s_wallvars
 {
 	double		ratio_x;
+	double		ratio_y;
 	int			wallx;
+	int			wally;
 	int			box_x;
+	int			box_y;
 }				t_wallvars;
 
 typedef struct s_rayvars
@@ -177,9 +180,15 @@ void			set_2d_int_map(t_data *data);
 void			set_wall_type(t_data *data, int side);
 void			free_t_map_data(t_map_data *data);
 int				init_data(t_data *data);
+bool			update_player_posx_upkey(t_data *data, double ratio,
+		double castAngle);
+bool			update_player_posy_upkey(t_data *data, double ratio,
+		double castAngle);
 bool			update_player_posy_upkey(t_data *data, double ratio,
 		double castangle);
 bool			update_player_posy_downkey(t_data *data, double ratio,
+		double castangle);
+bool			update_player_posx_downkey(t_data *data, double ratio,
 		double castangle);
 void			draw_walls_1(t_data *data, t_pixdata *pixdata, int stripex,
 		double texpos);
@@ -187,4 +196,8 @@ void			draw_wall_side(t_data *data, int stripex, t_pixdata *pixdata,
 		double texpos);
 int				set_up_wall_xpms(t_data *data);
 int				init_data2(t_data *data);
+bool			update_player_posx_rkey(t_data* data, double ratio, double castangle);
+bool			update_player_posx_lkey(t_data* data, double ratio, double castangle);
+bool			update_player_posy_lkey(t_data* data, double ratio, double castangle);
+bool			update_player_posy_rkey(t_data* data, double ratio, double castangle);
 #endif

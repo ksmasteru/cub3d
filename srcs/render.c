@@ -116,7 +116,7 @@ int	render_walls(t_data *data)
 		mlx_destroy_image(data->mlx_ptr, data->old_img->mlx_img);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img->mlx_img, 0,
 		0);
-	put_mini_map(data);
+	//put_mini_map(data);
 	data->old_img->mlx_img = data->img->mlx_img;
 	return (0);
 }

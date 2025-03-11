@@ -52,7 +52,7 @@ bool	update_player_posx_downkey(t_data *data, double ratio,
 	if ((data->map[(int)data->player->posy
 				/ data->texheight][(int)(data->player->posx + wallvars.ratio_x)
 		/ data->texwidth] != 0))
-		return (false);
+		return (false);    
 	data->player->posx += wallvars.ratio_x;
 	if (data->ray.dir_x > 0)
 	{
@@ -79,6 +79,7 @@ bool	update_player_pos(t_data *data, int keycode, double ratio)
 	double	castangle;
 
 	castangle = data->player->view_deg;
+	printf("castangle is %f\n", castangle);
 	if (castangle == 0 || castangle == 90 || castangle == 270
 		|| castangle == 180 || castangle == 360)
 		castangle += 1;
@@ -93,6 +94,17 @@ bool	update_player_pos(t_data *data, int keycode, double ratio)
 		boolx = update_player_posx_downkey(data, ratio, castangle);
 		booly = update_player_posy_downkey(data, ratio, castangle);
 	}
+	else if (keycode == XK_d)
+	{
+		boolx = update_player_posx_rkey(data, ratio, castangle);
+		booly = update_player_posy_rkey(data, ratio, castangle);
+	}
+	else if (keycode == XK_a)
+	{
+		boolx = update_player_posx_lkey(data, ratio, castangle);
+		booly = update_player_posy_lkey(data, ratio, castangle);
+	}
+	    printf("new x : %f new y : %f\n", data->player->posx, data->player->posy);
 	if (boolx || booly)
 		return (true);
 	return (false);
@@ -117,13 +129,14 @@ int	pressed_key_event(int keycode, t_data *data)
 {
 	bool	update_img;
 	update_img = true;
-	printf("pressed key is %d\n", keycode);
 	if (keycode == 53 || keycode == XK_w || keycode == XK_s
-		|| keycode == XK_Right || keycode == XK_Left)
+		|| keycode == XK_a || keycode == XK_d
+			|| keycode == XK_Right || keycode == XK_Left)
 	{
 		if (keycode == 53)
 			close_win(data);
-		else if (keycode == XK_w || keycode == XK_s)
+		else if (keycode == XK_w || keycode == XK_s || keycode == XK_a
+			|| keycode == XK_d)
 			update_img = update_player_pos(data, keycode, 0.3);
 		else if (keycode == XK_Right || keycode == XK_Left)
 			update_img = rotate_player_dir(data, keycode, 0.3);

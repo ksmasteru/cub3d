@@ -144,8 +144,7 @@ double			horizontalraycast(t_data *data, double castAngle, int i);
 double			verticalraycast(t_data *data, double castAngle, int i);
 double			raycast(t_data *data, double castAngle, int *side);
 void			set_new_img(t_data *data);
-double			calculate_distance(t_data *data, double cy,
-					double castAngle);
+double			calculate_distance(t_data *data, double cy, double castAngle);
 double			x_axis_raycast(t_data *data, double castAngle, int i);
 double			y_axis_raycast(t_data *data, double castAngle, int i);
 void			update_ray_dir(t_ray *ray, double view_deg);
@@ -153,7 +152,8 @@ bool			player_move_down(t_data *data, double old_posx, double old_posy,
 					double ratio);
 bool			player_move_up(t_data *data, double old_posx, double old_posy,
 					double ratio);
-bool			update_player_pos(t_data *data, int keycode, double ratio, double castangle);
+bool			update_player_pos(t_data *data, int keycode, double ratio,
+					double castangle);
 void			show_player_data(t_data *data);
 char			*ft_strdup2(char *s1);
 char			*ft_strjoin(char *s1, char *s2);
@@ -181,32 +181,36 @@ void			set_wall_type(t_data *data, int side);
 void			free_t_map_data(t_map_data *data);
 int				init_data(t_data *data);
 bool			update_player_posx_upkey(t_data *data, double ratio,
-		double castAngle);
+					double castAngle);
 bool			update_player_posy_upkey(t_data *data, double ratio,
-		double castAngle);
+					double castAngle);
 bool			update_player_posy_upkey(t_data *data, double ratio,
-		double castangle);
+					double castangle);
 bool			update_player_posy_downkey(t_data *data, double ratio,
-		double castangle);
+					double castangle);
 bool			update_player_posx_downkey(t_data *data, double ratio,
-		double castangle);
+					double castangle);
 void			draw_walls_1(t_data *data, t_pixdata *pixdata, int stripex,
-		double texpos);
+					double texpos);
 void			draw_wall_side(t_data *data, int stripex, t_pixdata *pixdata,
-		double texpos);
+					double texpos);
 int				set_up_wall_xpms(t_data *data);
 int				init_data2(t_data *data);
-bool			update_player_posx_rkey(t_data* data, double ratio, double castangle);
-bool			update_player_posx_lkey(t_data* data, double ratio, double castangle);
-bool			update_player_posy_lkey(t_data* data, double ratio, double castangle);
-bool			update_player_posy_rkey(t_data* data, double ratio, double castangle);
-void			update_rkey_x1(t_data* data, t_wallvars* wallvars);
-void			update_rkey_x2(t_data* data, t_wallvars* wallvars);
-void			update_rkey_y1(t_data* data, t_wallvars* wallvars);
-void			update_rkey_y2(t_data* data, t_wallvars* wallvars);
-void			update_lkey_x1(t_data* data, t_wallvars* wallvars);
-void			update_lkey_x2(t_data* data, t_wallvars* wallvars);
-void			update_lkey_y1(t_data* data, t_wallvars* wallvars);
-void			update_lkey_y2(t_data* data, t_wallvars* wallvars);
+bool			update_player_posx_rkey(t_data *data, double ratio,
+					double castangle);
+bool			update_player_posx_lkey(t_data *data, double ratio,
+					double castangle);
+bool			update_player_posy_lkey(t_data *data, double ratio,
+					double castangle);
+bool			update_player_posy_rkey(t_data *data, double ratio,
+					double castangle);
+void			update_rkey_x1(t_data *data, t_wallvars *wallvars);
+void			update_rkey_x2(t_data *data, t_wallvars *wallvars);
+void			update_rkey_y1(t_data *data, t_wallvars *wallvars);
+void			update_rkey_y2(t_data *data, t_wallvars *wallvars);
+void			update_lkey_x1(t_data *data, t_wallvars *wallvars);
+void			update_lkey_x2(t_data *data, t_wallvars *wallvars);
+void			update_lkey_y1(t_data *data, t_wallvars *wallvars);
+void			update_lkey_y2(t_data *data, t_wallvars *wallvars);
 double			fixed_angle(t_data *data);
 #endif

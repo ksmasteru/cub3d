@@ -56,7 +56,7 @@ t_map_data	*parse_cub_file(int ac, char **av)
 	t_map_data	*data;
 	int			fd;
 	char		*buffer;
-	
+
 	(void) ac;
 	data = (t_map_data *)malloc(sizeof(t_map_data));
 	fd = open_file(av[1], 0);

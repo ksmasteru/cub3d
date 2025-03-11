@@ -62,7 +62,7 @@ void	update_rkey_y2(t_data *data, t_wallvars *wallvars)
 
 double	fixed_angle(t_data *data)
 {
-	double castangle;
+	double	castangle;
 
 	castangle = data->player->view_deg;
 	if (castangle == 0 || castangle == 90 || castangle == 270

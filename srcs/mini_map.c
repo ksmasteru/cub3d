@@ -80,11 +80,10 @@ int	put_mini_map(t_data *data)
 		while (j < data->map_data->map_width)
 		{
 			mini_map.p_x = j * mini_map.w_pixels;
-			if (data->map[i][j] != 0)
+			if (data->map[i][j++] != 0)
 				fill_square_pixels(&mini_map, data->mini_map, 0x3333FF);
 			else
 				fill_square_pixels(&mini_map, data->mini_map, 0x99CCFF);
-			j++;
 		}
 		i++;
 	}

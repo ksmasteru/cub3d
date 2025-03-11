@@ -73,11 +73,11 @@ int	put_mini_map(t_data *data)
 	i = 0;
 	j = 0;
 	mini_map = fill_map_data(data);
-	while (i < data->map_data->map_width)
+	while (i < data->map_data->map_height)
 	{
 		j = 0;
 		mini_map.p_y = i * mini_map.h_pixels;
-		while (j < data->map_data->map_height)
+		while (j < data->map_data->map_width)
 		{
 			mini_map.p_x = j * mini_map.w_pixels;
 			if (data->map[i][j] != 0)

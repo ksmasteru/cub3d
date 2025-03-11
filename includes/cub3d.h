@@ -153,7 +153,7 @@ bool			player_move_down(t_data *data, double old_posx, double old_posy,
 					double ratio);
 bool			player_move_up(t_data *data, double old_posx, double old_posy,
 					double ratio);
-bool			update_player_pos(t_data *data, int keycode, double ratio);
+bool			update_player_pos(t_data *data, int keycode, double ratio, double castangle);
 void			show_player_data(t_data *data);
 char			*ft_strdup2(char *s1);
 char			*ft_strjoin(char *s1, char *s2);
@@ -200,4 +200,13 @@ bool			update_player_posx_rkey(t_data* data, double ratio, double castangle);
 bool			update_player_posx_lkey(t_data* data, double ratio, double castangle);
 bool			update_player_posy_lkey(t_data* data, double ratio, double castangle);
 bool			update_player_posy_rkey(t_data* data, double ratio, double castangle);
+void			update_rkey_x1(t_data* data, t_wallvars* wallvars);
+void			update_rkey_x2(t_data* data, t_wallvars* wallvars);
+void			update_rkey_y1(t_data* data, t_wallvars* wallvars);
+void			update_rkey_y2(t_data* data, t_wallvars* wallvars);
+void			update_lkey_x1(t_data* data, t_wallvars* wallvars);
+void			update_lkey_x2(t_data* data, t_wallvars* wallvars);
+void			update_lkey_y1(t_data* data, t_wallvars* wallvars);
+void			update_lkey_y2(t_data* data, t_wallvars* wallvars);
+double			fixed_angle(t_data *data);
 #endif

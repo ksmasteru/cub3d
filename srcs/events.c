@@ -6,7 +6,7 @@
 /*   By: hes-saqu <hes-saqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:38:55 by hes-saqu          #+#    #+#             */
-/*   Updated: 2025/02/22 18:48:36 by hes-saqu         ###   ########.fr       */
+/*   Updated: 2025/03/11 21:01:40 by hes-saqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ bool	update_player_posx_downkey(t_data *data, double ratio,
 	if ((data->map[(int)data->player->posy
 				/ data->texheight][(int)(data->player->posx + wallvars.ratio_x)
 		/ data->texwidth] != 0))
-		return (false);    
+		return (false);
 	data->player->posx += wallvars.ratio_x;
 	if (data->ray.dir_x > 0)
 	{
@@ -72,18 +72,12 @@ bool	update_player_posx_downkey(t_data *data, double ratio,
 	return (true);
 }
 
-bool	update_player_pos(t_data *data, int keycode, double ratio)
+bool	update_player_pos(t_data *data, int keycode,
+	double ratio, double castangle)
 {
 	bool	boolx;
 	bool	booly;
-	double	castangle;
 
-	castangle = data->player->view_deg;
-	printf("castangle is %f\n", castangle);
-	if (castangle == 0 || castangle == 90 || castangle == 270
-		|| castangle == 180 || castangle == 360)
-		castangle += 1;
-	update_ray_dir(&(data->ray), castangle);
 	if (keycode == XK_w)
 	{
 		boolx = update_player_posx_upkey(data, ratio, castangle);
@@ -104,10 +98,7 @@ bool	update_player_pos(t_data *data, int keycode, double ratio)
 		boolx = update_player_posx_lkey(data, ratio, castangle);
 		booly = update_player_posy_lkey(data, ratio, castangle);
 	}
-	    printf("new x : %f new y : %f\n", data->player->posx, data->player->posy);
-	if (boolx || booly)
-		return (true);
-	return (false);
+	return (boolx || booly);
 }
 
 bool	rotate_player_dir(t_data *data, int keycode, double ratio)
@@ -128,16 +119,20 @@ bool	rotate_player_dir(t_data *data, int keycode, double ratio)
 int	pressed_key_event(int keycode, t_data *data)
 {
 	bool	update_img;
+	double	castangle;
+
 	update_img = true;
+	castangle = fixed_angle(data);
 	if (keycode == 53 || keycode == XK_w || keycode == XK_s
 		|| keycode == XK_a || keycode == XK_d
-			|| keycode == XK_Right || keycode == XK_Left)
+		|| keycode == XK_Right || keycode == XK_Left)
 	{
+		update_ray_dir(&(data->ray), castangle);
 		if (keycode == 53)
 			close_win(data);
 		else if (keycode == XK_w || keycode == XK_s || keycode == XK_a
 			|| keycode == XK_d)
-			update_img = update_player_pos(data, keycode, 0.3);
+			update_img = update_player_pos(data, keycode, 0.3, castangle);
 		else if (keycode == XK_Right || keycode == XK_Left)
 			update_img = rotate_player_dir(data, keycode, 0.3);
 		if (update_img)

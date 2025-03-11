@@ -36,22 +36,6 @@ int	init_data2(t_data *data)
 	return (1);
 }
 
-int	key_pressed(int keycode, t_data *data)
-{
-	printf("keycode %d was held pressed\n", keycode);
-	if (keycode == XK_Up || keycode == XK_Down)
-	{
-		printf("keypress up/down\n");
-		return (update_player_pos(data, keycode, 0.5));
-	}
-	if (keycode == XK_Right || keycode == XK_Left)
-	{
-		printf("keypress r/l\n");
-		return (rotate_player_dir(data, keycode, 0.5));
-	}
-	return (0);
-}
-
 int	check_tex_dim(t_data *data, int *width, int *height)
 {
 	int	i;
@@ -103,9 +87,10 @@ int	set_up_wall_xpms(t_data *data)
 int	main(int ac, char **av)
 {
 	t_data	*data;
-	
+
 	if (ac != 2)
-		return(printf("Error : please enter correct number of arguments\n"), 1);
+		return (printf("Error : please enter correct number of arguments\n")
+			, 1);
 	data = (t_data *)malloc(sizeof(t_data));
 	if (!data)
 		return (1);

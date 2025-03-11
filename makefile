@@ -40,7 +40,7 @@ $(OBJS_DIR_B)%.o : %.c includes/cub3d.h
 	@$(CC) $(CC_FLAGS) -c $< -o $@
 
 $(NAME): $(OBJECTS_PREFIXED) maker
-	@$(CC) $(CC_FLAGS) -fsanitize=address -o $(NAME) $(OBJECTS_PREFIXED) $(MLB_FLAGS)
+	@$(CC) $(CC_FLAGS) -o $(NAME) $(OBJECTS_PREFIXED) $(MLB_FLAGS)
 
 $(NAME_B): $(OBJECTS_PREFIXED_B) maker
 	@$(CC) -o $(NAME_B) $(OBJECTS_PREFIXED_B) $(CC_FLAGS) $(MLB_FLAGS)

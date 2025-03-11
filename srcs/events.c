@@ -123,12 +123,12 @@ int	pressed_key_event(int keycode, t_data *data)
 
 	update_img = true;
 	castangle = fixed_angle(data);
-	if (keycode == 53 || keycode == XK_w || keycode == XK_s
+	if (keycode == XK_Escape || keycode == XK_w || keycode == XK_s
 		|| keycode == XK_a || keycode == XK_d
 		|| keycode == XK_Right || keycode == XK_Left)
 	{
 		update_ray_dir(&(data->ray), castangle);
-		if (keycode == 53)
+		if (keycode == XK_Escape)
 			close_win(data);
 		else if (keycode == XK_w || keycode == XK_s || keycode == XK_a
 			|| keycode == XK_d)

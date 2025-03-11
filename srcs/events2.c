@@ -26,31 +26,34 @@ void	free_t_data(t_data	*data)
 	free(data->map);
 }
 
-int	close_win(t_data *data)
+void	free_data(t_data	*data)
 {
-	mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-	free(data->mlx_ptr);
-	free_t_map_data(data->map_data);
-	free_t_data(data);
-	exit(0);
+	free(data->player->ver_hitx);
+	free(data->player->ver_hity);
+	free(data->player->hor_hitx);
+	free(data->player->hor_hity);
+	free(data->player->distance);
+	free(data->player->side);
+	free(data->player);
 }
 
-bool	player_slide_xside(t_data *data)
+int	close_win(t_data *data)
 {
-	double	old_posy;
-
-	old_posy = data->player->posy;
-	if (data->ray.dir_y > 0)
-		data->player->posy += fabs(SLIDE_SPEED * sin(data->player->view_deg));
-	else
-		data->player->posy -= fabs(SLIDE_SPEED * sin(data->player->view_deg));
-	if (data->map[(int)data->player->posy / data->texheight]
-		[(int)data->player->posx / data->texwidth] != 0)
-	{
-		data->player->posy = old_posy;
-		return (false);
-	}
-	return (true);
+	mlx_destroy_image(data->mlx_ptr, data->img->mlx_img);
+	mlx_destroy_image(data->mlx_ptr, data->mini_map->mlx_img);
+	mlx_destroy_image(data->mlx_ptr, data->xpm_imgs[0].mlx_img);
+	mlx_destroy_image(data->mlx_ptr, data->xpm_imgs[1].mlx_img);
+	mlx_destroy_image(data->mlx_ptr, data->xpm_imgs[2].mlx_img);
+	mlx_destroy_image(data->mlx_ptr, data->xpm_imgs[3].mlx_img);
+	free(data->img);
+	free(data->mini_map);
+	free(data->xpm_imgs);
+	mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+	free_t_map_data(data->map_data);
+	free_t_data(data);
+	free_data(data);
+	mlx_destroy_display(data->mlx_ptr);
+	exit(0);
 }
 
 bool	update_player_posy_upkey(t_data *data, double ratio,

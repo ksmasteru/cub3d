@@ -41,7 +41,8 @@ void	drawceiling(t_data *data, int stripex, int y_min)
 	{
 		pixel = data->img->adrs + data->img->size_line * i + stripex
 			* (data->img->bpp / 8);
-		*(int *)pixel = CEILING_COLOR;
+		*(int *)pixel = (data->map_data->ceiling_color[0] << 16) | 
+			(data->map_data->ceiling_color[1] << 8) | data->map_data->ceiling_color[2];
 		i++;
 	}
 }
@@ -54,7 +55,8 @@ void	drawfloor(t_data *data, int stripex, int y_max)
 	{
 		pixel = data->img->adrs + data->img->size_line * y_max + stripex
 			* (data->img->bpp / 8);
-		*(int *)pixel = FLOOR_COLOR;
+		*(int *)pixel = (data->map_data->floor_color[0] << 16) | 
+			(data->map_data->floor_color[1] << 8) | data->map_data->floor_color[2];
 		y_max++;
 	}
 }

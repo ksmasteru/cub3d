@@ -4,7 +4,7 @@ WE textures/colorstone.xpm
 EA textures/wood.xpm
 
 F 220,100,0
-C 225,30,0
+C 255,255,255
 
 111111111111111111111
 101000001000000000001

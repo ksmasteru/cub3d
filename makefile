@@ -47,8 +47,6 @@ $(NAME_B): $(OBJECTS_PREFIXED_B) maker
 
 all: $(NAME)
 
-bonus:	$(NAME_B)
-
 maker:
 	@make -C mlx
 

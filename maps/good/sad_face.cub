@@ -1,7 +1,7 @@
-NO textures/simonkraft/soul_sand.xpm
-SO textures/simonkraft/soul_soil_01.xpm
-WE textures/simonkraft/soul_soil.xpm
-EA textures/simonkraft/soul_sand.xpm
+NO textures/bluestone.xpm
+SO textures/eagle.xpm
+WE textures/colorstone.xpm
+EA textures/wood.xpm
 
 C 53,41,34
 F 45,33,27

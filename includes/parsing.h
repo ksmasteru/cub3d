@@ -64,7 +64,8 @@ typedef struct s_map_data
 
 	int				floor_color[3];
 	int				ceiling_color[3];
-
+	int				f_count;
+	int				c_count;
 	char			**map;
 	int				map_height;
 	int				map_width;

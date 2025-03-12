@@ -96,7 +96,10 @@ int	main(int ac, char **av)
 		return (1);
 	data->map_data = parse_cub_file(ac, av);
 	if (!data->map_data)
-		free_t_map_data(data->map_data);
+	{	
+		allocs_clean_up(&data->map_data->allocs);
+		return (1);
+	}
 	if (!init_data(data))
 	{
 		free_t_map_data(data->map_data);

@@ -42,7 +42,7 @@ void	allocs_clean_up(t_allocs **allocs)
 	t_allocs	*tmp;
 	t_allocs	*holder;
 
-	if (*allocs == NULL)
+	if (allocs == NULL)
 		return ;
 	tmp = *allocs;
 	while (tmp)

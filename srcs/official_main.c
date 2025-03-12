@@ -71,5 +71,7 @@ t_map_data	*parse_cub_file(int ac, char **av)
 	start_parsing(fd, buffer, data);
 	if (!validate_last_map_row(data) || !validate_textures(data))
 		return (NULL);
+	if (data->f_count != 2 || data->c_count != 2)
+		return (printf("Error : invalid color type\n"), NULL);
 	return (data);
 }

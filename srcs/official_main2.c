@@ -29,6 +29,8 @@ void	assign_struct(t_map_data *data)
 	data->map_width = 0;
 	data->player_x = 0;
 	data->player_y = 0;
+	data->f_count =0;
+	data->c_count = 0;
 }
 
 void	start_parsing(int fd, char *buffer, t_map_data *data)

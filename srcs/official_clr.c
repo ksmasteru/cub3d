@@ -39,13 +39,15 @@ static void	set_color(char *buffer, char type, t_map_data *data, char *start)
 		if (data->floor_color[f_i] < 0 || data->floor_color[f_i] > 255)
 			print_error(data, "color out of range");
 		f_i++;
+		data->f_count++;
 	}
 	else if ((type == 'C') && (c_i < 3))
 	{
 		data->ceiling_color[c_i] = ft_atoi(start);
-		if (data->ceiling_color[c_i] < 0 || data->ceiling_color[c_i] > 255)
+		if (data->ceiling_color[c_i] < 0 || data->ceiling_color[c_i] > 25)
 			print_error(data, "color out of range");
 		c_i++;
+		data->c_count++;
 	}
 	else if (f_i >= 3 || c_i >= 3)
 		print_error(data, "invalid color format");

@@ -70,7 +70,7 @@ t_error_code	is_texture(char *buffer, t_map_data *data)
 
 	if (identifier_found(buffer))
 	{
-		img_path = is_path(data ,&buffer[2]);
+		img_path = is_path(data, &buffer[2]);
 		if (img_path)
 		{
 			if (set_texture(data, buffer, img_path) == 1)

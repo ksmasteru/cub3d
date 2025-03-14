@@ -19,7 +19,6 @@ t_allocs	*make_new_node(void *addr)
 	new = (t_allocs *)malloc(sizeof(t_allocs));
 	new->next = NULL;
 	new->addr = addr;
-	printf("allocated for [%p]\n", addr);
 	return (new);
 }
 
@@ -43,14 +42,12 @@ void	allocs_clean_up(t_allocs *allocs)
 	t_allocs	*tmp;
 	t_allocs	*holder;
 
-	printf("allocs clean up called\n");
 	tmp = allocs;
 	while (tmp)
 	{
 		holder = tmp->next;
 		if (tmp->addr)
 		{
-			printf("freeing [%p] [%p]\n", tmp->addr, tmp);
 			free(tmp->addr);
 		}
 		free(tmp);

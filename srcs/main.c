@@ -17,7 +17,6 @@ int	init_data2(t_data *data)
 	init_player_data(data);
 	data->player->distance = malloc(sizeof(int)
 			* SCREEN_W);
-	//printf("data->player->data [%p] w %d\n", data->player->distance, SCREEN_W);
 	allocs_addback(&data->map_data->allocs, data->player->distance);
 	data->player->side = (int *)malloc(sizeof(int) * SCREEN_W);
 	allocs_addback(&data->map_data->allocs, data->player->side);
@@ -87,7 +86,7 @@ int	set_up_wall_xpms(t_data *data)
 	return (check_tex_dim(data, width, height));
 }
 
-t_data	*init_full_data()
+t_data	*init_full_data(void)
 {
 	t_data	*data;
 

@@ -77,7 +77,7 @@ int	parse_cub_file(int ac, char **av, t_map_data *data)
 	start_parsing(fd, buffer, data);
 	if (!validate_last_map_row(data) || !validate_textures(data))
 		return (-1);
-	if (parsing_failed(data)< 0)
+	if (parsing_failed(data) < 0)
 		return (-1);
 	return (0);
 }

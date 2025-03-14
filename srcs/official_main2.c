@@ -12,27 +12,6 @@
 
 #include "../includes/parsing.h"
 
-void	assign_struct(t_map_data *data)
-{
-	data->east_texture = NULL;
-	data->west_texture = NULL;
-	data->south_texture = NULL;
-	data->north_texture = NULL;
-	data->ceiling_color[0] = -1;
-	data->ceiling_color[1] = -1;
-	data->ceiling_color[2] = -1;
-	data->floor_color[0] = -1;
-	data->floor_color[1] = -1;
-	data->floor_color[2] = -1;
-	data->player_dir = '\0';
-	data->map_height = 0;
-	data->map_width = 0;
-	data->player_x = 0;
-	data->player_y = 0;
-	data->f_count =0;
-	data->c_count = 0;
-}
-
 void	start_parsing(int fd, char *buffer, t_map_data *data)
 {
 	t_parse	parse;
@@ -80,4 +59,6 @@ void	init_t_map_data(t_map_data *data)
 	data->map_width = 0;
 	data->player_x = 0;
 	data->player_y = 0;
+	data->f_count = 0;
+	data->c_count = 0;
 }

@@ -51,6 +51,8 @@ void	set_wall_type(t_data	*data, int side)
 		data->player->wall_type = 2;
 	if (side == 1 && data->ray.dir_x >= 0)
 		data->player->wall_type = 3;
+	else
+		data->player->wall_type = 0;
 }
 
 double	vertical_casting_2(t_data *data, double castangle, int i)

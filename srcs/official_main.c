@@ -14,7 +14,6 @@
 
 t_map_data	*initialize_and_check_file(int fd, char **av, t_map_data *data)
 {
-	init_t_map_data(data);
 	check_file(av[1], &fd);
 	close(fd);
 	return (data);
@@ -51,27 +50,34 @@ int	validate_last_map_row(t_map_data *data)
 	return (1);
 }
 
-t_map_data	*parse_cub_file(int ac, char **av)
+int	parsing_failed(t_map_data *data)
 {
-	t_map_data	*data;
+	if (data->f_count != 3 || data->c_count != 3)
+		return (printf("Error : invalid color type\n"), -1);
+	if (data->map_width <= 1 || data->map_height <= 1)
+		return (printf("Error : invalid map\n"), -1);
+	return (0);
+}
+
+int	parse_cub_file(int ac, char **av, t_map_data *data)
+{
 	int			fd;
 	char		*buffer;
 
 	(void) ac;
-	data = (t_map_data *)malloc(sizeof(t_map_data));
 	fd = open_file(av[1], 0);
 	initialize_and_check_file(fd, av, data);
 	buffer = get_next_line(fd);
 	if (buffer == NULL)
 	{
 		hanlde_error(ERR_INVALID_LINE);
-		return (NULL);
+		return (-1);
 	}
 	allocs_addback(&data->allocs, buffer);
 	start_parsing(fd, buffer, data);
 	if (!validate_last_map_row(data) || !validate_textures(data))
-		return (NULL);
-	if (data->f_count != 2 || data->c_count != 2)
-		return (printf("Error : invalid color type\n"), NULL);
-	return (data);
+		return (-1);
+	if (parsing_failed(data)< 0)
+		return (-1);
+	return (0);
 }

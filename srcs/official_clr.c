@@ -44,7 +44,7 @@ static void	set_color(char *buffer, char type, t_map_data *data, char *start)
 	else if ((type == 'C') && (c_i < 3))
 	{
 		data->ceiling_color[c_i] = ft_atoi(start);
-		if (data->ceiling_color[c_i] < 0 || data->ceiling_color[c_i] > 25)
+		if (data->ceiling_color[c_i] < 0 || data->ceiling_color[c_i] > 255)
 			print_error(data, "color out of range");
 		c_i++;
 		data->c_count++;

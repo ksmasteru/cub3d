@@ -12,7 +12,7 @@
 
 #include "../includes/parsing.h"
 
-char	*is_path(char *path)
+char	*is_path(t_map_data *data, char *path)
 {
 	int		img_fd;
 	char	*new_line;
@@ -26,6 +26,7 @@ char	*is_path(char *path)
 		new_line = strchr(path, '\n');
 		on_off(new_line);
 		path = strdup(path);
+		allocs_addback(&data->allocs, path);
 		on_off(new_line);
 		img_fd = open(path, O_RDONLY);
 		if (img_fd == -1)
@@ -69,7 +70,7 @@ t_error_code	is_texture(char *buffer, t_map_data *data)
 
 	if (identifier_found(buffer))
 	{
-		img_path = is_path(&buffer[2]);
+		img_path = is_path(data ,&buffer[2]);
 		if (img_path)
 		{
 			if (set_texture(data, buffer, img_path) == 1)

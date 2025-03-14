@@ -28,13 +28,8 @@ void	free_t_data(t_data	*data)
 
 void	free_data(t_data	*data)
 {
-	free(data->player->ver_hitx);
-	free(data->player->ver_hity);
-	free(data->player->hor_hitx);
-	free(data->player->hor_hity);
-	free(data->player->distance);
-	free(data->player->side);
-	free(data->player);
+	if (data->player)
+		free(data->player);
 }
 
 int	close_win(t_data *data)

@@ -107,7 +107,7 @@ int	render_walls(t_data *data)
 	while (++i < SCREEN_W)
 	{
 		data->player->distance[i] = raycast_1(data, castangle,
-				data->player->side + i, i);
+				data->player->side, i);
 		castangle -= sep_angle;
 		data->player->beta_angle -= sep_angle;
 	}

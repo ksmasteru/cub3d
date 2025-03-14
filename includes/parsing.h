@@ -97,7 +97,7 @@ t_error_code		is_texture(char *buffer, t_map_data *data);
 void				check_file(char *file_name, int *fd);
 t_error_code		is_color(char *buffer, t_map_data *data);
 int					is_map(char *buffer, t_map_data *data, int fd);
-
+char				*is_path(t_map_data *data, char *path);
 char				*get_next_line(int fd);
 void				*my_malloc(size_t size);
 void				cleanup(void);
@@ -113,7 +113,7 @@ void				hanlde_error(t_error_code err);
 void				print_map_data(t_map_data data);
 void				print_error_message(t_error_code code);
 void				allocs_addback(t_allocs **allocs, void *addr);
-void				allocs_clean_up(t_allocs **allocs);
+void				allocs_clean_up(t_allocs *allocs);
 t_allocs			*make_new_node(void *addr);
 void				set_map_line(char *buffer, size_t *size, t_map_data *data);
 int					is_allawed(char *iter);
@@ -137,4 +137,5 @@ void				init_t_map_data(t_map_data *data);
 void				start_parsing(int fd, char *buffer, t_map_data *data);
 void				check_last_close(char *iter);
 void				resize(t_map_data *data, char ***array, int size);
+void				assign_struct(t_map_data *data);
 #endif

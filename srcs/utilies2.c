@@ -25,16 +25,8 @@ void	free_2d_str(char **str)
 
 void	free_t_map_data(t_map_data *data)
 {
-	if (data->north_texture)
-		free(data->north_texture);
-	if (data->south_texture)
-		free(data->south_texture);
-	if (data->west_texture)
-		free(data->west_texture);
-	if (data->east_texture)
-		free(data->east_texture);
 	if (data->allocs != NULL)
-		allocs_clean_up(&data->allocs);
+		allocs_clean_up(data->allocs);
 }
 
 void	set_2d_int_map_helper(t_data	*data, int i, int j)

@@ -15,21 +15,24 @@
 int	init_data2(t_data *data)
 {
 	init_player_data(data);
-	data->player->distance = (double *)malloc(sizeof(double)
-			* data->map_data->w);
-	if (!data->player->distance)
-		return (-1);
-	data->player->side = (int *)malloc(sizeof(int) * data->map_data->w);
-	if (!data->player->side)
-		return (-1);
-	data->player->hor_hitx = (double *)malloc(sizeof(double)
-			* data->map_data->w);
-	data->player->hor_hity = (double *)malloc(sizeof(double)
-			* data->map_data->w);
-	data->player->ver_hitx = (double *)malloc(sizeof(double)
-			* data->map_data->w);
-	data->player->ver_hity = (double *)malloc(sizeof(double)
-			* data->map_data->w);
+	data->player->distance = malloc(sizeof(int)
+			* SCREEN_W);
+	//printf("data->player->data [%p] w %d\n", data->player->distance, SCREEN_W);
+	allocs_addback(&data->map_data->allocs, data->player->distance);
+	data->player->side = (int *)malloc(sizeof(int) * SCREEN_W);
+	allocs_addback(&data->map_data->allocs, data->player->side);
+	data->player->hor_hitx = (int *)malloc(sizeof(int)
+			* SCREEN_W);
+	allocs_addback(&data->map_data->allocs, data->player->hor_hitx);
+	data->player->hor_hity = (int *)malloc(sizeof(int)
+			* SCREEN_W);
+	allocs_addback(&data->map_data->allocs, data->player->hor_hity);
+	data->player->ver_hitx = (int *)malloc(sizeof(int)
+			* SCREEN_W);
+	allocs_addback(&data->map_data->allocs, data->player->ver_hitx);
+	data->player->ver_hity = (int *)malloc(sizeof(int)
+			* SCREEN_W);
+	allocs_addback(&data->map_data->allocs, data->player->ver_hity);
 	data->mini_map->mlx_img = NULL;
 	data->img->mlx_img = NULL;
 	data->player->mouse_x = SCREEN_W / 2;
@@ -84,6 +87,20 @@ int	set_up_wall_xpms(t_data *data)
 	return (check_tex_dim(data, width, height));
 }
 
+t_data	*init_full_data()
+{
+	t_data	*data;
+
+	data = (t_data *)malloc(sizeof(t_data));
+	if (!data)
+		return (NULL);
+	data->map_data = (t_map_data *)malloc(sizeof(t_map_data));
+	if (!data->map_data)
+		return (NULL);
+	init_t_map_data(data->map_data);
+	return (data);
+}
+
 int	main(int ac, char **av)
 {
 	t_data	*data;
@@ -91,18 +108,19 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return (printf("Error : please enter correct number of arguments\n")
 			, 1);
-	data = (t_data *)malloc(sizeof(t_data));
+	data = init_full_data();
 	if (!data)
 		return (1);
-	data->map_data = parse_cub_file(ac, av);
-	if (!data->map_data)
-	{	
-		allocs_clean_up(&data->map_data->allocs);
+	if (parse_cub_file(ac, av, data->map_data) < 0)
+	{
+		allocs_clean_up(data->map_data->allocs);
+		free(data->map_data);
+		free(data);
 		return (1);
 	}
 	if (!init_data(data))
 	{
-		free_t_map_data(data->map_data);
+		free(data);
 		return (1);
 	}
 	render_walls(data);

@@ -1,7 +1,7 @@
-NO ./bluestone.xpm
-SO ./bluestone.xpm
-WE ./bluestone.xpm
-EA ./bluestone.xpm
+NO textures/bluestone.xpm
+SO textures/eagle.xpm
+WE textures/colorstone.xpm
+EA textures/wood.xpm
 
 F 164,169,20
 C 153,204,255

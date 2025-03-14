@@ -36,10 +36,10 @@ double	raycast_2(t_data *data, double castangle, int *side, int i)
 	}
 	if (verticalray < horizontalray)
 	{
-		*side = 0;
+		side[i] = 0;
 		return (verticalray);
 	}
-	*side = 1;
+	side[i] = 1;
 	reset_verhit(data, i);
 	return (horizontalray);
 }
@@ -61,10 +61,10 @@ double	raycast_3(t_data *data, double castangle, int *side, int i)
 	}
 	if (verticalray < horizontalray)
 	{
-		*side = 0;
+		side[i] = 0;
 		return (verticalray);
 	}
-	*side = 1;
+	side[i] = 1;
 	reset_verhit(data, i);
 	return (horizontalray);
 }

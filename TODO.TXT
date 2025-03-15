@@ -1,4 +1,0 @@
-maps/good/works.cub 5asha te5dem
-textures/colorstone.xpm
-textures/colorstone.xpm.
-

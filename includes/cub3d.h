@@ -174,7 +174,7 @@ void			drawceiling(t_data *data, int stripex, int y_min);
 void			drawfloor(t_data *data, int stripex, int y_max);
 double			degtorad(double degrees);
 double			radtodeg(double radians);
-int				parse_cub_file(int ac, char **av, t_map_data* data);
+int				parse_cub_file(int ac, char **av, t_map_data *data);
 void			init_player_data(t_data *data);
 void			set_2d_int_map(t_data *data);
 void			set_wall_type(t_data *data, int side);

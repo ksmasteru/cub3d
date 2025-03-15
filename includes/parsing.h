@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <ctype.h>
 
 # define BUFF_SIZE 50
 
@@ -110,7 +111,7 @@ char				**read_filo(char *file_name, int *fd, t_map_data *data);
 void				on_off(char *change);
 int					open_file(char *file_name, int close_flag);
 void				hanlde_error(t_error_code err);
-void				print_map_data(t_map_data data);
+void				print_map_data(t_map_data *data);
 void				print_error_message(t_error_code code);
 void				allocs_addback(t_allocs **allocs, void *addr);
 void				allocs_clean_up(t_allocs *allocs);
@@ -138,4 +139,5 @@ void				start_parsing(int fd, char *buffer, t_map_data *data);
 void				check_last_close(char *iter);
 void				resize(t_map_data *data, char ***array, int size);
 void				assign_struct(t_map_data *data);
+char				*ft_strim(char *str);
 #endif

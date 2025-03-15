@@ -15,7 +15,7 @@
 
 void	check_start_close(char *iter)
 {
-	if (*iter != '1')
+	if (*iter != 0 && *iter != '1' && !isspace(*iter))
 		hanlde_error(ERR_MAP_NOT_CLOSED);
 }
 
@@ -44,16 +44,21 @@ void	read_map(int fd, t_map_data *data, size_t *size)
 {
 	char	*buffer;
 	int		h;
+	char	*trimmed;
 
 	h = 1;
-	buffer = get_next_line(fd);
+	trimmed = get_next_line(fd);
+	buffer = ft_strim(trimmed);
 	allocs_addback(&data->allocs, buffer);
+	allocs_addback(&data->allocs, trimmed);
 	while (buffer && *buffer != '\n')
 	{
 		h++;
 		process_map_line(buffer, data, size, h);
-		buffer = get_next_line(fd);
+		trimmed = get_next_line(fd);
+		buffer = ft_strim(trimmed);
 		allocs_addback(&data->allocs, buffer);
+		allocs_addback(&data->allocs, trimmed);
 	}
 }
 

@@ -39,7 +39,7 @@ int	validate_last_map_row(t_map_data *data)
 		iter = data->map[data->map_height - 1];
 		while (*iter)
 		{
-			if (*iter != '1')
+			if (*iter != '1' && !isspace(*iter))
 			{
 				printf("error last 11111111\n");
 				return (0);

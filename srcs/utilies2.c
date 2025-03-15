@@ -36,8 +36,8 @@ void	set_2d_int_map_helper(t_data	*data, int i, int j)
 		j = 0;
 		while (j < data->map_data->map_width)
 		{
-			if (data->map_data->map[i][j] >= '0'
-				&& data->map_data->map[i][j] <= '9')
+			if (data->map_data->map[i][j] == '0'
+				|| data->map_data->map[i][j] == '1')
 				data->map[i][j] = data->map_data->map[i][j] - 48;
 			else if (data->map_data->map[i][j] == '\0')
 			{

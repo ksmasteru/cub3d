@@ -41,3 +41,27 @@ void	trim_buffer(char **buffer)
 	*(end + 1) = '\n';
 	*buffer = start;
 }
+
+char	*ft_strim(char *str)
+{
+	int		i;
+	int		j;
+	char	*res;
+
+	if (!str)
+		return (NULL);
+	i = 0;
+	j = 0;
+	res = (char *)malloc(strlen(str) + 1);
+	while (str[i] && isspace(str[i]))
+		i++;
+	while (str[i])
+	{
+		if (!isspace(str[i]))
+			res[j++] = str[i++];
+		else
+			i++;
+	}
+	res[j] = '\0';
+	return (res);
+}
